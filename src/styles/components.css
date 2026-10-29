@@ -65,6 +65,16 @@
   [data-orientation$='-flipped'] .hmi {
     transform: rotate(180deg);
   }
+  /* start-up screen: no bars, main fills the device */
+  .hmi[data-bars='off'] {
+    grid-template-rows: 1fr !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas: 'main' !important;
+  }
+  .hmi[data-bars='off'] .hmi__status,
+  .hmi[data-bars='off'] .hmi__nav {
+    display: none !important;
+  }
   .hmi__status {
     grid-area: status;
   }
@@ -128,5 +138,107 @@
   }
   .scroll-y::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@layer components {
+  /* ---- bars ---------------------------------------------------------------- */
+  .status-bar {
+    background: color-mix(in srgb, var(--hmi-bg) 70%, transparent);
+    border-bottom: 1px solid var(--hmi-line-soft);
+  }
+  .nav-bar {
+    background: color-mix(in srgb, var(--hmi-surface) 85%, transparent);
+  }
+  .nav-bar__line {
+    inset: 0 0 auto 0;
+    height: 3px;
+  }
+  .nav-bar__btn,
+  .nav-bar__user {
+    min-height: var(--spacing-touch);
+  }
+  /* landscape: the bars are columns on the edges */
+  [data-orientation^='landscape'] .status-bar {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 16px 0;
+    gap: 16px;
+    border-bottom: 0;
+  }
+  [data-orientation='landscape-lh'] .status-bar,
+  [data-orientation='landscape-lh-flipped'] .status-bar {
+    border-left: 1px solid var(--hmi-line-soft);
+  }
+  [data-orientation='landscape-rh'] .status-bar,
+  [data-orientation='landscape-rh-flipped'] .status-bar {
+    border-right: 1px solid var(--hmi-line-soft);
+  }
+  [data-orientation^='landscape'] .status-bar__state {
+    flex-direction: column;
+    gap: 6px;
+  }
+  [data-orientation^='landscape'] .status-bar__label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 140px;
+  }
+  [data-orientation^='landscape'] .status-bar__secure {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 200px;
+  }
+  [data-orientation^='landscape'] .status-bar__icons {
+    flex-direction: column;
+    margin-top: auto;
+  }
+  [data-orientation^='landscape'] .nav-bar {
+    flex-direction: column;
+  }
+  [data-orientation='landscape-lh'] .nav-bar__line,
+  [data-orientation='landscape-lh-flipped'] .nav-bar__line {
+    inset: 0 0 0 auto;
+    height: auto;
+    width: 3px;
+  }
+  [data-orientation='landscape-rh'] .nav-bar__line,
+  [data-orientation='landscape-rh-flipped'] .nav-bar__line {
+    inset: 0 auto 0 0;
+    height: auto;
+    width: 3px;
+  }
+  [data-orientation^='landscape'] .nav-bar__line {
+    background-image: none;
+  }
+
+  /* ---- sheet ------------------------------------------------------------------ */
+  .sheet__panel {
+    max-height: 72%;
+    display: flex;
+  }
+  .sheet__panel > * {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+  }
+  [data-orientation^='landscape'] .sheet {
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: row;
+  }
+  [data-orientation^='landscape'] .sheet__panel {
+    max-height: 100%;
+    height: 100%;
+    width: 60%;
+    border-radius: var(--radius-card) 0 0 var(--radius-card);
+  }
+  [data-orientation='landscape-rh'] .sheet,
+  [data-orientation='landscape-rh-flipped'] .sheet {
+    align-items: flex-start;
+  }
+  [data-orientation='landscape-rh'] .sheet__panel,
+  [data-orientation='landscape-rh-flipped'] .sheet__panel {
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
   }
 }

@@ -1,0 +1,10 @@
+{
+  "$comment": "Dummy user profiles. Passwords are plain text because this is a prototype with dummy data; the real device keeps a secure user DB (docx §8.13).",
+  "users": [
+    { "id": "u1", "name": "m.mustermann", "level": 3, "password": "1234", "autoLogoffMin": 10, "language": 501, "lastPasswordChange": "2026-09-02", "enabled": true, "blacklist": [], "whitelist": [] },
+    { "id": "u2", "name": "s.operator", "level": 1, "password": "1111", "autoLogoffMin": 5, "language": 502, "lastPasswordChange": "2026-06-18", "enabled": true, "blacklist": [], "whitelist": [] },
+    { "id": "u3", "name": "a.supervisor", "level": 2, "password": "2222", "autoLogoffMin": 15, "language": 501, "lastPasswordChange": "2026-08-30", "enabled": true, "blacklist": [], "whitelist": [] },
+    { "id": "u4", "name": "service.pid", "level": 3, "password": "3333", "autoLogoffMin": 30, "language": 501, "lastPasswordChange": "2026-10-01", "enabled": true, "blacklist": [], "whitelist": [] },
+    { "id": "u5", "name": "old.account", "level": 1, "password": "0000", "autoLogoffMin": 5, "language": 501, "lastPasswordChange": "2025-11-11", "enabled": false, "blacklist": [], "whitelist": [] }
+  ]
+}

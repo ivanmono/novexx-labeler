@@ -23,21 +23,21 @@ Requirement trace: [../REQUIREMENTS-TRACE.md](../REQUIREMENTS-TRACE.md). Open po
 
 | ID | Title | Size | Status |
 |---|---|---|---|
-| [P1-01](P1-01.md) | Store, persistence, factory reset, targeted re-render | M | todo |
+| [P1-01](P1-01.md) | Store, persistence, factory reset, targeted re-render | M | done |
 | [G1-1](G1-1.md) | **Gate: shell** | - | todo |
-| [P1-02](P1-02.md) | Router with explicit back-stack and ref resolution | M | todo |
+| [P1-02](P1-02.md) | Router with explicit back-stack and ref resolution | M | done |
 | [G1-2](G1-2.md) | **Gate: start-up, home, login, stand-by** | - | todo |
 | [P1-03](P1-03.md) | Condition parser with full operator coverage | S | done |
-| [P1-04](P1-04.md) | Access model: levels 0-4, read hides, write locks, L4 session | M | todo |
-| [P1-05](P1-05.md) | i18n: EN + DE, TextResID keys, temp language, length audit | M | todo |
-| [P1-06](P1-06.md) | Theme and orientation bound to params 612 and 601 | M | todo |
-| [P1-07](P1-07.md) | Machine simulator and seed data | L | todo |
-| [P1-08](P1-08.md) | Status bar | M | todo |
-| [P1-09](P1-09.md) | Title bar and navigation bar | M | todo |
-| [P1-10](P1-10.md) | Toast, modal host, sheet host | M | todo |
-| [P1-10b](P1-10b.md) | Styleguide screen | M | todo |
-| [P1-11](P1-11.md) | Start-up screen | M | todo |
-| [P1-12](P1-12.md) | Home screen | L | todo |
+| [P1-04](P1-04.md) | Access model: levels 0-4, read hides, write locks, L4 session | M | done |
+| [P1-05](P1-05.md) | i18n: EN + DE, TextResID keys, temp language, length audit | M | done |
+| [P1-06](P1-06.md) | Theme and orientation bound to params 612 and 601 | M | done |
+| [P1-07](P1-07.md) | Machine simulator and seed data | L | done |
+| [P1-08](P1-08.md) | Status bar | M | done |
+| [P1-09](P1-09.md) | Title bar and navigation bar | M | done |
+| [P1-10](P1-10.md) | Toast, modal host, sheet host | M | done |
+| [P1-10b](P1-10b.md) | Styleguide screen | M | done |
+| [P1-11](P1-11.md) | Start-up screen | M | done |
+| [P1-12](P1-12.md) | Home screen | L | in progress |
 | [P1-13](P1-13.md) | Login flow | M | todo |
 | [P1-14](P1-14.md) | Dev panel complete and Playwright harness | M | todo |
 | [P1-15](P1-15.md) | Figma: shell components and first screens | M | todo |

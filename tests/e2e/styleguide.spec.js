@@ -4,8 +4,8 @@ import { test, expect } from '@playwright/test';
 // Screenshots are the baseline that later Figma syncs and design tweaks compare against.
 for (const theme of ['dark', 'light']) {
   test(`styleguide tokens render in ${theme} theme`, async ({ page }, testInfo) => {
-    await page.goto('/#/styleguide');
-    await page.waitForSelector('[data-sprite]', { state: 'attached' });
+    await page.goto('/?nosplash#/styleguide');
+    await page.waitForFunction(() => window.__hmi?.ctx);
     await page.evaluate((t) => window.__hmi.set('theme', t), theme);
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
     await expect(page.getByRole('heading', { name: 'Styleguide · tokens' })).toBeVisible();

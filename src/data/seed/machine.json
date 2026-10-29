@@ -1,0 +1,54 @@
+{
+  "$comment": "Dummy machine identity and installed options. Gates menu tiles (overrides.json optionGates) and feeds the start-up screen, info screen and QR payloads.",
+  "type": "XLS 224",
+  "series": "XLS",
+  "serial": "SN 1043",
+  "firmware": "0.01",
+  "firmwareDate": "2026-09-21",
+  "manufacturer": "PID",
+  "manufacturingDate": "2026-08-14",
+  "manufacturingLocation": "Fürth",
+  "hmiDeviceNameDefault": "XLS22X",
+  "options": {
+    "rewinder": false,
+    "busCard": false,
+    "busCardName": null,
+    "cryptoChip": true
+  },
+  "boot": {
+    "previousDurationsMs": [6400, 6900, 6200],
+    "simulatedDurationMs": 6500
+  },
+  "io": {
+    "groups": [
+      {
+        "id": "mio",
+        "name": "MIO card",
+        "pins": [
+          { "pin": "X1.1", "dir": "in", "fn": "Start input" },
+          { "pin": "X1.2", "dir": "in", "fn": "Stop input" },
+          { "pin": "X1.3", "dir": "in", "fn": "Inhibit" },
+          { "pin": "X1.4", "dir": "in", "fn": "Printer busy" },
+          { "pin": "X1.5", "dir": "in", "fn": "Touch-down" },
+          { "pin": "X2.1", "dir": "out", "fn": "Printer start" },
+          { "pin": "X2.2", "dir": "out", "fn": "Cycle signal" },
+          { "pin": "X2.3", "dir": "out", "fn": "Apply" },
+          { "pin": "X2.4", "dir": "out", "fn": "Blow-on" },
+          { "pin": "X2.5", "dir": "out", "fn": "Vacuum" }
+        ]
+      },
+      {
+        "id": "cpu",
+        "name": "CPU board",
+        "pins": [
+          { "pin": "X3.1", "dir": "in", "fn": "External error" },
+          { "pin": "X3.2", "dir": "in", "fn": "Label sensor" },
+          { "pin": "X3.3", "dir": "in", "fn": "Roll end" },
+          { "pin": "X4.1", "dir": "out", "fn": "Machine ready" },
+          { "pin": "X4.2", "dir": "out", "fn": "Alarm" },
+          { "pin": "X4.3", "dir": "out", "fn": "Warning" }
+        ]
+      }
+    ]
+  }
+}
