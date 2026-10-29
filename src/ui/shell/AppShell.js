@@ -9,6 +9,7 @@ import { renderTitleBar } from './TitleBar.js';
 import { createToaster } from './Toast.js';
 import { createModalHost } from './ModalHost.js';
 import { createSheetHost } from './SheetHost.js';
+import { mountStandby } from './Standby.js';
 import { onAction } from '../html.js';
 
 export function mountAppShell(root, ctx) {
@@ -30,6 +31,7 @@ export function mountAppShell(root, ctx) {
   const toast = createToaster(main);
   const modal = createModalHost(root);
   const sheet = createSheetHost(main);
+  const unmountStandby = mountStandby(root, ctx);
 
   let currentUnmount = null;
   let disposeTitle = null;
@@ -65,6 +67,7 @@ export function mountAppShell(root, ctx) {
       currentUnmount?.();
       status.unmount();
       nav.unmount();
+      unmountStandby();
     },
   };
 }

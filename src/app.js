@@ -123,13 +123,13 @@ export async function boot(root, { skipBoot = false } = {}) {
       ctx.log('login', user.name, { level: user.level });
       ctx.shell?.toast.ok(t('toast.loggedIn', { name: user.name }));
     },
-    logout({ silent = false } = {}) {
+    logout({ silent = false, stay = false } = {}) {
       const s = store.get('session');
       if (s.user) ctx.log('logout', s.user.name);
       clearTemporaryLanguage();
       store.set('session', { level: 0, user: null, elevatedUntil: null, loginAt: null });
       if (!silent) ctx.shell?.toast.ok(t('toast.loggedOut'));
-      router.reset('home');
+      if (!stay) router.reset('home');
     },
     elevate(minutes) {
       const until = Date.now() + minutes * 60_000;
@@ -209,8 +209,9 @@ export async function boot(root, { skipBoot = false } = {}) {
       else if (key === 'lang') ctx.setParam(500, value === 'de' ? 502 : 501, { source: 'dev' });
       else if (key === 'level') {
         const lvl = Number(value);
-        if (lvl === 0) ctx.logout({ silent: true });
-        else if (lvl === 4) ctx.elevate(30);
+        if (lvl === 0) {
+          if (ctx.level !== 0) ctx.logout({ silent: true, stay: true });
+        } else if (lvl === 4) ctx.elevate(30);
         else {
           const u = store.get('users').find((x) => x.level === lvl && x.enabled) ?? { id: 'dev', name: `dev L${lvl}`, level: lvl, autoLogoffMin: 0 };
           ctx.login(u);

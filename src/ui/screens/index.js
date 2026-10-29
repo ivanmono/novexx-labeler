@@ -7,13 +7,15 @@ import * as Styleguide from './Styleguide.js';
 import * as Startup from './StartupScreen.js';
 import * as Home from './HomeScreen.js';
 import * as Placeholder from './PlaceholderScreen.js';
+import * as Login from './LoginScreen.js';
+import * as User from './UserScreen.js';
 
 export const screens = {
   home: Home,
   startup: Startup,
   styleguide: Styleguide,
   screen: Placeholder, // replaced by Menu / ParamList / masks in Phase 2–3
-  login: Placeholder,
-  user: Placeholder,
+  login: Login,
+  user: User,
   notFound: Placeholder,
 };

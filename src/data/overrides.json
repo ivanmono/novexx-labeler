@@ -19,6 +19,10 @@
       "control": "ip",
       "why": "Excel type '?'. Gateway is an IPv4 address."
     },
+    "141": {
+      "value": 214.5,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Measured roll diameter mm."
+    },
     "246": {
       "cond": "{238}",
       "why": "Excel condition {247=249};{247=250} points at Batch Mode, which is unrelated to 'Printfunction via CAN-Input'. The CAN screen gates it on External_Canbus_Enable (238); recorded in OPEN-POINTS."
@@ -46,6 +50,62 @@
     "701": {
       "control": "date",
       "why": "Info_Date, same reason as 700."
+    },
+    "708": {
+      "value": 37,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Missing labels."
+    },
+    "709": {
+      "value": 1284563,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Total labels dispensed."
+    },
+    "710": {
+      "value": 1532,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Labels dispensed."
+    },
+    "711": {
+      "value": 1490,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Good labels camera."
+    },
+    "712": {
+      "value": 31,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Reject labels camera."
+    },
+    "713": {
+      "value": 11,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Reject labels code."
+    },
+    "714": {
+      "value": 3812.4,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Operational time min."
+    },
+    "715": {
+      "value": 2140.7,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Time in run min."
+    },
+    "716": {
+      "value": 12.3,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Time in alarm min."
+    },
+    "717": {
+      "value": 4.1,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Time in warning min."
+    },
+    "718": {
+      "value": 128456.3,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Total distance m."
+    },
+    "719": {
+      "value": 1843.2,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Distance since service m."
+    },
+    "720": {
+      "value": 612.5,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Time since service min."
+    },
+    "721": {
+      "value": 18432,
+      "why": "Dummy start value for the counters/live values (Excel Val empty): Labels since service."
     },
     "729": {
       "control": "display",

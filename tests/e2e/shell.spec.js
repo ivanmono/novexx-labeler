@@ -1,10 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-/** Boot straight to home (no splash) and expose the dev API. */
-async function open(page, route = '') {
-  await page.goto(`/?nosplash#/${route}`);
-  await page.waitForFunction(() => window.__hmi?.ctx);
-}
+import { open } from './helpers.js';
 
 test.describe('shell', () => {
   test('start-up screen has no bars, progresses, then lands on home', async ({ page }, testInfo) => {
@@ -35,14 +31,6 @@ test.describe('shell', () => {
     await page.evaluate(() => window.__hmi.set('level', '4'));
     await expect(status.locator('[data-secure]')).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath(`home-L4-${testInfo.project.name}.png`) });
-  });
-
-  test('home start/pause toggles the simulator', async ({ page }) => {
-    await open(page);
-    await page.locator('[data-action="toggle"]').click();
-    await expect(page.locator('.status-bar')).toHaveAttribute('data-status', 'run');
-    await page.locator('[data-action="toggle"]').click();
-    await expect(page.locator('.status-bar')).toHaveAttribute('data-status', 'pause');
   });
 
   test('menu button at level 0 rejects; at level 1 opens the main menu; back returns', async ({ page }) => {

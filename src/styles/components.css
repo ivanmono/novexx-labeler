@@ -242,3 +242,31 @@
     border-radius: 0 var(--radius-card) var(--radius-card) 0;
   }
 }
+
+@layer components {
+  /* ---- keyboards ---------------------------------------------------------------- */
+  .keyboard .key {
+    height: 52px;
+    min-width: 0;
+  }
+  .keyboard--compact .key {
+    height: 44px;
+  }
+  .numpad .key {
+    height: var(--spacing-touch);
+  }
+  .key:active {
+    background: var(--hmi-keyboard-key-pressed);
+  }
+  [data-orientation^='landscape'] .keyboard .key {
+    height: 40px;
+  }
+  [data-orientation^='landscape'] .numpad .key {
+    height: 52px;
+  }
+
+  /* ---- stand-by layer -------------------------------------------------------------- */
+  .standby {
+    background: color-mix(in srgb, var(--hmi-bg) 92%, black);
+  }
+}

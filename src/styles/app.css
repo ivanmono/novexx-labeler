@@ -19,3 +19,5 @@
 @source inline('{bg,text}-status-{run,standby,error,warning}-ink');
 @source inline('{w,h}-{1,2,3,4,6,8,12,15}');
 @source inline('rounded-{xs,sm,md,card,card-inner,pill}');
+@source inline('{bg,border}-status-{error,warning}/{15,40}');
+@source inline('{bg,text}-branch-{settings,production,info,service,help,usermgmt}');
