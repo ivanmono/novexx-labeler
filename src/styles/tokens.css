@@ -1,0 +1,263 @@
+/* =============================================================================
+   DESIGN TOKENS — Labeller HMI
+   Source of truth for colour, type, spacing, radius, shadow (docx §5.1, §5.2).
+   Raw palette → semantic variables (theme-switchable on <html data-theme>)
+   → Tailwind theme (utilities such as bg-surface, text-muted, text-status-run).
+   Keep this file in sync with Figma page "HMI / 01 Tokens" (docs/FIGMA.md).
+   ============================================================================= */
+
+/* ---- 1. Raw palette (never used directly in components) ------------------- */
+:root {
+  --raw-brand-500: #20a498; /* primary action */
+  --raw-brand-300: #88e6c6; /* highlight */
+  --raw-brand-700: #1a7a71;
+  --raw-brand-050: #f0fdf4;
+
+  --raw-navy-900: #080e1e; /* dark background */
+  --raw-navy-800: #1d2028;
+  --raw-navy-700: #313648; /* dark card */
+  --raw-navy-600: #4d5a67; /* dark form surface */
+  --raw-navy-500: #505d75; /* dark line */
+  --raw-navy-400: #98a3b2; /* dark secondary text */
+  --raw-navy-300: #b9bfca;
+  --raw-navy-200: #becbd7;
+  --raw-navy-100: #eff6ff; /* dark primary text */
+
+  --raw-light-050: #f4f7fa; /* light background */
+  --raw-light-100: #ffffff; /* light card */
+  --raw-light-200: #e9edf3; /* light form surface */
+  --raw-light-300: #c9d1dc; /* light line */
+  --raw-light-600: #616b7b; /* light secondary text */
+  --raw-light-900: #141a26; /* light primary text */
+
+  --raw-green-500: #22d464; /* running */
+  --raw-green-700: #178f45;
+  --raw-yellow-500: #ffcc04; /* stand-by */
+  --raw-yellow-700: #b58900;
+  --raw-red-500: #e8413f; /* error / alarm */
+  --raw-red-400: #ff6479;
+  --raw-red-700: #c22f2d;
+  --raw-orange-500: #ff601c; /* level badge / warning */
+  --raw-orange-700: #c94a12;
+  --raw-blue-400: #79a3ff; /* level 1 */
+  --raw-purple-500: #b34aff; /* level 3 */
+  --raw-purple-700: #8a2fd0;
+}
+
+/* ---- 2. Semantic tokens — dark theme (default) ---------------------------- */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --hmi-bg: var(--raw-navy-900);
+  --hmi-surface: var(--raw-navy-700);
+  --hmi-surface-2: var(--raw-navy-600);
+  --hmi-line: var(--raw-navy-500);
+  --hmi-line-soft: color-mix(in srgb, var(--raw-navy-500) 55%, transparent);
+  --hmi-text: var(--raw-navy-100);
+  --hmi-text-muted: var(--raw-navy-400);
+  --hmi-text-faint: color-mix(in srgb, var(--raw-navy-400) 60%, transparent);
+  --hmi-chrome: #bfcbd8; /* status-bar icons, nav labels */
+
+  --hmi-brand: var(--raw-brand-500);
+  --hmi-brand-hi: var(--raw-brand-300);
+  --hmi-brand-deep: var(--raw-brand-700);
+  --hmi-on-brand: #04121a;
+
+  /* machine / status colours — same hue in both themes (docx §5.2) */
+  --hmi-status-run: var(--raw-green-500);
+  --hmi-status-standby: var(--raw-yellow-500);
+  --hmi-status-error: var(--raw-red-500);
+  --hmi-status-warning: var(--raw-orange-500);
+  --hmi-status-ready: var(--raw-brand-300);
+  --hmi-status-pause: var(--raw-navy-300);
+  /* same meaning as text on the current background (contrast-safe) */
+  --hmi-status-run-ink: var(--raw-green-500);
+  --hmi-status-standby-ink: var(--raw-yellow-500);
+  --hmi-status-error-ink: var(--raw-red-400);
+  --hmi-status-warning-ink: var(--raw-orange-500);
+
+  /* access levels 0–4 (nav badge, user tiles) */
+  --hmi-level-0: var(--raw-navy-400);
+  --hmi-level-1: var(--raw-blue-400);
+  --hmi-level-2: var(--raw-orange-500);
+  --hmi-level-3: var(--raw-purple-500);
+  --hmi-level-4: var(--raw-red-400);
+
+  /* main-menu branch colour code (docx §6.1, kept from the first draft) */
+  --hmi-branch-settings: var(--raw-blue-400);
+  --hmi-branch-production: var(--raw-orange-500);
+  --hmi-branch-info: var(--raw-green-500);
+  --hmi-branch-service: var(--raw-yellow-500);
+  --hmi-branch-help: var(--raw-brand-500);
+  --hmi-branch-usermgmt: var(--raw-purple-500);
+
+  --hmi-gradient-stroke: linear-gradient(99deg, #43464b 0%, #777f8f 48%, #59606d 100%);
+  --hmi-gradient-stroke-strong: linear-gradient(146deg, #c6cbdd 0%, #2d303b 53%, #c6cbdd 100%);
+  --hmi-gradient-surface: linear-gradient(152deg, #313648 0%, #424756 100%);
+  --hmi-gradient-page: radial-gradient(46.66% 78.22% at 98.75% 0.31%, #4c546c 0%, #1d2028 100%);
+  --hmi-gradient-run: linear-gradient(90deg, transparent 0%, var(--raw-brand-300) 50%, transparent 100%);
+  --hmi-gradient-standby: linear-gradient(90deg, transparent 0%, var(--raw-yellow-500) 50%, transparent 100%);
+  --hmi-gradient-error: linear-gradient(90deg, transparent 0%, var(--raw-red-400) 50%, transparent 100%);
+  --hmi-gradient-warning: linear-gradient(90deg, transparent 0%, var(--raw-orange-500) 50%, transparent 100%);
+
+  --hmi-shadow-card: 0 8px 18px 0 rgb(0 0 0 / 0.25);
+  --hmi-glow-brand: 0 0 25px 0 rgb(136 230 198 / 0.5);
+  --hmi-glow-error: 0 0 60px 0 rgb(255 25 74 / 0.5);
+  --hmi-glow-run: 0 0 60px 0 rgb(111 203 44 / 0.5);
+
+  --hmi-keyboard-key: var(--raw-navy-600);
+  --hmi-keyboard-key-pressed: var(--raw-navy-400);
+  --hmi-overlay: rgb(8 14 30 / 0.7);
+}
+
+/* ---- 3. Semantic tokens — light theme ------------------------------------ */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --hmi-bg: var(--raw-light-050);
+  --hmi-surface: var(--raw-light-100);
+  --hmi-surface-2: var(--raw-light-200);
+  --hmi-line: var(--raw-light-300);
+  --hmi-line-soft: color-mix(in srgb, var(--raw-light-300) 60%, transparent);
+  --hmi-text: var(--raw-light-900);
+  --hmi-text-muted: var(--raw-light-600);
+  --hmi-text-faint: color-mix(in srgb, var(--raw-light-600) 60%, transparent);
+  --hmi-chrome: #5b6677;
+
+  --hmi-brand: var(--raw-brand-500);
+  --hmi-brand-hi: var(--raw-brand-700);
+  --hmi-brand-deep: var(--raw-brand-700);
+  --hmi-on-brand: #ffffff;
+
+  --hmi-status-ready: var(--raw-brand-500);
+  --hmi-status-pause: var(--raw-light-600);
+  --hmi-status-run-ink: var(--raw-green-700);
+  --hmi-status-standby-ink: var(--raw-yellow-700);
+  --hmi-status-error-ink: var(--raw-red-700);
+  --hmi-status-warning-ink: var(--raw-orange-700);
+
+  --hmi-level-0: var(--raw-light-600);
+  --hmi-level-1: #2f6fe4;
+  --hmi-level-2: var(--raw-orange-700);
+  --hmi-level-3: var(--raw-purple-700);
+  --hmi-level-4: var(--raw-red-700);
+
+  --hmi-branch-settings: #2f6fe4;
+  --hmi-branch-production: var(--raw-orange-700);
+  --hmi-branch-info: var(--raw-green-700);
+  --hmi-branch-service: var(--raw-yellow-700);
+  --hmi-branch-help: var(--raw-brand-700);
+  --hmi-branch-usermgmt: var(--raw-purple-700);
+
+  --hmi-gradient-stroke: linear-gradient(99deg, #d5dae3 0%, #aeb6c4 48%, #c3cad6 100%);
+  --hmi-gradient-stroke-strong: linear-gradient(146deg, #ffffff 0%, #aeb6c4 53%, #ffffff 100%);
+  --hmi-gradient-surface: linear-gradient(152deg, #ffffff 0%, #f0f3f8 100%);
+  --hmi-gradient-page: radial-gradient(46.66% 78.22% at 98.75% 0.31%, #ffffff 0%, #e9edf3 100%);
+
+  --hmi-shadow-card: 0 8px 18px 0 rgb(32 60 83 / 0.12);
+  --hmi-glow-brand: 0 0 25px 0 rgb(32 164 152 / 0.35);
+  --hmi-glow-error: 0 0 60px 0 rgb(232 65 63 / 0.35);
+  --hmi-glow-run: 0 0 60px 0 rgb(23 143 69 / 0.35);
+
+  --hmi-keyboard-key: #ffffff;
+  --hmi-keyboard-key-pressed: #dadee5;
+  --hmi-overlay: rgb(20 26 38 / 0.45);
+}
+
+/* ---- 4. Tailwind theme (utilities) ----------------------------------------
+   `inline` makes utilities reference the semantic variable, so they follow the
+   theme switch without a rebuild. Spacing keeps Tailwind's 4 px base, which
+   yields the docx scale 4/8/12/16/24/32/48/60 as 1/2/3/4/6/8/12/15.
+   --------------------------------------------------------------------------- */
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #020202;
+
+  --color-bg: var(--hmi-bg);
+  --color-surface: var(--hmi-surface);
+  --color-surface-2: var(--hmi-surface-2);
+  --color-line: var(--hmi-line);
+  --color-line-soft: var(--hmi-line-soft);
+  --color-text: var(--hmi-text);
+  --color-muted: var(--hmi-text-muted);
+  --color-faint: var(--hmi-text-faint);
+  --color-chrome: var(--hmi-chrome);
+  --color-brand: var(--hmi-brand);
+  --color-brand-hi: var(--hmi-brand-hi);
+  --color-brand-deep: var(--hmi-brand-deep);
+  --color-on-brand: var(--hmi-on-brand);
+  --color-overlay: var(--hmi-overlay);
+
+  --color-status-run: var(--hmi-status-run);
+  --color-status-standby: var(--hmi-status-standby);
+  --color-status-error: var(--hmi-status-error);
+  --color-status-warning: var(--hmi-status-warning);
+  --color-status-ready: var(--hmi-status-ready);
+  --color-status-pause: var(--hmi-status-pause);
+  --color-status-run-ink: var(--hmi-status-run-ink);
+  --color-status-standby-ink: var(--hmi-status-standby-ink);
+  --color-status-error-ink: var(--hmi-status-error-ink);
+  --color-status-warning-ink: var(--hmi-status-warning-ink);
+
+  --color-level-0: var(--hmi-level-0);
+  --color-level-1: var(--hmi-level-1);
+  --color-level-2: var(--hmi-level-2);
+  --color-level-3: var(--hmi-level-3);
+  --color-level-4: var(--hmi-level-4);
+
+  --color-branch-settings: var(--hmi-branch-settings);
+  --color-branch-production: var(--hmi-branch-production);
+  --color-branch-info: var(--hmi-branch-info);
+  --color-branch-service: var(--hmi-branch-service);
+  --color-branch-help: var(--hmi-branch-help);
+  --color-branch-usermgmt: var(--hmi-branch-usermgmt);
+
+  --color-key: var(--hmi-keyboard-key);
+  --color-key-pressed: var(--hmi-keyboard-key-pressed);
+
+  --font-sans: 'Figtree', system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, monospace;
+
+  /* type scale (docx §1 asks to check for larger sizes on the target display) */
+  --text-caption: 12px;
+  --text-caption--line-height: 1.2;
+  --text-caption--letter-spacing: 0.15em;
+  --text-label: 14px;
+  --text-label--line-height: 1.2;
+  --text-body-sm: 16px;
+  --text-body-sm--line-height: 1.25;
+  --text-body: 18px;
+  --text-body--line-height: 1.25;
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 1.25;
+  --text-title: 24px;
+  --text-title--line-height: 1.2;
+  --text-hero: 32px;
+  --text-hero--line-height: 1.15;
+  --text-display: 48px;
+  --text-display--line-height: 1.1;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-card: 24px;
+  --radius-card-inner: 23px;
+  --radius-pill: 9999px;
+
+  --shadow-card: var(--hmi-shadow-card);
+  --shadow-glow-brand: var(--hmi-glow-brand);
+  --shadow-glow-error: var(--hmi-glow-error);
+  --shadow-glow-run: var(--hmi-glow-run);
+
+  /* touch targets (docx §3.2: ≥60 px primary, ≥48 px list rows) */
+  --spacing-touch: 60px;
+  --spacing-touch-row: 48px;
+  --spacing-bar: 80px; /* status / nav bar thickness */
+  --spacing-title: 64px;
+
+  --ease-hmi: cubic-bezier(0.2, 0, 0, 1);
+}

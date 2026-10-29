@@ -1,0 +1,4 @@
+dist
+node_modules
+src/data/*.json
+src/assets/icons/sprite.svg

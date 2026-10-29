@@ -1,0 +1,3090 @@
+{
+  "id": "root",
+  "title": "Main Menu",
+  "subtitle": null,
+  "icon": "menu",
+  "kind": "menu",
+  "branch": null,
+  "src": "KGZeQrobCNhrkpSedkqO-123 (entry circle)",
+  "depth": 0,
+  "parent": null,
+  "path": [
+    "Main Menu"
+  ],
+  "note": null,
+  "shared": null,
+  "target": null,
+  "children": [
+    {
+      "id": "settings",
+      "title": "Settings",
+      "subtitle": null,
+      "icon": "settings",
+      "kind": "menu",
+      "branch": "settings",
+      "src": "KGZeQrobCNhrkpSedkqO-1",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Settings"
+      ],
+      "note": null,
+      "shared": null,
+      "target": null,
+      "children": [
+        {
+          "id": "machine",
+          "title": "Machine",
+          "subtitle": null,
+          "icon": "machine",
+          "kind": "menu",
+          "branch": "settings",
+          "src": "KGZeQrobCNhrkpSedkqO-2",
+          "depth": 2,
+          "parent": "settings",
+          "path": [
+            "Main Menu",
+            "Settings",
+            "Machine"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "options",
+              "title": "Options",
+              "subtitle": null,
+              "icon": "options",
+              "kind": "menu",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-181",
+              "depth": 3,
+              "parent": "machine",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Machine",
+                "Options"
+              ],
+              "note": "Hardware/feature options. Visibility of the sub-items is driven by the Option_* toggles (ParamID 32-36).",
+              "shared": null,
+              "target": null,
+              "children": [
+                {
+                  "id": "pconnector",
+                  "title": "PConnector",
+                  "subtitle": "Applicator type selection",
+                  "icon": "applicator",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-11 / -36",
+                  "depth": 4,
+                  "parent": "options",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Options",
+                    "PConnector"
+                  ],
+                  "note": "The applicator block lives on the MIO card. Four of its rows are repeated here for the Blow-On connector type - same ParamIDs, one value, two places to change it.",
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "PConnector Function Selection",
+                      "pid": 255,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Pivoting Dispensing Edge Mode",
+                      "pid": 259,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Pivoting Dispensing Edge Offset",
+                      "pid": 262,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Pivoting Dispensing Edge Delay",
+                      "pid": 265,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Pivoting Dispensing Edge Wait Distance",
+                      "pid": 266,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Pivoting Dispensing Edge Persevere Time",
+                      "pid": 267,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Pivoting Dispensing Edge Persevere Distance",
+                      "pid": 268,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit",
+                      "pid": 212,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Inhibit Warning",
+                      "pid": 215,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Cycle-Signal",
+                      "pid": 269,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Cycle-Signal Pulse Length",
+                      "pid": 273,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Cycle-Signal Pulse Delay",
+                      "pid": 274,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Apply Mode",
+                      "pid": 307,
+                      "status": "defined",
+                      "note": "New in the 2026-09-01 diagram. Same ParamID as on the MIO card; the show condition now reads \"MIO2 = Applicator or PConnector = Blow-On\"."
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Delay After Dispense",
+                      "pid": 311,
+                      "status": "defined",
+                      "note": "New in the 2026-09-01 diagram."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Blow-On Time",
+                      "pid": 316,
+                      "status": "defined",
+                      "note": "New in the 2026-09-01 diagram."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Label Presence Input",
+                      "pid": 330,
+                      "status": "defined",
+                      "note": "New in the 2026-09-01 diagram."
+                    }
+                  ],
+                  "links": [
+                    {
+                      "to": "mio",
+                      "why": "The full applicator block, gated on MIO2 = Applicator",
+                      "proposed": true
+                    }
+                  ]
+                },
+                {
+                  "id": "printers",
+                  "title": "Printers",
+                  "subtitle": null,
+                  "icon": "printer",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-143 / -209",
+                  "depth": 4,
+                  "parent": "options",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Options",
+                    "Printers"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Printer Option (Enabled/Disabled)",
+                      "pid": 146,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Printer Alarm (High/Low)",
+                      "pid": 147,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Output Printer Start",
+                      "pid": 148,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Start Pulse delay",
+                      "pid": 153,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Start Pulse time",
+                      "pid": 152,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Printer Busy Input / Ignore Start",
+                      "pid": 154,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Dispensing start alarm",
+                      "pid": 158,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Alternate Print",
+                      "pid": 169,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Alternate Print - Number of Labels to print",
+                      "pid": 170,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Alternate Print - Number of Labels no print",
+                      "pid": 171,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Alternate Print - Start Alternate Print Cycle",
+                      "pid": 172,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Simulate Encoder Output / Metering Signal",
+                      "pid": 167,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Simulate Encoder Settings",
+                      "pid": 168,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Printer Input selection",
+                      "pid": 162,
+                      "status": "defined",
+                      "note": "In Excel only - not drawn in the diagram."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Warning Input (High/Low)",
+                      "pid": 165,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Printfunction via CAN-Input",
+                      "pid": 246,
+                      "status": "defined",
+                      "note": "Linked parameter - same value as in Interface > CAN."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Printfunction enabled IO Input (High/Low)",
+                      "pid": 166,
+                      "status": "defined",
+                      "note": null
+                    }
+                  ],
+                  "links": [
+                    {
+                      "to": "can",
+                      "why": "Printfunction via CAN-Input is the same parameter as on the CAN screen",
+                      "proposed": true
+                    }
+                  ],
+                  "gate": {
+                    "param": 146
+                  }
+                },
+                {
+                  "id": "control",
+                  "title": "Control",
+                  "subtitle": "A = Camera, B = Code",
+                  "icon": "camera",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-185 / -187",
+                  "depth": 4,
+                  "parent": "options",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Options",
+                    "Control"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Option Camera (A)",
+                      "pid": 177,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Option Code (B)",
+                      "pid": 187,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "External Alarm (Off, High Level, Low Level)",
+                      "pid": 331,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Good/Bad Output A",
+                      "pid": 181,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Good/Bad Output B",
+                      "pid": 191,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Output Pulse Length A",
+                      "pid": 184,
+                      "status": "defined",
+                      "note": "In Excel only."
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Output Pulse Length B",
+                      "pid": 194,
+                      "status": "defined",
+                      "note": "In Excel only."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Consecutive Error A",
+                      "pid": 186,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Consecutive Error B",
+                      "pid": 196,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Label Position A (in labels to edge)",
+                      "pid": 178,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Label Position B (in labels to edge)",
+                      "pid": 188,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Control Window A (from start of label)",
+                      "pid": 179,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Control Window B (from start of label)",
+                      "pid": 189,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Extend Control Window A (time for processing)",
+                      "pid": 180,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Extend Control Window B (time for processing)",
+                      "pid": 190,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Data Valid A",
+                      "pid": 185,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Data Valid B",
+                      "pid": 195,
+                      "status": "defined",
+                      "note": null
+                    }
+                  ],
+                  "gate": {
+                    "params": [
+                      177,
+                      187
+                    ]
+                  }
+                },
+                {
+                  "id": "mio",
+                  "title": "MIO-Card",
+                  "subtitle": "Signals & Applicator",
+                  "icon": "card",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "1HVUSzmmTR6Z41bdG5ZZ-6 / -35",
+                  "depth": 4,
+                  "parent": "options",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Options",
+                    "MIO-Card"
+                  ],
+                  "note": "Renamed and extended in the 2026-08-19 diagram: the card screen now also holds the complete applicator block. That answers the earlier open point - MIO2 Selection and the parameters it switches on now live on the same screen. Reachable from Machine > Options and from Interface > Digital IO.",
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Inhibit / Disable Start",
+                      "pid": 212,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit Warning",
+                      "pid": 215,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "MIO2 Selection",
+                      "pid": 303,
+                      "status": "defined",
+                      "note": "Options: Status / Applicator / Custom. Setting it to Applicator is what makes every row below visible."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Apply Mode",
+                      "pid": 307,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Delay After Dispense",
+                      "pid": 311,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Dwell Time",
+                      "pid": 312,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Touch-Down Input",
+                      "pid": 313,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Touch-Down Timeout",
+                      "pid": 315,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Applicator Alarm",
+                      "pid": 323,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Blow-On Time",
+                      "pid": 316,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Vacuum Mode",
+                      "pid": 317,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 2,
+                      "label": "Vacuum Offset",
+                      "pid": 321,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Position Timeout",
+                      "pid": 322,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Restart Delay",
+                      "pid": 328,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Applicator Compensation Time",
+                      "pid": 329,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Label Presence Input",
+                      "pid": 330,
+                      "status": "defined",
+                      "note": null
+                    }
+                  ],
+                  "links": [
+                    {
+                      "to": "applicatortest",
+                      "why": "Set up the applicator here, try it out there - today that is a five-step walk through the menu",
+                      "proposed": true
+                    },
+                    {
+                      "to": "pconnector",
+                      "why": "The other half of the applicator setup",
+                      "proposed": true
+                    }
+                  ]
+                },
+                {
+                  "id": "buscard",
+                  "title": "Bus- & Network Card",
+                  "subtitle": "*dynamic name",
+                  "icon": "card",
+                  "kind": "placeholder",
+                  "branch": "settings",
+                  "src": "1HVUSzmmTR6Z41bdG5ZZ-9 / -19",
+                  "depth": 4,
+                  "parent": "options",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Options",
+                    "Bus- & Network Card"
+                  ],
+                  "note": "Marked \"comes later\" in the diagram. Shown as a disabled placeholder; the tile caption is generated at runtime from the detected card.",
+                  "shared": null,
+                  "target": null,
+                  "optionKey": "busCard",
+                  "gate": {
+                    "machine": "busCard"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "unwinder",
+              "title": "Unwinder",
+              "subtitle": null,
+              "icon": "unwinder",
+              "kind": "list",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-3 / -39",
+              "depth": 3,
+              "parent": "machine",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Machine",
+                "Unwinder"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "Roll End Alarm",
+                  "pid": 137,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Roll End Alarm Diameter",
+                  "pid": 142,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Roll End Warning Diameter",
+                  "pid": 143,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Label Roll Inner Diameter",
+                  "pid": 140,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Label Roll Diameter Measured",
+                  "pid": 141,
+                  "status": "defined",
+                  "note": null
+                }
+              ],
+              "links": [
+                {
+                  "to": "label",
+                  "why": "Roll and label geometry are usually set up together",
+                  "proposed": true
+                }
+              ]
+            },
+            {
+              "id": "rewinder",
+              "title": "Rewinder",
+              "subtitle": null,
+              "icon": "rewinder",
+              "kind": "placeholder",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-8 / 7VYFu0i-ZTWRBuyH0wE8-29",
+              "depth": 3,
+              "parent": "machine",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Machine",
+                "Rewinder"
+              ],
+              "note": "Diagram note: to be defined for the D-Series, only visible for that machine type, enabled via the crypto chip information. So this is the first screen whose visibility depends on machine type rather than on a parameter - the design needs a rule for machine-type dependent tiles.",
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "Rewinder Roll Warning Diameter",
+                  "pid": null,
+                  "status": "planned",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Rewinder Roll Warning Diameter Measured",
+                  "pid": null,
+                  "status": "planned",
+                  "note": null
+                }
+              ],
+              "machineTypes": [
+                "D-Series"
+              ],
+              "gate": {
+                "machine": "rewinder"
+              }
+            },
+            {
+              "id": "driveunit",
+              "title": "Drive Unit",
+              "subtitle": null,
+              "icon": "drive",
+              "kind": "menu",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-10",
+              "depth": 3,
+              "parent": "machine",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Machine",
+                "Drive Unit"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "children": [
+                {
+                  "id": "start",
+                  "title": "Start",
+                  "subtitle": null,
+                  "icon": "start",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-32",
+                  "depth": 4,
+                  "parent": "driveunit",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Drive Unit",
+                    "Start"
+                  ],
+                  "note": null,
+                  "shared": "Also reachable via Digital IO > Sensors",
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Start Input",
+                      "pid": 197,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Start delay time",
+                      "pid": 145,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Start delay space",
+                      "pid": 144,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Minimum product distance",
+                      "pid": 211,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Minimum product delay",
+                      "pid": 210,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Minimum Start Input Pulse Length",
+                      "pid": 209,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Start Input MUX",
+                      "pid": 200,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Multi Label Mode",
+                      "pid": 173,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Space between Multi Labels",
+                      "pid": 174,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Time between Multi Labels",
+                      "pid": 175,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Partial label Mode",
+                      "pid": 216,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "First Space Partial Label Mode",
+                      "pid": 217,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Dynamic Start Compensation",
+                      "pid": 203,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Start Compensation Delta",
+                      "pid": 206,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Start Compensation Minimum Speed",
+                      "pid": 207,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Start Compensation Maximum Speed",
+                      "pid": 208,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Inhibit / Disable Start",
+                      "pid": 212,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit Warning",
+                      "pid": 215,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit at Activate - queued",
+                      "pid": 213,
+                      "status": "defined",
+                      "note": "New in this version - not drawn in the diagram. Screen assignment to confirm."
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit at Deactivate - queued",
+                      "pid": 214,
+                      "status": "defined",
+                      "note": "New in this version - not drawn in the diagram. Screen assignment to confirm."
+                    }
+                  ]
+                },
+                {
+                  "id": "stop",
+                  "title": "Stop",
+                  "subtitle": null,
+                  "icon": "stop",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-148",
+                  "depth": 4,
+                  "parent": "driveunit",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Drive Unit",
+                    "Stop"
+                  ],
+                  "note": null,
+                  "shared": "Also reachable via Digital IO > Sensors",
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Button: Teach Label Length",
+                      "pid": 802,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Button: Sensor Teaching",
+                      "pid": 801,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Label Length",
+                      "pid": 117,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Stop Input",
+                      "pid": 198,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Stop delay",
+                      "pid": 218,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Stop Sensor Label Length Filter",
+                      "pid": 219,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Stop Sensor Gap Length Filter",
+                      "pid": 220,
+                      "status": "defined",
+                      "note": "In Excel only."
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Minimum Stop Input Pulse Length",
+                      "pid": null,
+                      "status": "tbd",
+                      "note": "No matching row in the Excel sheet."
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Missing label mode",
+                      "pid": 233,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Label Presence Alarm",
+                      "pid": 236,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Label Presence Detect Tolerance",
+                      "pid": 237,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Stop Compensation",
+                      "pid": 221,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Sensor Type",
+                      "pid": 222,
+                      "status": "defined",
+                      "note": "Three types planned at start: optical through-beam, capacitive, ultrasonic. Opt4-Opt10 are reserved IDs for later variants - see the report."
+                    }
+                  ]
+                },
+                {
+                  "id": "speed",
+                  "title": "Speed",
+                  "subtitle": null,
+                  "icon": "speed",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-153",
+                  "depth": 4,
+                  "parent": "driveunit",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Drive Unit",
+                    "Speed"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Speed Selection",
+                      "pid": 118,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Fixed Speed",
+                      "pid": 122,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Encoder Pulley Diameter",
+                      "pid": 124,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Encoder Resolution",
+                      "pid": 125,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Encoder Type",
+                      "pid": 126,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Encoder speed modification",
+                      "pid": 130,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Manual Feed Speed",
+                      "pid": 123,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Manual Feed (action)",
+                      "pid": 7,
+                      "status": "defined",
+                      "note": "In Excel only."
+                    }
+                  ]
+                },
+                {
+                  "id": "drivesettings",
+                  "title": "Drive Settings",
+                  "subtitle": null,
+                  "icon": "drivecfg",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-194",
+                  "depth": 4,
+                  "parent": "driveunit",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Drive Unit",
+                    "Drive Settings"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Startup Mode",
+                      "pid": 300,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Endless Mode",
+                      "pid": 199,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Acceleration Ramp",
+                      "pid": 131,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Deceleration Ramp",
+                      "pid": 132,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Product Rate Calculation",
+                      "pid": 136,
+                      "status": "defined",
+                      "note": "New in the 2026-09-21 diagram."
+                    }
+                  ]
+                },
+                {
+                  "id": "tandem",
+                  "title": "Tandem",
+                  "subtitle": null,
+                  "icon": "tandem",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "KGZeQrobCNhrkpSedkqO-168",
+                  "depth": 4,
+                  "parent": "driveunit",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Machine",
+                    "Drive Unit",
+                    "Tandem"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Enable External CAN",
+                      "pid": 238,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "CAN ID",
+                      "pid": 239,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "BaudRate",
+                      "pid": 240,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Tandem Mode",
+                      "pid": 275,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Space Offset Begin",
+                      "pid": 284,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Space Offset Persevere",
+                      "pid": 285,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Trigger Offset Begin",
+                      "pid": 286,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Trigger Offset Persevere",
+                      "pid": 287,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Time Offset Begin",
+                      "pid": 288,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Secondary Time Offset Persevere",
+                      "pid": 289,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Space Offset Begin",
+                      "pid": 290,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Space Offset Persevere",
+                      "pid": 291,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Trigger Offset Begin",
+                      "pid": 292,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Trigger Offset Persevere",
+                      "pid": 293,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Time Offset Begin",
+                      "pid": 294,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Backup Time Offset Persevere",
+                      "pid": 295,
+                      "status": "defined",
+                      "note": null
+                    }
+                  ],
+                  "gate": {
+                    "param": 238
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ref-digitalio-machine",
+              "title": "Digital IO",
+              "subtitle": null,
+              "icon": "io",
+              "kind": "ref",
+              "branch": "settings",
+              "src": "edge KGZeQrobCNhrkpSedkqO-9 -> -2",
+              "depth": 3,
+              "parent": "machine",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Machine",
+                "Digital IO"
+              ],
+              "note": "The diagram links Digital IO to Machine as well as to Interface. Same screen, two entry points.",
+              "shared": null,
+              "target": "digitalio"
+            }
+          ]
+        },
+        {
+          "id": "interface",
+          "title": "Interface",
+          "subtitle": null,
+          "icon": "interface",
+          "kind": "menu",
+          "branch": "settings",
+          "src": "KGZeQrobCNhrkpSedkqO-55",
+          "depth": 2,
+          "parent": "settings",
+          "path": [
+            "Main Menu",
+            "Settings",
+            "Interface"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "digitalio",
+              "title": "Digital IO",
+              "subtitle": null,
+              "icon": "io",
+              "kind": "menu",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-9",
+              "depth": 3,
+              "parent": "interface",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Interface",
+                "Digital IO"
+              ],
+              "note": "Collects every IO-related block. Control, PConnector, the MIO card and Sensors are linked here in the diagram as well as under Machine > Options - same screens, second entry point.",
+              "shared": null,
+              "target": null,
+              "children": [
+                {
+                  "id": "sensors",
+                  "title": "Sensors",
+                  "subtitle": null,
+                  "icon": "sensor",
+                  "kind": "menu",
+                  "branch": "settings",
+                  "src": "1HVUSzmmTR6Z41bdG5ZZ-24",
+                  "depth": 4,
+                  "parent": "digitalio",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Interface",
+                    "Digital IO",
+                    "Sensors"
+                  ],
+                  "note": "In the diagram the Start and Stop parameter blocks point to Sensors. Implemented as references to the same two screens.",
+                  "shared": null,
+                  "target": null,
+                  "children": [
+                    {
+                      "id": "ref-start",
+                      "title": "Start",
+                      "subtitle": null,
+                      "icon": "start",
+                      "kind": "ref",
+                      "branch": "settings",
+                      "src": null,
+                      "depth": 5,
+                      "parent": "sensors",
+                      "path": [
+                        "Main Menu",
+                        "Settings",
+                        "Interface",
+                        "Digital IO",
+                        "Sensors",
+                        "Start"
+                      ],
+                      "note": null,
+                      "shared": null,
+                      "target": "start"
+                    },
+                    {
+                      "id": "ref-stop",
+                      "title": "Stop",
+                      "subtitle": null,
+                      "icon": "stop",
+                      "kind": "ref",
+                      "branch": "settings",
+                      "src": null,
+                      "depth": 5,
+                      "parent": "sensors",
+                      "path": [
+                        "Main Menu",
+                        "Settings",
+                        "Interface",
+                        "Digital IO",
+                        "Sensors",
+                        "Stop"
+                      ],
+                      "note": null,
+                      "shared": null,
+                      "target": "stop"
+                    }
+                  ]
+                },
+                {
+                  "id": "furtherio",
+                  "title": "Further IO-Signals",
+                  "subtitle": null,
+                  "icon": "signal",
+                  "kind": "list",
+                  "branch": "settings",
+                  "src": "1HVUSzmmTR6Z41bdG5ZZ-2 / -177",
+                  "depth": 4,
+                  "parent": "digitalio",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Interface",
+                    "Digital IO",
+                    "Further IO-Signals"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": null,
+                  "items": [
+                    {
+                      "indent": 0,
+                      "label": "Cycle-Signal",
+                      "pid": 269,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Cycle-Signal Pulse Length",
+                      "pid": 273,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Cycle-Signal Pulse Delay",
+                      "pid": 274,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "Inhibit / Disable Start",
+                      "pid": 212,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 1,
+                      "label": "Inhibit Warning",
+                      "pid": 215,
+                      "status": "defined",
+                      "note": null
+                    },
+                    {
+                      "indent": 0,
+                      "label": "External Error",
+                      "pid": 331,
+                      "status": "defined",
+                      "note": null
+                    }
+                  ]
+                },
+                {
+                  "id": "ref-control",
+                  "title": "Control",
+                  "subtitle": null,
+                  "icon": "camera",
+                  "kind": "ref",
+                  "branch": "settings",
+                  "src": null,
+                  "depth": 4,
+                  "parent": "digitalio",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Interface",
+                    "Digital IO",
+                    "Control"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": "control"
+                },
+                {
+                  "id": "ref-pconnector",
+                  "title": "PConnector",
+                  "subtitle": null,
+                  "icon": "applicator",
+                  "kind": "ref",
+                  "branch": "settings",
+                  "src": null,
+                  "depth": 4,
+                  "parent": "digitalio",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Interface",
+                    "Digital IO",
+                    "PConnector"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": "pconnector"
+                },
+                {
+                  "id": "ref-mio",
+                  "title": "MIO-Card",
+                  "subtitle": "Signals & Applicator",
+                  "icon": "card",
+                  "kind": "ref",
+                  "branch": "settings",
+                  "src": "edge 1HVUSzmmTR6Z41bdG5ZZ-6 -> KGZeQrobCNhrkpSedkqO-9",
+                  "depth": 4,
+                  "parent": "digitalio",
+                  "path": [
+                    "Main Menu",
+                    "Settings",
+                    "Interface",
+                    "Digital IO",
+                    "MIO-Card"
+                  ],
+                  "note": null,
+                  "shared": null,
+                  "target": "mio"
+                }
+              ]
+            },
+            {
+              "id": "network",
+              "title": "Network",
+              "subtitle": null,
+              "icon": "network",
+              "kind": "list",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-79 / 7VYFu0i-ZTWRBuyH0wE8-23 \"Network Settings\"",
+              "depth": 3,
+              "parent": "interface",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Interface",
+                "Network"
+              ],
+              "note": "Collects every network service. The separate Webserver tile went in the previous version, the OPC UA tile in this one - OPC UA is two rows here now. Gateway Address and Easyplug Enable are new as well.",
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "IP-Address Mode",
+                  "pid": 105,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "IP-Address",
+                  "pid": 108,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Subnet Mask",
+                  "pid": 109,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Gateway Address",
+                  "pid": 110,
+                  "status": "defined",
+                  "note": "New in the 2026-09-01 diagram."
+                },
+                {
+                  "indent": 1,
+                  "label": "DHCP-Name",
+                  "pid": 111,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "WebServer",
+                  "pid": 112,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "WLAN",
+                  "pid": 113,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "OPC UA Enable",
+                  "pid": 114,
+                  "status": "defined",
+                  "note": "New in the 2026-09-01 diagram. The separate OPC UA tile is gone."
+                },
+                {
+                  "indent": 1,
+                  "label": "OPC UA Server Name",
+                  "pid": 115,
+                  "status": "defined",
+                  "note": "New in the 2026-09-01 diagram."
+                },
+                {
+                  "indent": 0,
+                  "label": "Easyplug Enable",
+                  "pid": 116,
+                  "status": "defined",
+                  "note": "New in the 2026-09-01 diagram."
+                }
+              ]
+            },
+            {
+              "id": "can",
+              "title": "CAN",
+              "subtitle": null,
+              "icon": "can",
+              "kind": "list",
+              "branch": "settings",
+              "src": "KGZeQrobCNhrkpSedkqO-83 / -155",
+              "depth": 3,
+              "parent": "interface",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Interface",
+                "CAN"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "Enable External CAN",
+                  "pid": 238,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "CAN ID",
+                  "pid": 239,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "BaudRate",
+                  "pid": 240,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Printfunction via CAN-Input",
+                  "pid": 246,
+                  "status": "defined",
+                  "note": "Linked parameter - same value as in Options > Printers."
+                },
+                {
+                  "indent": 0,
+                  "label": "Option CAN-Bus",
+                  "pid": null,
+                  "status": "tbd",
+                  "note": "Existed in an earlier file version and was removed - is the CAN option now covered by Enable External CAN alone?"
+                }
+              ]
+            },
+            {
+              "id": "ref-buscard",
+              "title": "Bus- & Network Card",
+              "subtitle": null,
+              "icon": "card",
+              "kind": "ref",
+              "branch": "settings",
+              "src": null,
+              "depth": 3,
+              "parent": "interface",
+              "path": [
+                "Main Menu",
+                "Settings",
+                "Interface",
+                "Bus- & Network Card"
+              ],
+              "note": null,
+              "shared": null,
+              "target": "buscard"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "title": "Label",
+          "subtitle": null,
+          "icon": "label",
+          "kind": "list",
+          "branch": "settings",
+          "src": "KGZeQrobCNhrkpSedkqO-56 / vEB-SgFbKxuN5mocZhpQ-6",
+          "depth": 2,
+          "parent": "settings",
+          "path": [
+            "Main Menu",
+            "Settings",
+            "Label"
+          ],
+          "note": "Overlaps strongly with Drive Unit > Start/Stop: 9 of 12 rows are the same ParamIDs. See the optimisation notes in the report.",
+          "shared": null,
+          "target": null,
+          "items": [
+            {
+              "indent": 0,
+              "label": "Button: Teach Label Length",
+              "pid": 802,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Button: Sensor Teaching",
+              "pid": 801,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Label Length",
+              "pid": 117,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Label Maximum Length",
+              "pid": 176,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Multi Label Mode",
+              "pid": 173,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Space between Multi Labels",
+              "pid": 174,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Time between Multi Labels",
+              "pid": 175,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Partial label Mode",
+              "pid": 216,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "First Space Partial Label Mode",
+              "pid": 217,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Stop delay",
+              "pid": 218,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Missing label mode",
+              "pid": 233,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Label Presence Alarm",
+              "pid": 236,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Label Presence Detect Tolerance",
+              "pid": 237,
+              "status": "defined",
+              "note": null
+            }
+          ],
+          "links": [
+            {
+              "to": "start",
+              "why": "Start carries the same Multi Label and Partial Label rows",
+              "proposed": true
+            },
+            {
+              "to": "stop",
+              "why": "Stop carries the same label length and missing label rows",
+              "proposed": true
+            }
+          ]
+        },
+        {
+          "id": "hmi",
+          "title": "HMI",
+          "subtitle": null,
+          "icon": "display",
+          "kind": "list",
+          "branch": "settings",
+          "src": "KGZeQrobCNhrkpSedkqO-92 / vEB-SgFbKxuN5mocZhpQ-4",
+          "depth": 2,
+          "parent": "settings",
+          "path": [
+            "Main Menu",
+            "Settings",
+            "HMI"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "items": [
+            {
+              "indent": 0,
+              "label": "Language",
+              "pid": 500,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Time",
+              "pid": 700,
+              "status": "defined",
+              "note": "Type String with a number keypad - a time widget is still missing from the list of input field types."
+            },
+            {
+              "indent": 0,
+              "label": "Date",
+              "pid": 701,
+              "status": "defined",
+              "note": "Same widget question as Time."
+            },
+            {
+              "indent": 0,
+              "label": "Orientation",
+              "pid": 601,
+              "status": "defined",
+              "note": "In the parameter list, but NOT on the HMI block of the 2026-09-01 diagram any more - and it grew from four to six options. Kept here because the parameter exists and drives the whole layout. Where should it live?"
+            },
+            {
+              "indent": 0,
+              "label": "Dark Mode",
+              "pid": 612,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Device Name",
+              "pid": 600,
+              "status": "defined",
+              "note": "New in this version, replaces the earlier \"line name\". Shown on the home screen."
+            },
+            {
+              "indent": 0,
+              "label": "Stand-By-Timer",
+              "pid": 613,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Start-Up Logo",
+              "pid": 608,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Quicklink 1",
+              "pid": 614,
+              "status": "defined",
+              "note": "Holds the ParamID of the parameter behind the home-screen shortcut."
+            },
+            {
+              "indent": 0,
+              "label": "Quicklink 2",
+              "pid": 615,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Quicklink 3",
+              "pid": 616,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Quicklink 4",
+              "pid": 617,
+              "status": "defined",
+              "note": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "production",
+      "title": "Production",
+      "subtitle": null,
+      "icon": "production",
+      "kind": "menu",
+      "branch": "production",
+      "src": "KGZeQrobCNhrkpSedkqO-158",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Production"
+      ],
+      "note": null,
+      "shared": null,
+      "target": null,
+      "children": [
+        {
+          "id": "formats",
+          "title": "Formats",
+          "subtitle": null,
+          "icon": "recipe",
+          "kind": "menu",
+          "branch": "production",
+          "src": "KGZeQrobCNhrkpSedkqO-59",
+          "depth": 2,
+          "parent": "production",
+          "path": [
+            "Main Menu",
+            "Production",
+            "Formats"
+          ],
+          "note": "Renamed from \"Formats/Recipes\" and restructured in the 2026-09-21 diagram: Save Format and the two Compare/Check screens are gone, Modify Format and Create New Format are new. All three are custom masks, not parameter lists.",
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "selectformat",
+              "title": "Select Format",
+              "subtitle": null,
+              "icon": "folderopen",
+              "kind": "mask",
+              "branch": "production",
+              "src": "KGZeQrobCNhrkpSedkqO-137 / 1kMq5FSSAxZiEf7XC0P9-2",
+              "depth": 3,
+              "parent": "formats",
+              "path": [
+                "Main Menu",
+                "Production",
+                "Formats",
+                "Select Format"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "formatlist",
+              "accessRead": 1,
+              "accessAction": 1
+            },
+            {
+              "id": "modifyformat",
+              "title": "Modify Format",
+              "subtitle": null,
+              "icon": "save",
+              "kind": "mask",
+              "branch": "production",
+              "src": "1kMq5FSSAxZiEf7XC0P9-4 / -6",
+              "depth": 3,
+              "parent": "formats",
+              "path": [
+                "Main Menu",
+                "Production",
+                "Formats",
+                "Modify Format"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "formatlist",
+              "accessRead": 1,
+              "accessAction": 2
+            },
+            {
+              "id": "createformat",
+              "title": "Create New Format",
+              "subtitle": null,
+              "icon": "formatnew",
+              "kind": "mask",
+              "branch": "production",
+              "src": "1kMq5FSSAxZiEf7XC0P9-8 / -13",
+              "depth": 3,
+              "parent": "formats",
+              "path": [
+                "Main Menu",
+                "Production",
+                "Formats",
+                "Create New Format"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "textinput",
+              "accessRead": 1,
+              "accessAction": 2
+            }
+          ]
+        },
+        {
+          "id": "batch",
+          "title": "Batch Mode",
+          "subtitle": null,
+          "icon": "batch",
+          "kind": "list",
+          "branch": "production",
+          "src": "vEB-SgFbKxuN5mocZhpQ-8 / -10",
+          "depth": 2,
+          "parent": "production",
+          "path": [
+            "Main Menu",
+            "Production",
+            "Batch Mode"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "items": [
+            {
+              "indent": 0,
+              "label": "Batch Mode",
+              "pid": 247,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Secure Production Mode",
+              "pid": 251,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Batch Counter",
+              "pid": 252,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Autostart Delay",
+              "pid": 253,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Autostart Distance",
+              "pid": 254,
+              "status": "defined",
+              "note": null
+            }
+          ],
+          "links": [
+            {
+              "to": "info",
+              "why": "Batch counter and the machine counters belong to the same question: how much has run",
+              "proposed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "info",
+      "title": "Information/Counters",
+      "subtitle": null,
+      "icon": "counter",
+      "kind": "list",
+      "branch": "info",
+      "src": "KGZeQrobCNhrkpSedkqO-61 / 7VYFu0i-ZTWRBuyH0wE8-17 \"Information & Counter\"",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Information/Counters"
+      ],
+      "note": "Filled in the 2026-08-19 diagram. 20 rows on one screen - a candidate for a split into Information and Counters, see the optimisation notes.",
+      "shared": null,
+      "target": null,
+      "items": [
+        {
+          "indent": 0,
+          "label": "Information",
+          "pid": null,
+          "status": "header",
+          "note": "Group header"
+        },
+        {
+          "indent": 1,
+          "label": "Machine Type",
+          "pid": 704,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "SW-Version",
+          "pid": 702,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "SW-Date",
+          "pid": 703,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Manufacturer",
+          "pid": 705,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Manufacturing Date",
+          "pid": 706,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Manufacturing Location",
+          "pid": 707,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 0,
+          "label": "Counters",
+          "pid": null,
+          "status": "header",
+          "note": "Group header"
+        },
+        {
+          "indent": 1,
+          "label": "Total Labels Dispensed",
+          "pid": 709,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Total Distance Dispensed",
+          "pid": 718,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Distance since last Service",
+          "pid": 719,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Time since last Service",
+          "pid": 720,
+          "status": "defined",
+          "note": "The parameter counts days, the diagram says \"time\" - agree on one."
+        },
+        {
+          "indent": 1,
+          "label": "Labels since last Service",
+          "pid": 721,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Labels Dispensed",
+          "pid": 710,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Operational Time",
+          "pid": 714,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Time in Run",
+          "pid": 715,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Time in Alarm",
+          "pid": 716,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Time in Warning",
+          "pid": 717,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Good Labels (Camera)",
+          "pid": 711,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Reject Labels (Camera)",
+          "pid": 712,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Reject Labels (Code)",
+          "pid": 713,
+          "status": "defined",
+          "note": null
+        },
+        {
+          "indent": 1,
+          "label": "Missing Labels",
+          "pid": 708,
+          "status": "defined",
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "service",
+      "title": "Service",
+      "subtitle": null,
+      "icon": "service",
+      "kind": "menu",
+      "branch": "service",
+      "src": "KGZeQrobCNhrkpSedkqO-64",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Service"
+      ],
+      "note": "Changed in the 2026-08-19 diagram: \"Parameter Overview (read only)\" is gone and \"User modified Parameters\" moved up from Files to Service.",
+      "shared": null,
+      "target": null,
+      "children": [
+        {
+          "id": "tests",
+          "title": "Tests",
+          "subtitle": null,
+          "icon": "test",
+          "kind": "menu",
+          "branch": "service",
+          "src": "KGZeQrobCNhrkpSedkqO-105",
+          "depth": 2,
+          "parent": "service",
+          "path": [
+            "Main Menu",
+            "Service",
+            "Tests"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "speedtest",
+              "title": "Speed Test",
+              "subtitle": null,
+              "icon": "speed",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-109 / 1kMq5FSSAxZiEf7XC0P9-22",
+              "depth": 3,
+              "parent": "tests",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Tests",
+                "Speed Test"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "speedtest",
+              "accessRead": 1,
+              "accessAction": 2
+            },
+            {
+              "id": "iotest",
+              "title": "IO-Test",
+              "subtitle": null,
+              "icon": "iotest",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-107 / 1kMq5FSSAxZiEf7XC0P9-24",
+              "depth": 3,
+              "parent": "tests",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Tests",
+                "IO-Test"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "iotable",
+              "accessRead": 1,
+              "accessAction": 3
+            },
+            {
+              "id": "applicatortest",
+              "title": "Applicator Test",
+              "subtitle": null,
+              "icon": "applicatortest",
+              "kind": "list",
+              "branch": "service",
+              "src": "q4jQLp2FBiCRd6Glpq8W-1 / -5",
+              "depth": 3,
+              "parent": "tests",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Tests",
+                "Applicator Test"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "Trigger-Button for Applicator States",
+                  "pid": null,
+                  "status": "header",
+                  "note": "Group header"
+                },
+                {
+                  "indent": 1,
+                  "label": "Cylinder active",
+                  "pid": 803,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Support air active",
+                  "pid": 804,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Vacuum active",
+                  "pid": 805,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Blow active",
+                  "pid": 806,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Trigger-Button for Applicator Test Cycle",
+                  "pid": 807,
+                  "status": "defined",
+                  "note": "includes dispensing"
+                },
+                {
+                  "indent": 1,
+                  "label": "Single step cycle",
+                  "pid": 808,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Counters",
+                  "pid": null,
+                  "status": "header",
+                  "note": "Group header"
+                },
+                {
+                  "indent": 1,
+                  "label": "Dispensing Time",
+                  "pid": 722,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Applicator Apply Time",
+                  "pid": 723,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Start to Apply Time",
+                  "pid": 724,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 1,
+                  "label": "Full Cycle Time",
+                  "pid": 725,
+                  "status": "defined",
+                  "note": null
+                }
+              ]
+            },
+            {
+              "id": "testmode",
+              "title": "Test-Mode",
+              "subtitle": null,
+              "icon": "testmode",
+              "kind": "list",
+              "branch": "service",
+              "src": "vEB-SgFbKxuN5mocZhpQ-13 / -16",
+              "depth": 3,
+              "parent": "tests",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Tests",
+                "Test-Mode"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "items": [
+                {
+                  "indent": 0,
+                  "label": "Test Mode",
+                  "pid": 296,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Test Speed",
+                  "pid": 297,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "On Time",
+                  "pid": 298,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Off Time",
+                  "pid": 299,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Counter Test Duration",
+                  "pid": 726,
+                  "status": "defined",
+                  "note": null
+                },
+                {
+                  "indent": 0,
+                  "label": "Counter Test Cycles",
+                  "pid": 727,
+                  "status": "defined",
+                  "note": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "diagnostic",
+          "title": "Diagnostic Function",
+          "subtitle": null,
+          "icon": "diagnostic",
+          "kind": "menu",
+          "branch": "service",
+          "src": "KGZeQrobCNhrkpSedkqO-111",
+          "depth": 2,
+          "parent": "service",
+          "path": [
+            "Main Menu",
+            "Service",
+            "Diagnostic Function"
+          ],
+          "note": "The separate \"Button/Switch Activate Diagnosis\" screen is gone - the toggle now sits on the Diagnosis Logs screen.",
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "diaglogs",
+              "title": "Diagnosis Logs",
+              "subtitle": null,
+              "icon": "logs",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-116 / 1kMq5FSSAxZiEf7XC0P9-20",
+              "depth": 3,
+              "parent": "diagnostic",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Diagnostic Function",
+                "Diagnosis Logs"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "eventlog",
+              "accessRead": 2,
+              "accessAction": 3
+            },
+            {
+              "id": "errorhistory",
+              "title": "Error History",
+              "subtitle": "audit trail",
+              "icon": "history",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-118 / 1kMq5FSSAxZiEf7XC0P9-18",
+              "depth": 3,
+              "parent": "diagnostic",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Diagnostic Function",
+                "Error History"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "errorlog",
+              "accessRead": 1,
+              "accessAction": 3
+            }
+          ]
+        },
+        {
+          "id": "reporting",
+          "title": "Reporting",
+          "subtitle": "service done",
+          "icon": "report",
+          "kind": "mask",
+          "branch": "service",
+          "src": "KGZeQrobCNhrkpSedkqO-121 / 1kMq5FSSAxZiEf7XC0P9-10",
+          "depth": 2,
+          "parent": "service",
+          "path": [
+            "Main Menu",
+            "Service",
+            "Reporting"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "servicereport",
+          "accessRead": 3,
+          "accessAction": 3
+        },
+        {
+          "id": "files",
+          "title": "Files",
+          "subtitle": null,
+          "icon": "files",
+          "kind": "menu",
+          "branch": "service",
+          "src": "KGZeQrobCNhrkpSedkqO-130",
+          "depth": 2,
+          "parent": "service",
+          "path": [
+            "Main Menu",
+            "Service",
+            "Files"
+          ],
+          "note": "Both screens are the same USB file browser with different filters and different actions - one component, two configurations.",
+          "shared": null,
+          "target": null,
+          "children": [
+            {
+              "id": "backup",
+              "title": "Load/Store Backup",
+              "subtitle": "USB",
+              "icon": "backup",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-131 / 1kMq5FSSAxZiEf7XC0P9-15",
+              "depth": 3,
+              "parent": "files",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Files",
+                "Load/Store Backup"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "browser",
+              "accessRead": 2,
+              "accessAction": 3
+            },
+            {
+              "id": "fwupdate",
+              "title": "FW-Update",
+              "subtitle": "USB",
+              "icon": "fwupdate",
+              "kind": "mask",
+              "branch": "service",
+              "src": "KGZeQrobCNhrkpSedkqO-134 / 1kMq5FSSAxZiEf7XC0P9-17",
+              "depth": 3,
+              "parent": "files",
+              "path": [
+                "Main Menu",
+                "Service",
+                "Files",
+                "FW-Update"
+              ],
+              "note": null,
+              "shared": null,
+              "target": null,
+              "mask": "browser",
+              "accessRead": 3,
+              "accessAction": 3
+            }
+          ]
+        },
+        {
+          "id": "usermodified",
+          "title": "User modified Parameters",
+          "subtitle": null,
+          "icon": "modified",
+          "kind": "mask",
+          "branch": "service",
+          "src": "KGZeQrobCNhrkpSedkqO-102 / 7VYFu0i-ZTWRBuyH0wE8-2",
+          "depth": 2,
+          "parent": "service",
+          "path": [
+            "Main Menu",
+            "Service",
+            "User modified Parameters"
+          ],
+          "note": "Moved from Files to Service. Diagram note: list of user modified parameters, can also be implemented in a later firmware update.",
+          "shared": null,
+          "target": null,
+          "mask": "usermodified"
+        }
+      ]
+    },
+    {
+      "id": "help",
+      "title": "Help/Contact/Links",
+      "subtitle": null,
+      "icon": "help",
+      "kind": "menu",
+      "branch": "help",
+      "src": "KGZeQrobCNhrkpSedkqO-89",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Help/Contact/Links"
+      ],
+      "note": null,
+      "shared": null,
+      "target": null,
+      "children": [
+        {
+          "id": "reportingqr",
+          "title": "Reporting QR",
+          "subtitle": "planned for later",
+          "icon": "qr",
+          "kind": "mask",
+          "branch": "help",
+          "src": "KGZeQrobCNhrkpSedkqO-73 / 1kMq5FSSAxZiEf7XC0P9-26",
+          "depth": 2,
+          "parent": "help",
+          "path": [
+            "Main Menu",
+            "Help/Contact/Links",
+            "Reporting QR"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "qr",
+          "accessRead": 1,
+          "accessAction": 1
+        },
+        {
+          "id": "search",
+          "title": "Search Field",
+          "subtitle": null,
+          "icon": "search",
+          "kind": "mask",
+          "branch": "help",
+          "src": "KGZeQrobCNhrkpSedkqO-97 / 1kMq5FSSAxZiEf7XC0P9-28",
+          "depth": 2,
+          "parent": "help",
+          "path": [
+            "Main Menu",
+            "Help/Contact/Links",
+            "Search Field"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "search",
+          "accessRead": 1,
+          "accessAction": 1
+        }
+      ]
+    },
+    {
+      "id": "usermgmt",
+      "title": "Users & Authentication",
+      "subtitle": null,
+      "icon": "authusers",
+      "kind": "menu",
+      "branch": "usermgmt",
+      "src": "KGZeQrobCNhrkpSedkqO-94",
+      "depth": 1,
+      "parent": "root",
+      "path": [
+        "Main Menu",
+        "Users & Authentication"
+      ],
+      "note": "Three of the four screens are custom masks. The password policy is the only part that is a plain parameter list - and it now has real ParamIDs (618-627).",
+      "shared": null,
+      "target": null,
+      "children": [
+        {
+          "id": "createuser",
+          "title": "Create New User",
+          "subtitle": "Create User",
+          "icon": "useradd",
+          "kind": "mask",
+          "branch": "usermgmt",
+          "src": "ne2JSO2-4cI6DQKgnL8U-1 / 1kMq5FSSAxZiEf7XC0P9-35",
+          "depth": 2,
+          "parent": "usermgmt",
+          "path": [
+            "Main Menu",
+            "Users & Authentication",
+            "Create New User"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "form",
+          "accessRead": 3,
+          "accessAction": 3
+        },
+        {
+          "id": "usersettings",
+          "title": "User Settings",
+          "subtitle": "password policy",
+          "icon": "userpolicy",
+          "kind": "list",
+          "branch": "usermgmt",
+          "src": "ne2JSO2-4cI6DQKgnL8U-3 / KGZeQrobCNhrkpSedkqO-199",
+          "depth": 2,
+          "parent": "usermgmt",
+          "path": [
+            "Main Menu",
+            "Users & Authentication",
+            "User Settings"
+          ],
+          "note": "The only screen in this branch that is a plain parameter list - and as of list 10 every row has a ParamID.",
+          "shared": null,
+          "target": null,
+          "items": [
+            {
+              "indent": 0,
+              "label": "Min. Password length",
+              "pid": 621,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "PW Change after first login",
+              "pid": 618,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Expiring Cycle",
+              "pid": 619,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Number of old passwords blocked",
+              "pid": 620,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Password Requirements",
+              "pid": null,
+              "status": "header",
+              "note": "Group header"
+            },
+            {
+              "indent": 1,
+              "label": "Small Letters",
+              "pid": 622,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Capital Letters",
+              "pid": 623,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Symbols",
+              "pid": 624,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Numbers",
+              "pid": 625,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 0,
+              "label": "Active Directory Enable",
+              "pid": 626,
+              "status": "defined",
+              "note": null
+            },
+            {
+              "indent": 1,
+              "label": "Active Directory Domain",
+              "pid": 627,
+              "status": "defined",
+              "note": null
+            }
+          ]
+        },
+        {
+          "id": "usermanage",
+          "title": "User Management",
+          "subtitle": null,
+          "icon": "usermanage",
+          "kind": "mask",
+          "branch": "usermgmt",
+          "src": "ne2JSO2-4cI6DQKgnL8U-9 / 1kMq5FSSAxZiEf7XC0P9-32",
+          "depth": 2,
+          "parent": "usermgmt",
+          "path": [
+            "Main Menu",
+            "Users & Authentication",
+            "User Management"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "usermgmt",
+          "accessRead": 1,
+          "accessAction": 1
+        },
+        {
+          "id": "securecode",
+          "title": "Secure Code",
+          "subtitle": null,
+          "icon": "securecode",
+          "kind": "mask",
+          "branch": "usermgmt",
+          "src": "ne2JSO2-4cI6DQKgnL8U-11 / 1kMq5FSSAxZiEf7XC0P9-30",
+          "depth": 2,
+          "parent": "usermgmt",
+          "path": [
+            "Main Menu",
+            "Users & Authentication",
+            "Secure Code"
+          ],
+          "note": null,
+          "shared": null,
+          "target": null,
+          "mask": "qr",
+          "accessRead": 0,
+          "accessAction": 0
+        },
+        {
+          "id": "cracountry",
+          "title": "Country Settings",
+          "subtitle": null,
+          "icon": "country",
+          "kind": "list",
+          "branch": "usermgmt",
+          "src": "not in the diagram - parameter CRA_relevant_Target_Country",
+          "depth": 2,
+          "parent": "usermgmt",
+          "path": [
+            "Main Menu",
+            "Users & Authentication",
+            "Country Settings"
+          ],
+          "note": "Only in the parameter list, not drawn. Placed here because it decides which security rules apply. Type Boolean, although a target country is a selection.",
+          "shared": null,
+          "target": null,
+          "items": [
+            {
+              "indent": 0,
+              "label": "CRA relevant Target Country",
+              "pid": 729,
+              "status": "defined",
+              "note": null
+            }
+          ],
+          "accessRead": 4,
+          "accessAction": 4
+        }
+      ]
+    }
+  ]
+}

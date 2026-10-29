@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "name": "Alarm_Reset",
+    "type": "Action Button",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 2,
+    "name": "Start_Trigger",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 3,
+    "name": "Offline",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 4,
+    "name": "Online",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 5,
+    "name": "Pause",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 6,
+    "name": "Run",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 7,
+    "name": "Manual_Feed_Trigger",
+    "type": "Action",
+    "rpg": "RPDO"
+  },
+  {
+    "id": 8,
+    "name": "State_Offline",
+    "type": "State",
+    "rpg": "TPDO"
+  },
+  {
+    "id": 9,
+    "name": "State_Online",
+    "type": "State",
+    "rpg": "TPDO"
+  },
+  {
+    "id": 10,
+    "name": "State_Pause",
+    "type": "State",
+    "rpg": "TPDO"
+  },
+  {
+    "id": 11,
+    "name": "State_Run",
+    "type": "State",
+    "rpg": "TPDO"
+  },
+  {
+    "id": 12,
+    "name": "State_Alarm",
+    "type": "State",
+    "rpg": "TPDO"
+  },
+  {
+    "id": 13,
+    "name": "State_Warning",
+    "type": "State",
+    "rpg": "TPDO"
+  }
+]

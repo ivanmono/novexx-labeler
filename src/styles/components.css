@@ -1,0 +1,132 @@
+/* =============================================================================
+   BASE + COMPONENT LAYER
+   Only recurring shapes live here; everything else is Tailwind utilities.
+   ============================================================================= */
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+  body {
+    @apply bg-bg text-text font-sans text-body;
+    touch-action: manipulation;
+  }
+  #app {
+    height: 100%;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  svg.icon {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+@layer components {
+  /* ---- device shell: three layouts via data-orientation on <html> -------- */
+  .hmi {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: grid;
+    background: var(--hmi-gradient-page);
+  }
+  [data-orientation='portrait'] .hmi,
+  [data-orientation='portrait-flipped'] .hmi {
+    grid-template-rows: var(--spacing-bar) 1fr var(--spacing-bar);
+    grid-template-columns: 1fr;
+    grid-template-areas: 'status' 'main' 'nav';
+  }
+  [data-orientation='landscape-lh'] .hmi,
+  [data-orientation='landscape-lh-flipped'] .hmi {
+    grid-template-columns: var(--spacing-bar) 1fr var(--spacing-bar);
+    grid-template-rows: 1fr;
+    grid-template-areas: 'nav main status';
+  }
+  [data-orientation='landscape-rh'] .hmi,
+  [data-orientation='landscape-rh-flipped'] .hmi {
+    grid-template-columns: var(--spacing-bar) 1fr var(--spacing-bar);
+    grid-template-rows: 1fr;
+    grid-template-areas: 'status main nav';
+  }
+  [data-orientation$='-flipped'] .hmi {
+    transform: rotate(180deg);
+  }
+  .hmi__status {
+    grid-area: status;
+  }
+  .hmi__main {
+    grid-area: main;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .hmi__nav {
+    grid-area: nav;
+  }
+
+  /* ---- gradient-border card (the signature surface of the first draft) --- */
+  .card-border {
+    padding: 1px;
+    border-radius: var(--radius-card);
+    background: var(--hmi-gradient-stroke);
+  }
+  .card-border > * {
+    border-radius: var(--radius-card-inner);
+    background: var(--hmi-surface);
+  }
+  .card-border--strong {
+    background: var(--hmi-gradient-stroke-strong);
+  }
+  .card-border--surface > * {
+    background: var(--hmi-gradient-surface);
+  }
+
+  /* ---- touch feedback: no hover on a touch panel, only pressed ----------- */
+  /* embedded performance budget: short, transform/opacity-only transitions, opt-in */
+  .pressable {
+    transition: transform 120ms var(--ease-hmi), opacity 120ms var(--ease-hmi), filter 120ms var(--ease-hmi);
+  }
+  .pressable:active,
+  .pressable[data-pressed='true'] {
+    transform: scale(0.96);
+    filter: brightness(1.12);
+  }
+  .pressable:disabled,
+  .pressable[aria-disabled='true'] {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* ---- type helpers ------------------------------------------------------- */
+  .t-caption {
+    @apply text-caption font-semibold uppercase tracking-[0.15em];
+  }
+  .t-param {
+    @apply font-mono font-semibold;
+  }
+
+  /* ---- scroll areas ------------------------------------------------------- */
+  .scroll-y {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .scroll-y::-webkit-scrollbar {
+    display: none;
+  }
+}

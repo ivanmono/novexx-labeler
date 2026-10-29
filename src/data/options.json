@@ -1,0 +1,1145 @@
+[
+  {
+    "id": 100,
+    "name": "General_Inp_Rising_Edge",
+    "parent": 313,
+    "labelKey": "tr50",
+    "textres": 50,
+    "reserved": false,
+    "row": 15
+  },
+  {
+    "id": 101,
+    "name": "General_Inp_Falling_Edge",
+    "parent": 313,
+    "labelKey": "tr51",
+    "textres": 51,
+    "reserved": false,
+    "row": 16
+  },
+  {
+    "id": 102,
+    "name": "General_Inp_Rising_Falling_Edge",
+    "parent": 197,
+    "labelKey": "tr52",
+    "textres": 52,
+    "reserved": false,
+    "row": 17
+  },
+  {
+    "id": 103,
+    "name": "General_Inp_Level_High",
+    "parent": 331,
+    "labelKey": "tr53",
+    "textres": 53,
+    "reserved": false,
+    "row": 18
+  },
+  {
+    "id": 104,
+    "name": "General_Inp_Level_Low",
+    "parent": 331,
+    "labelKey": "tr54",
+    "textres": 54,
+    "reserved": false,
+    "row": 19
+  },
+  {
+    "id": 106,
+    "name": "IPAddress_Fixed",
+    "parent": 105,
+    "labelKey": "tr14",
+    "textres": 14,
+    "reserved": false,
+    "row": 21
+  },
+  {
+    "id": 107,
+    "name": "IPAddress_DHCP",
+    "parent": 105,
+    "labelKey": "tr15",
+    "textres": 15,
+    "reserved": false,
+    "row": 22
+  },
+  {
+    "id": 119,
+    "name": "SpeedSelection_Fixed",
+    "parent": 118,
+    "labelKey": "tr7",
+    "textres": 7,
+    "reserved": false,
+    "row": 34
+  },
+  {
+    "id": 120,
+    "name": "SpeedSelection_Encoder_Start",
+    "parent": 118,
+    "labelKey": "tr8",
+    "textres": 8,
+    "reserved": false,
+    "row": 35
+  },
+  {
+    "id": 121,
+    "name": "SpeedSelection_Encoder_Tracking",
+    "parent": 118,
+    "labelKey": "tr9",
+    "textres": 9,
+    "reserved": false,
+    "row": 36
+  },
+  {
+    "id": 127,
+    "name": "ExternEncoder_1_Channel",
+    "parent": 126,
+    "labelKey": "opt.127",
+    "textres": null,
+    "reserved": false,
+    "row": 42
+  },
+  {
+    "id": 128,
+    "name": "ExternEncoder_2_Channel_Clockwise",
+    "parent": 126,
+    "labelKey": "opt.128",
+    "textres": null,
+    "reserved": false,
+    "row": 43
+  },
+  {
+    "id": 129,
+    "name": "ExternEncoder_2_Channel_CounterClockwise",
+    "parent": 126,
+    "labelKey": "opt.129",
+    "textres": null,
+    "reserved": false,
+    "row": 44
+  },
+  {
+    "id": 133,
+    "name": "Ramp_Slow",
+    "parent": 132,
+    "labelKey": "opt.133",
+    "textres": null,
+    "reserved": false,
+    "row": 48
+  },
+  {
+    "id": 134,
+    "name": "Ramp_Medium",
+    "parent": 132,
+    "labelKey": "opt.134",
+    "textres": null,
+    "reserved": false,
+    "row": 49
+  },
+  {
+    "id": 135,
+    "name": "Ramp_Fast",
+    "parent": 132,
+    "labelKey": "opt.135",
+    "textres": null,
+    "reserved": false,
+    "row": 50
+  },
+  {
+    "id": 138,
+    "name": "Roll_End_Alarm_encoder_stopped",
+    "parent": 137,
+    "labelKey": "tr63",
+    "textres": 63,
+    "reserved": false,
+    "row": 53
+  },
+  {
+    "id": 139,
+    "name": "Roll_End_Alarm_Diameter",
+    "parent": 137,
+    "labelKey": "tr64",
+    "textres": 64,
+    "reserved": false,
+    "row": 54
+  },
+  {
+    "id": 149,
+    "name": "Printer_Output_Pulse_OnStop",
+    "parent": 148,
+    "labelKey": "opt.149",
+    "textres": null,
+    "reserved": false,
+    "row": 64
+  },
+  {
+    "id": 150,
+    "name": "Printer_Output_Pulse_OnStart",
+    "parent": 148,
+    "labelKey": "opt.150",
+    "textres": null,
+    "reserved": false,
+    "row": 65
+  },
+  {
+    "id": 151,
+    "name": "Printer_Output_Level_OnStart",
+    "parent": 148,
+    "labelKey": "opt.151",
+    "textres": null,
+    "reserved": false,
+    "row": 66
+  },
+  {
+    "id": 155,
+    "name": "IgnoreStart_Off",
+    "parent": 154,
+    "labelKey": "opt.155",
+    "textres": null,
+    "reserved": false,
+    "row": 70
+  },
+  {
+    "id": 156,
+    "name": "IgnoreStart_Time",
+    "parent": 154,
+    "labelKey": "opt.156",
+    "textres": null,
+    "reserved": false,
+    "row": 71
+  },
+  {
+    "id": 157,
+    "name": "IgnoreStart_Printer_Busy_Inp",
+    "parent": 154,
+    "labelKey": "opt.157",
+    "textres": null,
+    "reserved": false,
+    "row": 72
+  },
+  {
+    "id": 159,
+    "name": "Printer_Busy_Start_Alarm",
+    "parent": 158,
+    "labelKey": "opt.159",
+    "textres": null,
+    "reserved": false,
+    "row": 74
+  },
+  {
+    "id": 160,
+    "name": "Printer_Busy_Start_Warning",
+    "parent": 158,
+    "labelKey": "opt.160",
+    "textres": null,
+    "reserved": false,
+    "row": 75
+  },
+  {
+    "id": 161,
+    "name": "Printer_Busy_Start_Ignore",
+    "parent": 158,
+    "labelKey": "opt.161",
+    "textres": null,
+    "reserved": false,
+    "row": 76
+  },
+  {
+    "id": 163,
+    "name": "Printer_Busy_Inp",
+    "parent": 162,
+    "labelKey": "opt.163",
+    "textres": null,
+    "reserved": false,
+    "row": 78
+  },
+  {
+    "id": 164,
+    "name": "Printer_Warning_Inp",
+    "parent": 162,
+    "labelKey": "opt.164",
+    "textres": null,
+    "reserved": false,
+    "row": 79
+  },
+  {
+    "id": 182,
+    "name": "Camera_Output_Good",
+    "parent": 181,
+    "labelKey": "tr73",
+    "textres": 73,
+    "reserved": false,
+    "row": 97
+  },
+  {
+    "id": 183,
+    "name": "Camera_Output_Bad",
+    "parent": 181,
+    "labelKey": "tr74",
+    "textres": 74,
+    "reserved": false,
+    "row": 98
+  },
+  {
+    "id": 192,
+    "name": "LID_Code_Output_Good",
+    "parent": 191,
+    "labelKey": "tr80",
+    "textres": 80,
+    "reserved": false,
+    "row": 107
+  },
+  {
+    "id": 193,
+    "name": "LID_Code_Output_Bad",
+    "parent": 191,
+    "labelKey": "tr81",
+    "textres": 81,
+    "reserved": false,
+    "row": 108
+  },
+  {
+    "id": 201,
+    "name": "Start_inp_CPU",
+    "parent": 200,
+    "labelKey": "opt.201",
+    "textres": null,
+    "reserved": false,
+    "row": 116
+  },
+  {
+    "id": 202,
+    "name": "Start_inp_DRV",
+    "parent": 200,
+    "labelKey": "opt.202",
+    "textres": null,
+    "reserved": false,
+    "row": 117
+  },
+  {
+    "id": 204,
+    "name": "Start_Compensation_Auto",
+    "parent": 203,
+    "labelKey": "opt.204",
+    "textres": null,
+    "reserved": false,
+    "row": 119
+  },
+  {
+    "id": 205,
+    "name": "Start_Compensation_Manual",
+    "parent": 203,
+    "labelKey": "opt.205",
+    "textres": null,
+    "reserved": false,
+    "row": 120
+  },
+  {
+    "id": 223,
+    "name": "Sensor_Type_Opt1",
+    "parent": 222,
+    "labelKey": "opt.223",
+    "textres": null,
+    "reserved": false,
+    "row": 138
+  },
+  {
+    "id": 224,
+    "name": "Sensor_Type_Opt2",
+    "parent": 222,
+    "labelKey": "opt.224",
+    "textres": null,
+    "reserved": false,
+    "row": 139
+  },
+  {
+    "id": 225,
+    "name": "Sensor_Type_Opt3",
+    "parent": 222,
+    "labelKey": "opt.225",
+    "textres": null,
+    "reserved": false,
+    "row": 140
+  },
+  {
+    "id": 226,
+    "name": "Sensor_Type_Opt4",
+    "parent": null,
+    "labelKey": "opt.226",
+    "textres": null,
+    "reserved": true,
+    "row": 141
+  },
+  {
+    "id": 227,
+    "name": "Sensor_Type_Opt5",
+    "parent": null,
+    "labelKey": "opt.227",
+    "textres": null,
+    "reserved": true,
+    "row": 142
+  },
+  {
+    "id": 228,
+    "name": "Sensor_Type_Opt6",
+    "parent": null,
+    "labelKey": "opt.228",
+    "textres": null,
+    "reserved": true,
+    "row": 143
+  },
+  {
+    "id": 229,
+    "name": "Sensor_Type_Opt7",
+    "parent": null,
+    "labelKey": "opt.229",
+    "textres": null,
+    "reserved": true,
+    "row": 144
+  },
+  {
+    "id": 230,
+    "name": "Sensor_Type_Opt8",
+    "parent": null,
+    "labelKey": "opt.230",
+    "textres": null,
+    "reserved": true,
+    "row": 145
+  },
+  {
+    "id": 231,
+    "name": "Sensor_Type_Opt9",
+    "parent": null,
+    "labelKey": "opt.231",
+    "textres": null,
+    "reserved": true,
+    "row": 146
+  },
+  {
+    "id": 232,
+    "name": "Sensor_Type_Opt10",
+    "parent": null,
+    "labelKey": "opt.232",
+    "textres": null,
+    "reserved": true,
+    "row": 147
+  },
+  {
+    "id": 234,
+    "name": "Missing_Label_Compensation",
+    "parent": 233,
+    "labelKey": "opt.234",
+    "textres": null,
+    "reserved": false,
+    "row": 149
+  },
+  {
+    "id": 235,
+    "name": "Missing_Label_Simulation",
+    "parent": 233,
+    "labelKey": "opt.235",
+    "textres": null,
+    "reserved": false,
+    "row": 150
+  },
+  {
+    "id": 241,
+    "name": "External_Canbus_BaudRate_125kb",
+    "parent": 240,
+    "labelKey": "opt.241",
+    "textres": null,
+    "reserved": false,
+    "row": 156
+  },
+  {
+    "id": 242,
+    "name": "External_Canbus_BaudRate_250kb",
+    "parent": 240,
+    "labelKey": "opt.242",
+    "textres": null,
+    "reserved": false,
+    "row": 157
+  },
+  {
+    "id": 243,
+    "name": "External_Canbus_BaudRate_500kb",
+    "parent": 240,
+    "labelKey": "opt.243",
+    "textres": null,
+    "reserved": false,
+    "row": 158
+  },
+  {
+    "id": 244,
+    "name": "External_Canbus_BaudRate_1Mb",
+    "parent": 240,
+    "labelKey": "opt.244",
+    "textres": null,
+    "reserved": false,
+    "row": 159
+  },
+  {
+    "id": 245,
+    "name": "External_Canbus_BaudRate_10Mb",
+    "parent": 240,
+    "labelKey": "opt.245",
+    "textres": null,
+    "reserved": false,
+    "row": 160
+  },
+  {
+    "id": 248,
+    "name": "Batch_Mode_Off",
+    "parent": 247,
+    "labelKey": "opt.248",
+    "textres": null,
+    "reserved": false,
+    "row": 163
+  },
+  {
+    "id": 249,
+    "name": "Batch_Mode_StartInp",
+    "parent": 247,
+    "labelKey": "opt.249",
+    "textres": null,
+    "reserved": false,
+    "row": 164
+  },
+  {
+    "id": 250,
+    "name": "Batch_Mode_Autostart",
+    "parent": 247,
+    "labelKey": "opt.250",
+    "textres": null,
+    "reserved": false,
+    "row": 165
+  },
+  {
+    "id": 256,
+    "name": "PConnector_Pivoting",
+    "parent": 255,
+    "labelKey": "opt.256",
+    "textres": null,
+    "reserved": false,
+    "row": 171
+  },
+  {
+    "id": 257,
+    "name": "PConnector_BlowOn",
+    "parent": 255,
+    "labelKey": "opt.257",
+    "textres": null,
+    "reserved": false,
+    "row": 172
+  },
+  {
+    "id": 258,
+    "name": "PConnector_PLC_Signals",
+    "parent": 255,
+    "labelKey": "opt.258",
+    "textres": null,
+    "reserved": false,
+    "row": 173
+  },
+  {
+    "id": 260,
+    "name": "Pivoting_DispensigEdge_OnDispensing",
+    "parent": 259,
+    "labelKey": "opt.260",
+    "textres": null,
+    "reserved": false,
+    "row": 175
+  },
+  {
+    "id": 261,
+    "name": "Pivoting_DispensigEdge_OnStatus",
+    "parent": 259,
+    "labelKey": "opt.261",
+    "textres": null,
+    "reserved": false,
+    "row": 176
+  },
+  {
+    "id": 263,
+    "name": "Pivoting_DispensigEdge_offset_Time",
+    "parent": 262,
+    "labelKey": "opt.263",
+    "textres": null,
+    "reserved": false,
+    "row": 178
+  },
+  {
+    "id": 264,
+    "name": "Pivoting_DispensigEdge_offset_Space",
+    "parent": 262,
+    "labelKey": "opt.264",
+    "textres": null,
+    "reserved": false,
+    "row": 179
+  },
+  {
+    "id": 270,
+    "name": "Cycle_Signal_Mode_Off",
+    "parent": 269,
+    "labelKey": "opt.270",
+    "textres": null,
+    "reserved": false,
+    "row": 185
+  },
+  {
+    "id": 271,
+    "name": "Cycle_Signal_Mode_Pulse_Start",
+    "parent": 269,
+    "labelKey": "opt.271",
+    "textres": null,
+    "reserved": false,
+    "row": 186
+  },
+  {
+    "id": 272,
+    "name": "Cycle_Signal_Mode_Pulse_End",
+    "parent": 269,
+    "labelKey": "opt.272",
+    "textres": null,
+    "reserved": false,
+    "row": 187
+  },
+  {
+    "id": 276,
+    "name": "Tandem_Mode_Off",
+    "parent": 275,
+    "labelKey": "opt.276",
+    "textres": null,
+    "reserved": false,
+    "row": 191
+  },
+  {
+    "id": 277,
+    "name": "Tandem_Mode_Primary",
+    "parent": 275,
+    "labelKey": "opt.277",
+    "textres": null,
+    "reserved": false,
+    "row": 192
+  },
+  {
+    "id": 278,
+    "name": "Tandem_Mode_Secondary_Space",
+    "parent": 275,
+    "labelKey": "opt.278",
+    "textres": null,
+    "reserved": false,
+    "row": 193
+  },
+  {
+    "id": 279,
+    "name": "Tandem_Mode_Secondary_Trigger",
+    "parent": 275,
+    "labelKey": "opt.279",
+    "textres": null,
+    "reserved": false,
+    "row": 194
+  },
+  {
+    "id": 280,
+    "name": "Tandem_Mode_Secondary_Time",
+    "parent": 275,
+    "labelKey": "opt.280",
+    "textres": null,
+    "reserved": false,
+    "row": 195
+  },
+  {
+    "id": 281,
+    "name": "Tandem_Mode_Backup_Space",
+    "parent": 275,
+    "labelKey": "opt.281",
+    "textres": null,
+    "reserved": false,
+    "row": 196
+  },
+  {
+    "id": 282,
+    "name": "Tandem_Mode_Backup_Trigger",
+    "parent": 275,
+    "labelKey": "opt.282",
+    "textres": null,
+    "reserved": false,
+    "row": 197
+  },
+  {
+    "id": 283,
+    "name": "Tandem_Mode_Backup_Time",
+    "parent": 275,
+    "labelKey": "opt.283",
+    "textres": null,
+    "reserved": false,
+    "row": 198
+  },
+  {
+    "id": 301,
+    "name": "Startup_Mode_Run",
+    "parent": 300,
+    "labelKey": "opt.301",
+    "textres": null,
+    "reserved": false,
+    "row": 216
+  },
+  {
+    "id": 302,
+    "name": "Startup_Mode_Pause",
+    "parent": 300,
+    "labelKey": "opt.302",
+    "textres": null,
+    "reserved": false,
+    "row": 217
+  },
+  {
+    "id": 304,
+    "name": "Multi_IO_2_Status",
+    "parent": 303,
+    "labelKey": "opt.304",
+    "textres": null,
+    "reserved": false,
+    "row": 219
+  },
+  {
+    "id": 305,
+    "name": "Multi_IO_2_Applicator",
+    "parent": 303,
+    "labelKey": "opt.305",
+    "textres": null,
+    "reserved": false,
+    "row": 220
+  },
+  {
+    "id": 306,
+    "name": "Multi_IO_2_Custom",
+    "parent": 303,
+    "labelKey": "opt.306",
+    "textres": null,
+    "reserved": false,
+    "row": 221
+  },
+  {
+    "id": 308,
+    "name": "App_Apply_Mode_After_Start_Inp",
+    "parent": 307,
+    "labelKey": "opt.308",
+    "textres": null,
+    "reserved": false,
+    "row": 223
+  },
+  {
+    "id": 309,
+    "name": "App_Apply_Mode_After_Dispense",
+    "parent": 307,
+    "labelKey": "opt.309",
+    "textres": null,
+    "reserved": false,
+    "row": 224
+  },
+  {
+    "id": 310,
+    "name": "App_Apply_Mode_After_Custom_Trigger",
+    "parent": 307,
+    "labelKey": "opt.310",
+    "textres": null,
+    "reserved": false,
+    "row": 225
+  },
+  {
+    "id": 314,
+    "name": "App_Touch_Down_Input_Off",
+    "parent": 313,
+    "labelKey": "opt.314",
+    "textres": null,
+    "reserved": false,
+    "row": 229
+  },
+  {
+    "id": 318,
+    "name": "App_Vacuum_Mode_Start_Dispense",
+    "parent": 317,
+    "labelKey": "opt.318",
+    "textres": null,
+    "reserved": false,
+    "row": 233
+  },
+  {
+    "id": 319,
+    "name": "App_Vacuum_Mode_End_Dispense",
+    "parent": 317,
+    "labelKey": "opt.319",
+    "textres": null,
+    "reserved": false,
+    "row": 234
+  },
+  {
+    "id": 320,
+    "name": "App_Vacuum_Mode_Start_Dispense_Offset",
+    "parent": 317,
+    "labelKey": "opt.320",
+    "textres": null,
+    "reserved": false,
+    "row": 235
+  },
+  {
+    "id": 324,
+    "name": "AppAlarm_off",
+    "parent": 323,
+    "labelKey": "tr2",
+    "textres": 2,
+    "reserved": false,
+    "row": 239
+  },
+  {
+    "id": 325,
+    "name": "AppAlarm_pick",
+    "parent": 323,
+    "labelKey": "tr3",
+    "textres": 3,
+    "reserved": false,
+    "row": 240
+  },
+  {
+    "id": 326,
+    "name": "AppAlarm_place",
+    "parent": 323,
+    "labelKey": "tr4",
+    "textres": 4,
+    "reserved": false,
+    "row": 241
+  },
+  {
+    "id": 327,
+    "name": "AppAlarm_pick_place",
+    "parent": 323,
+    "labelKey": "tr5",
+    "textres": 5,
+    "reserved": false,
+    "row": 242
+  },
+  {
+    "id": 332,
+    "name": "External_Error_off",
+    "parent": 331,
+    "labelKey": "opt.332",
+    "textres": null,
+    "reserved": false,
+    "row": 247
+  },
+  {
+    "id": 501,
+    "name": "Language_English",
+    "parent": 500,
+    "labelKey": "opt.501",
+    "textres": null,
+    "reserved": false,
+    "row": 249
+  },
+  {
+    "id": 502,
+    "name": "Language_German",
+    "parent": 500,
+    "labelKey": "opt.502",
+    "textres": null,
+    "reserved": false,
+    "row": 250
+  },
+  {
+    "id": 503,
+    "name": "Language_Italian",
+    "parent": 500,
+    "labelKey": "opt.503",
+    "textres": null,
+    "reserved": false,
+    "row": 251
+  },
+  {
+    "id": 504,
+    "name": "Language_French",
+    "parent": 500,
+    "labelKey": "opt.504",
+    "textres": null,
+    "reserved": false,
+    "row": 252
+  },
+  {
+    "id": 505,
+    "name": "Language_Spanish",
+    "parent": 500,
+    "labelKey": "opt.505",
+    "textres": null,
+    "reserved": false,
+    "row": 253
+  },
+  {
+    "id": 506,
+    "name": "Language_Dutch",
+    "parent": 500,
+    "labelKey": "opt.506",
+    "textres": null,
+    "reserved": false,
+    "row": 254
+  },
+  {
+    "id": 507,
+    "name": "Language_Danish",
+    "parent": 500,
+    "labelKey": "opt.507",
+    "textres": null,
+    "reserved": false,
+    "row": 255
+  },
+  {
+    "id": 508,
+    "name": "Language_Polish",
+    "parent": 500,
+    "labelKey": "opt.508",
+    "textres": null,
+    "reserved": false,
+    "row": 256
+  },
+  {
+    "id": 509,
+    "name": "Language_Turkiye",
+    "parent": 500,
+    "labelKey": "opt.509",
+    "textres": null,
+    "reserved": false,
+    "row": 257
+  },
+  {
+    "id": 510,
+    "name": "Language_Russian",
+    "parent": 500,
+    "labelKey": "opt.510",
+    "textres": null,
+    "reserved": false,
+    "row": 258
+  },
+  {
+    "id": 511,
+    "name": "Language_Czech",
+    "parent": 500,
+    "labelKey": "opt.511",
+    "textres": null,
+    "reserved": false,
+    "row": 259
+  },
+  {
+    "id": 512,
+    "name": "Language_Chinese",
+    "parent": 500,
+    "labelKey": "opt.512",
+    "textres": null,
+    "reserved": false,
+    "row": 260
+  },
+  {
+    "id": 513,
+    "name": "Language_Japanese",
+    "parent": 500,
+    "labelKey": "opt.513",
+    "textres": null,
+    "reserved": false,
+    "row": 261
+  },
+  {
+    "id": 514,
+    "name": "Language_Hungarian",
+    "parent": 500,
+    "labelKey": "opt.514",
+    "textres": null,
+    "reserved": false,
+    "row": 262
+  },
+  {
+    "id": 515,
+    "name": "Language_Portugese",
+    "parent": 500,
+    "labelKey": "opt.515",
+    "textres": null,
+    "reserved": false,
+    "row": 263
+  },
+  {
+    "id": 516,
+    "name": "Language_Arabic",
+    "parent": 500,
+    "labelKey": "opt.516",
+    "textres": null,
+    "reserved": false,
+    "row": 264
+  },
+  {
+    "id": 517,
+    "name": "Language_Korean",
+    "parent": 500,
+    "labelKey": "opt.517",
+    "textres": null,
+    "reserved": false,
+    "row": 265
+  },
+  {
+    "id": 518,
+    "name": "Language_Thai",
+    "parent": 500,
+    "labelKey": "opt.518",
+    "textres": null,
+    "reserved": false,
+    "row": 266
+  },
+  {
+    "id": 519,
+    "name": "Language_Vietnamese",
+    "parent": 500,
+    "labelKey": "opt.519",
+    "textres": null,
+    "reserved": false,
+    "row": 267
+  },
+  {
+    "id": 520,
+    "name": "Language_Slovakia",
+    "parent": 500,
+    "labelKey": "opt.520",
+    "textres": null,
+    "reserved": false,
+    "row": 268
+  },
+  {
+    "id": 521,
+    "name": "Language_Greek",
+    "parent": 500,
+    "labelKey": "opt.521",
+    "textres": null,
+    "reserved": false,
+    "row": 269
+  },
+  {
+    "id": 522,
+    "name": "Language_Romanian",
+    "parent": 500,
+    "labelKey": "opt.522",
+    "textres": null,
+    "reserved": false,
+    "row": 270
+  },
+  {
+    "id": 523,
+    "name": "Language_Swedish",
+    "parent": 500,
+    "labelKey": "opt.523",
+    "textres": null,
+    "reserved": false,
+    "row": 271
+  },
+  {
+    "id": 524,
+    "name": "Language_Norwegian",
+    "parent": 500,
+    "labelKey": "opt.524",
+    "textres": null,
+    "reserved": false,
+    "row": 272
+  },
+  {
+    "id": 525,
+    "name": "Language_Finnish",
+    "parent": 500,
+    "labelKey": "opt.525",
+    "textres": null,
+    "reserved": false,
+    "row": 273
+  },
+  {
+    "id": 526,
+    "name": "Language_Bulgarian",
+    "parent": 500,
+    "labelKey": "opt.526",
+    "textres": null,
+    "reserved": false,
+    "row": 274
+  },
+  {
+    "id": 602,
+    "name": "HMI_Orientation_Portrait",
+    "parent": 601,
+    "labelKey": "opt.602",
+    "textres": null,
+    "reserved": false,
+    "row": 277
+  },
+  {
+    "id": 603,
+    "name": "HMI_Orientation_Landscape_LH",
+    "parent": 601,
+    "labelKey": "opt.603",
+    "textres": null,
+    "reserved": false,
+    "row": 278
+  },
+  {
+    "id": 604,
+    "name": "HMI_Orientation_Landscape_RH",
+    "parent": 601,
+    "labelKey": "opt.604",
+    "textres": null,
+    "reserved": false,
+    "row": 279
+  },
+  {
+    "id": 605,
+    "name": "HMI_Orientation_Portrait_UpsideDown",
+    "parent": 601,
+    "labelKey": "opt.605",
+    "textres": null,
+    "reserved": false,
+    "row": 280
+  },
+  {
+    "id": 606,
+    "name": "HMI_Orientation_Landscape_LH_UpsideDown",
+    "parent": 601,
+    "labelKey": "opt.606",
+    "textres": null,
+    "reserved": false,
+    "row": 281
+  },
+  {
+    "id": 607,
+    "name": "HMI_Orientation_Landscape_RH_UpsideDown",
+    "parent": 601,
+    "labelKey": "opt.607",
+    "textres": null,
+    "reserved": false,
+    "row": 282
+  },
+  {
+    "id": 609,
+    "name": "HMI_Logo_NOVEXX",
+    "parent": 608,
+    "labelKey": "opt.609",
+    "textres": null,
+    "reserved": false,
+    "row": 284
+  },
+  {
+    "id": 610,
+    "name": "HMI_Logo_Etipack",
+    "parent": 608,
+    "labelKey": "opt.610",
+    "textres": null,
+    "reserved": false,
+    "row": 285
+  },
+  {
+    "id": 611,
+    "name": "HMI_Logo_Custom",
+    "parent": 608,
+    "labelKey": "opt.611",
+    "textres": null,
+    "reserved": false,
+    "row": 286
+  }
+]

@@ -1,0 +1,378 @@
+{
+  "selectformat": {
+    "type": "formatlist",
+    "spec": {},
+    "req": {
+      "purpose": "Load a stored parameter set into the running machine.",
+      "content": [
+        "Scrollable list of the format files present on the machine, one row per format.",
+        "Per row: format name, and the metadata needed to tell two similar formats apart (suggested: date of last change, author or access level that saved it).",
+        "The format currently loaded is marked in the list.",
+        "Empty state when no format is stored yet."
+      ],
+      "interaction": [
+        "Tapping a row selects it (single selection, no immediate effect).",
+        "A primary action button loads the selected format.",
+        "Loading overwrites live machine settings, so it must be confirmed in a dialog that names the format and warns that unsaved changes are lost.",
+        "While the machine is running, loading has to be blocked or the machine stopped first - decide which."
+      ],
+      "access": "Read from L1; loading a format from L2 (to be confirmed).",
+      "data": "File system, not the parameter list. The format file contains a snapshot of the parameter values.",
+      "open": [
+        "Where are formats stored - internal memory, USB, or both?",
+        "What exactly does a format contain: every parameter, or a defined subset (without network and user settings)?",
+        "Is loading allowed while running?"
+      ]
+    }
+  },
+  "modifyformat": {
+    "type": "formatlist",
+    "spec": {},
+    "req": {
+      "purpose": "Overwrite an existing format with the current settings.",
+      "content": [
+        "Same list component as Select Format, but the action is \"overwrite\", not \"load\".",
+        "Per row: format name plus date of last change, so the user sees what they are about to replace.",
+        "The currently loaded format is marked and should be the default selection."
+      ],
+      "interaction": [
+        "Selecting a row and confirming overwrites that file with the current live values.",
+        "Confirmation dialog naming the target file - this action destroys data.",
+        "Optional but recommended: a short diff (\"12 parameters differ\") before confirming, which replaces the Compare/Check screen that was dropped from the diagram."
+      ],
+      "access": "L2 or higher (to be confirmed).",
+      "data": "File system; reads the live parameter values at the moment of saving.",
+      "open": [
+        "Is the dropped Compare/Check function meant to come back as this diff, or is it gone for good?",
+        "May a format be renamed here, or only overwritten?"
+      ]
+    }
+  },
+  "createformat": {
+    "type": "textinput",
+    "spec": {},
+    "req": {
+      "purpose": "Store the current settings as a new format file.",
+      "content": [
+        "One text input field for the format name, pre-filled with a proposal (suggested: device name + date).",
+        "Alphabetical keyboard, unfolding below the field.",
+        "Visible rule text for what a valid name is (length, allowed characters)."
+      ],
+      "interaction": [
+        "Save is disabled until the name is valid and not already in use.",
+        "Duplicate name: either block with an inline message or offer \"overwrite instead\".",
+        "After saving, return to Formats with a confirmation toast."
+      ],
+      "access": "L2 or higher (to be confirmed).",
+      "data": "File system; writes a snapshot of the live parameter values.",
+      "open": [
+        "Maximum name length and allowed character set?",
+        "Is there an upper limit for the number of stored formats?"
+      ]
+    }
+  },
+  "speedtest": {
+    "type": "speedtest",
+    "spec": {},
+    "req": {
+      "purpose": "Verify the external encoder and show the resulting production rate.",
+      "content": [
+        "Live value of the measured external encoder, in m/min and in Hz, updating continuously.",
+        "Button to run the speed test.",
+        "Result block: time needed for the next label dispensed / cycle, and the rated pieces per minute (product rate).",
+        "Timestamp or \"live\" marker so the user knows whether the value is current."
+      ],
+      "interaction": [
+        "The live fields update while the screen is open; leaving the screen stops the measurement.",
+        "No encoder signal: show \"no signal\" rather than 0.",
+        "The test itself may move the machine - say so before it starts."
+      ],
+      "access": "Read from L1, running the test from L2 (to be confirmed).",
+      "data": "Info_Speed_Test_Measured, Info_Product_rate and Button_Speed_Test from the parameter list; the live values come from the drive, not from a stored parameter.",
+      "open": [
+        "Update rate of the live values?",
+        "Info_Product_rate has no Type in the parameter list - Float with what unit, pieces/min?",
+        "Does the product rate depend on Calc_Product_Rate_Enable being on?"
+      ]
+    }
+  },
+  "iotest": {
+    "type": "iotable",
+    "spec": {},
+    "req": {
+      "purpose": "See the state of every digital IO and, at L3, force outputs for commissioning.",
+      "content": [
+        "Table of all digital IOs of the MIO card and the other IO groups.",
+        "Columns: pin name, direction (in/out), assigned function, live state.",
+        "State shown as a clear on/off indicator, not just text - it is read at a glance while probing hardware.",
+        "Grouping or a filter by IO group, since the list is long."
+      ],
+      "interaction": [
+        "Live update of the input states while the screen is open.",
+        "With L3 access, outputs can be forced; a forced output must be visibly marked and must reset when the screen is left or after a timeout.",
+        "Forcing outputs can move the machine: an explicit warning and an \"all outputs back to normal\" action are required."
+      ],
+      "access": "Read from L1; forcing outputs L3 only.",
+      "data": "Live IO states from the firmware. Pin assignment comes from the MIO configuration, not from a parameter.",
+      "open": [
+        "How many IOs in total, and how are they grouped?",
+        "Does a forced output survive leaving the screen? Recommended: no, with an automatic timeout.",
+        "Is forcing logged in the audit trail? (CRA-relevant)"
+      ]
+    }
+  },
+  "diaglogs": {
+    "type": "eventlog",
+    "spec": {},
+    "req": {
+      "purpose": "Switch diagnosis recording on and review what the machine recorded since.",
+      "content": [
+        "Toggle bar at the top of the screen that activates diagnosis recording.",
+        "Chronological list of internal events since activation: user logins, parameter changes (old value to new value), state changes, errors.",
+        "Per entry: timestamp, event type, user role, detail text.",
+        "Visible indication of how long recording has been on and how much space is left."
+      ],
+      "interaction": [
+        "Switching the toggle off keeps the recorded list until it is cleared.",
+        "The list is scrollable and should be filterable by event type.",
+        "Export to USB is expected - confirm."
+      ],
+      "access": "L2 to view, L3 to activate and to clear (to be confirmed).",
+      "data": "Log file written by the firmware. The activation state replaces the separate \"Button/Switch Activate Diagnosis\" screen of the previous diagram - it currently has no parameter in the list.",
+      "open": [
+        "Activation needs its own parameter so the state survives a restart.",
+        "Ring buffer or fixed size, and what happens when it is full?",
+        "Is the diagnosis log the same thing as the audit trail, or a second, separate log? Two logs with overlapping content are a maintenance trap."
+      ]
+    }
+  },
+  "errorhistory": {
+    "type": "errorlog",
+    "spec": {},
+    "req": {
+      "purpose": "Find out what went wrong, when, and who was logged in at the time.",
+      "content": [
+        "Scrollable list of error messages, newest first.",
+        "Per entry: error ID, message text, severity, timestamp, and the user role logged in at that moment.",
+        "Search field that unfolds an alphabetical keyboard.",
+        "Empty state and an end-of-list marker."
+      ],
+      "interaction": [
+        "Search filters while typing, over ID and message text.",
+        "A row can be opened for the full text if the message is longer than the row.",
+        "Sorting is fixed to newest first; a filter by severity is recommended."
+      ],
+      "access": "Read from L1 (an operator has to be able to report an error); clearing L3 only, if clearing is allowed at all.",
+      "data": "Log file. No parameters involved.",
+      "open": [
+        "Retention: how many entries, how long, and what happens on overflow? (CRA-relevant)",
+        "Is the audit trail allowed to be cleared? For CRA purposes it should not be, or only with an entry documenting the clearing.",
+        "Export format for a service report - CSV, PDF, or the QR route?"
+      ]
+    }
+  },
+  "reporting": {
+    "type": "servicereport",
+    "spec": {},
+    "req": {
+      "purpose": "Close out a service visit: document what was done and reset the service counters.",
+      "content": [
+        "Read-only block with the counters since the last service (distance, time, labels - the same values as on Information/Counters).",
+        "Multi-line text field for the technician comment.",
+        "Date and the logged-in user are added automatically and shown."
+      ],
+      "interaction": [
+        "Commit writes a text entry into the log and resets the \"since last service\" counters.",
+        "Because the reset is irreversible, it needs a confirmation dialog that states which counters are reset.",
+        "Empty comment: allow but warn, or block - to be decided."
+      ],
+      "access": "L2 or L3 (service), to be confirmed.",
+      "data": "Counters from the parameter list (read); the comment goes into the log file, not into a parameter.",
+      "open": [
+        "Which counters exactly are reset - only the four \"since last service\" ones, or also the error counters?",
+        "Is the entry exportable, and does it belong in the audit trail?"
+      ]
+    }
+  },
+  "backup": {
+    "type": "browser",
+    "spec": {},
+    "req": {
+      "purpose": "Write a backup to a USB drive, or load one back into the machine.",
+      "content": [
+        "File browser over the USB drive: path bar, folder rows, file rows, one level up.",
+        "Files that are not machine backups are greyed out or filtered.",
+        "Action button \"Create backup here\" for the folder currently open.",
+        "Follow-up dialog: editable file name, pre-filled with device name + serial + date, and a choice between \"Backup\" (everything) and \"Format\" (parameter set only)."
+      ],
+      "interaction": [
+        "No USB drive: the screen shows an empty state, not an error dialog.",
+        "Loading a backup is a machine-changing action - confirmation dialog, and the machine must not be running.",
+        "Long operations need a progress state and a result message; the user must not be able to pull the drive without a warning."
+      ],
+      "access": "L3 for load, L2 for create (to be confirmed).",
+      "data": "USB file system. The backup content is defined by firmware, not by the parameter list.",
+      "open": [
+        "What is in a \"Backup\" as opposed to a \"Format\" - network settings, users, logs?",
+        "Are backups signed or checksummed, and what happens on a broken file? (CRA-relevant)",
+        "Is loading a backup from a different machine type allowed?"
+      ]
+    }
+  },
+  "fwupdate": {
+    "type": "browser",
+    "spec": {},
+    "req": {
+      "purpose": "Select a firmware file from a USB drive and install it.",
+      "content": [
+        "Same file browser component as Load/Store Backup, filtered to firmware files.",
+        "Current firmware version and the version of the selected file, side by side.",
+        "Clear statement of what happens during the update (machine stops, reboot)."
+      ],
+      "interaction": [
+        "Install is a single, clearly separated primary action with a confirmation step.",
+        "Progress display with a phase text; no back navigation during the update.",
+        "Result screen with success or failure and the resulting version."
+      ],
+      "access": "L3.",
+      "data": "USB file system; firmware image.",
+      "open": [
+        "Signature check and rollback behaviour on a failed update (CRA-relevant).",
+        "Is a downgrade allowed?",
+        "Does the update keep parameter values, and what happens to parameters that the new version does not know?"
+      ]
+    }
+  },
+  "usermodified": {
+    "type": "usermodified",
+    "spec": {},
+    "req": null
+  },
+  "reportingqr": {
+    "type": "qr",
+    "spec": {},
+    "req": {
+      "purpose": "Hand machine context to a service form on the phone without typing it.",
+      "content": [
+        "Generated QR code, large enough to be scanned from about 30 cm.",
+        "Below it, in plain text, what the code contains and what happens when it is scanned.",
+        "The machine data that goes into the link, visible so the user knows what is being shared."
+      ],
+      "interaction": [
+        "The code is built from a URL plus machine-specific information (serial number and more) and pre-fills a web form.",
+        "The code must be regenerated when the underlying data changes.",
+        "Marked in the diagram as planned for later - show it as a preview screen, not as a finished function."
+      ],
+      "access": "L1.",
+      "data": "URL template plus machine identification. The template has to be configurable and does not exist in the parameter list yet.",
+      "open": [
+        "Which fields go into the link, and is any of it personal data?",
+        "Where does the URL template come from - fixed in firmware, or a parameter?",
+        "What does the screen show when the machine has no serial number set?"
+      ]
+    }
+  },
+  "search": {
+    "type": "search",
+    "spec": {},
+    "req": {
+      "purpose": "Reach a parameter directly instead of walking the menu tree.",
+      "content": [
+        "Search field with an unfolding alphabetical keyboard and a numeric mode for IDs.",
+        "Result rows: parameter name, its menu path, and its current value.",
+        "Empty state before typing, \"no match\" state after."
+      ],
+      "interaction": [
+        "Search runs over parameter ID and name; from two characters onwards.",
+        "Selecting a result opens the screen that contains the parameter, with the row highlighted - not a detached editor.",
+        "Back returns to the result list, not to the menu root."
+      ],
+      "access": "Results should be filtered by access level: a parameter the user may not read is not listed.",
+      "data": "Parameter list. Needs a search index, including the translated names.",
+      "open": [
+        "Is the search over the English names only, or over the translated labels too?",
+        "Should recently used parameters be offered before typing?"
+      ]
+    }
+  },
+  "createuser": {
+    "type": "form",
+    "spec": {},
+    "req": {
+      "purpose": "Create a user account and store it in the secure user database.",
+      "content": [
+        "Input fields: Name, Password, Access Level, Auto LogOff (Time), Language.",
+        "Password field masked, with a visibility toggle and live feedback against the rules from User Settings (length, capitals, symbols, numbers).",
+        "Access Level as a selection limited to the levels the creator may hand out.",
+        "Language as a selection - a new user should see their own language at first login."
+      ],
+      "interaction": [
+        "Save is only enabled when every rule is met; violations are shown per field, not as one dialog at the end.",
+        "Duplicate user name is rejected inline.",
+        "After saving, the account appears in User Management.",
+        "Cancel must warn about losing the entry."
+      ],
+      "access": "L3 minimum to create L1/L2/L3 accounts. An L3 user must not be able to create a higher level than their own.",
+      "data": "Secure user database (firmware side), not the parameter list. The password rules come from User Settings (ParamID 618-627).",
+      "open": [
+        "Is the password stored as a hash? It has to be, for CRA - please state it in the spec.",
+        "What is the maximum number of users?",
+        "Is there a forced password change at first login (User_PW_Change_first_login = True) and what does that flow look like?",
+        "The diagram mentions black-listed and white-listed parameters per user - is that configured here or in User Management?"
+      ]
+    }
+  },
+  "usermanage": {
+    "type": "usermgmt",
+    "spec": {},
+    "req": {
+      "purpose": "Self-service for the logged-in user, and user administration for higher levels.",
+      "content": [
+        "The screen has two faces, decided by the level of the logged-in user.",
+        "L1/L2: change own password, change language temporarily (value set back afterwards), disable own role.",
+        "L3: list of enabled users with name, role and date of last password change.",
+        "L3 per user: password, access level, auto log-off time, language, black-listed parameters, white-listed parameters, disable user."
+      ],
+      "interaction": [
+        "One screen, two layouts - the frontend needs both states drawn, plus the transition when the level changes mid-session.",
+        "\"Disable own role\" logs the user out; it needs a confirmation that says so.",
+        "\"Temporary language change\" has to state when it is set back - on logout, or after the standby timer.",
+        "The black-/white-list needs a parameter picker, which is a screen of its own and is not yet drawn anywhere."
+      ],
+      "access": "L1/L2 see only their own account. L3 sees the list and may edit levels 1-3. Level 0 (not logged in) has no access to this screen at all.",
+      "data": "Secure user database. Nothing here is in the parameter list.",
+      "open": [
+        "There is an L4 in this description while the rest of the system uses three levels - is L4 a real level, or is it L3 = super admin?",
+        "What exactly does the parameter black-/white-list do, and how does an admin pick from 330 parameters on a 4.3\" screen?",
+        "Does temporary language survive a restart? (It should not.)",
+        "Is deleting a user allowed, or only disabling? For an audit trail, disabling is the safer answer."
+      ]
+    }
+  },
+  "securecode": {
+    "type": "qr",
+    "spec": {},
+    "req": {
+      "purpose": "Controlled, time-limited service access beyond the normal levels.",
+      "content": [
+        "QR code generated by the machine from a URL plus machine-specific data (serial number and more) that pre-fills a request form.",
+        "Plain-text explanation of what the code is for and what happens next.",
+        "Field for entering the code that comes back, with a numeric or alphanumeric keyboard.",
+        "State display: whether an elevated access is currently open and until when."
+      ],
+      "interaction": [
+        "Entering a valid code opens the elevated access for a defined time and then closes it again by itself.",
+        "Every opening and closing must appear in the audit trail.",
+        "The backlog also lists a \"button for data erase\" - that is a destructive action and needs its own confirmation flow, not a button next to the others."
+      ],
+      "access": "Visible from L3. The access it grants is level 4 (Secure Access) and is bound to the code and its time window, not to a user profile.",
+      "data": "URL template, machine identification, and a code check in the firmware. Backlog entries: \"Parameters for Secure Code\", \"Parameters for hiding port of database, ports, SSH etc. (high level access) - self resetting\".",
+      "open": [
+        "This is a documented back door: the spec needs who may request it, how long it stays open, what it unlocks, and what is logged. (CRA-relevant)",
+        "Is the code bound to one machine and one time window?",
+        "What does \"self resetting\" mean exactly - after a time, after a reboot, or both?",
+        "Does \"data erase\" wipe user data, logs, or the whole parameter set?"
+      ]
+    }
+  }
+}

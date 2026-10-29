@@ -1,0 +1,243 @@
+{
+  "$comment": "Hand-reviewed corrections applied by scripts/extract-data.mjs on top of the Excel list and the clickdummy tree. Every entry cites its reason. The requirements document v1.6 (docs/sources) wins over every other source.",
+  "params": {
+    "108": {
+      "type": "String",
+      "control": "ip",
+      "why": "Excel type '?' (DATA.checks). IPv4 address; docx §8/§11 silent. Decided: IPv4 field with numeric keypad."
+    },
+    "109": {
+      "type": "String",
+      "control": "ip",
+      "inputType": "Number Keyboard",
+      "default": "255.255.255.0",
+      "why": "Excel type '?', default 'AA:AA:AA:AA' and alphabetical keyboard look like a copy error; a subnet mask is dotted-decimal like the other two.",
+      "value": "255.255.255.0"
+    },
+    "110": {
+      "type": "String",
+      "control": "ip",
+      "why": "Excel type '?'. Gateway is an IPv4 address."
+    },
+    "246": {
+      "cond": "{238}",
+      "why": "Excel condition {247=249};{247=250} points at Batch Mode, which is unrelated to 'Printfunction via CAN-Input'. The CAN screen gates it on External_Canbus_Enable (238); recorded in OPEN-POINTS."
+    },
+    "273": {
+      "cond": "{269=271};{269=272}",
+      "why": "Excel has {269=271}&{269=272}: AND between two values of the same selection can never be true. Clearly meant as OR."
+    },
+    "274": {
+      "cond": "{269=271};{269=272}",
+      "why": "Same as 273."
+    },
+    "323": {
+      "color": null,
+      "why": "Excel colour '#fffff' is a 5-digit hex (DATA.checks). Dropped; status colours come from tokens."
+    },
+    "608": {
+      "value": 609,
+      "why": "Excel Val=502 is a language option id, not a logo option (copy error). Use the NOVEXX logo as the current value."
+    },
+    "700": {
+      "control": "time",
+      "why": "Info_Time is a String with a Number Keyboard in Excel; a time needs its own picker (docx §7.2 has no date/time control; recorded in OPEN-POINTS)."
+    },
+    "701": {
+      "control": "date",
+      "why": "Info_Date, same reason as 700."
+    },
+    "729": {
+      "control": "display",
+      "why": "CRA_relevant_Target_Country is read-only level 4 with Editable=False; shown as a read-only value until PID defines the country selection."
+    }
+  },
+  "sliders": {
+    "ids": [
+      122,
+      123,
+      130,
+      297,
+      613
+    ],
+    "why": "docx §7.2 asks for a slider 'where a range is more intuitive' but the Excel marks no parameter as slider. Proposal: fixed speed, manual feed speed, speed modification %, test speed, stand-by timer. Recorded in OPEN-POINTS."
+  },
+  "reservedOptions": {
+    "ids": [
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232
+    ],
+    "why": "Sensor_Type_Opt4–Opt10 are reserved on purpose (clickdummy report 'What changed'); hidden from the selection list (plan P2-06)."
+  },
+  "nodes": {
+    "selectformat": {
+      "accessRead": 1,
+      "accessAction": 1,
+      "why": "docx §8.1: Access L1 (clickdummy said L2 to be confirmed)."
+    },
+    "modifyformat": {
+      "accessRead": 1,
+      "accessAction": 2,
+      "why": "docx §8.2: L2."
+    },
+    "createformat": {
+      "accessRead": 1,
+      "accessAction": 2,
+      "why": "docx §8.3: L2."
+    },
+    "speedtest": {
+      "accessRead": 1,
+      "accessAction": 2,
+      "why": "docx §8.4: read L1, run L2."
+    },
+    "iotest": {
+      "accessRead": 1,
+      "accessAction": 3,
+      "why": "docx §8.5: read L1, forcing L3."
+    },
+    "diaglogs": {
+      "accessRead": 2,
+      "accessAction": 3,
+      "why": "docx §8.6: L2 view, L3 activate/clear."
+    },
+    "errorhistory": {
+      "accessRead": 1,
+      "accessAction": 3,
+      "why": "docx §8.7: read L1, clearing L3."
+    },
+    "reporting": {
+      "accessRead": 3,
+      "accessAction": 3,
+      "why": "docx §8.8: L3."
+    },
+    "backup": {
+      "accessRead": 2,
+      "accessAction": 3,
+      "why": "docx §8.9: L3 load, L2 create."
+    },
+    "fwupdate": {
+      "accessRead": 3,
+      "accessAction": 3,
+      "why": "docx §8.10: L3."
+    },
+    "reportingqr": {
+      "accessRead": 1,
+      "accessAction": 1,
+      "why": "docx §8.11: L1."
+    },
+    "search": {
+      "accessRead": 1,
+      "accessAction": 1,
+      "why": "docx §8.12: results filtered by level."
+    },
+    "createuser": {
+      "accessRead": 3,
+      "accessAction": 3,
+      "why": "docx §8.13: L3 minimum."
+    },
+    "usermanage": {
+      "accessRead": 1,
+      "accessAction": 1,
+      "why": "docx §8.14: L1/L2 own account, L3 list. L0 no access."
+    },
+    "securecode": {
+      "accessRead": 0,
+      "accessAction": 0,
+      "why": "docx §8.15: visible from any level (clickdummy said L3)."
+    },
+    "cracountry": {
+      "accessRead": 4,
+      "accessAction": 4,
+      "why": "Parameter 729 is read level 4."
+    },
+    "usermodified": {
+      "kind": "mask",
+      "mask": {
+        "type": "usermodified",
+        "spec": {}
+      },
+      "why": "Diagram: 'List of User Modified Parameters'. Implemented as a generated list of parameters whose value differs from default (plan P3-13)."
+    },
+    "rewinder": {
+      "machineTypes": [
+        "D-Series"
+      ],
+      "why": "Diagram note: only visible for the D-Series, enabled via crypto chip. Tile hidden unless seed/machine.json says D-Series."
+    },
+    "buscard": {
+      "optionKey": "busCard",
+      "why": "'Comes later', dynamic tile name from the detected card. Tile disabled unless seed/machine.json lists a bus card."
+    }
+  },
+  "optionGates": {
+    "$comment": "Menu tiles that are disabled when the machine option is not installed (docx §5.4 'disabled (option not present)'). Key = tree node id, value = parameter id of the Option_* boolean or a key in seed/machine.json.",
+    "printers": {
+      "param": 146
+    },
+    "control": {
+      "params": [
+        177,
+        187
+      ]
+    },
+    "rewinder": {
+      "machine": "rewinder"
+    },
+    "buscard": {
+      "machine": "busCard"
+    },
+    "tandem": {
+      "param": 238
+    }
+  },
+  "extraParams": {
+    "900": {
+      "name": "Diag_Recording_Enable",
+      "label": "Diagnosis recording",
+      "type": "Boolean",
+      "inputType": "Toggle Bar",
+      "default": false,
+      "accessRead": 2,
+      "accessWrite": 3,
+      "why": "docx §8.6 activation toggle has no parameter yet."
+    },
+    "901": {
+      "name": "SecureCode_Request_Limit",
+      "label": "Secure codes remaining",
+      "type": "Integer",
+      "default": 3,
+      "min": 0,
+      "max": 10,
+      "accessRead": 0,
+      "accessWrite": null,
+      "why": "docx §8.15 'limited number of codes'."
+    },
+    "902": {
+      "name": "SecureCode_Session_Minutes",
+      "label": "Elevated access duration",
+      "type": "Integer",
+      "unit": "min",
+      "default": 30,
+      "min": 5,
+      "max": 240,
+      "accessRead": 3,
+      "accessWrite": 4,
+      "why": "docx §8.15 'L4 for a limited time'."
+    },
+    "906": {
+      "name": "Reporting_QR_URL_Template",
+      "label": "Reporting URL template",
+      "type": "String",
+      "default": "https://partner.pid-group.example/report?sn={serial}&type={machine}&fw={fw}",
+      "accessRead": 3,
+      "accessWrite": 3,
+      "why": "docx §8.11 'URL template must be configurable and is not in the parameter list yet'."
+    },
+    "$comment": "Dummy ids for things the docx needs but the Excel does not define yet (recorded in OPEN-POINTS). Ids 900+ are outside the Excel range."
+  }
+}

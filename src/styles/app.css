@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/* self-hosted fonts (SIL Open Font License — licence-free for commercial use, docx §5.1) */
+@import '@fontsource/figtree/400.css';
+@import '@fontsource/figtree/600.css';
+@import '@fontsource/figtree/700.css';
+@import '@fontsource/fira-code/400.css';
+@import '@fontsource/fira-code/600.css';
+
+@import './tokens.css';
+@import './components.css';
+
+/* Tailwind v4 scans source files automatically; the dev panel and styleguide build
+   class names dynamically from these lists, so register them explicitly. */
+@source inline('{bg,text,border}-{bg,surface,surface-2,line,line-soft,overlay,text,muted,faint,chrome,brand,brand-hi,brand-deep,on-brand,key,key-pressed}');
+@source inline('{bg,text,border}-{status-run,status-standby,status-error,status-warning,status-ready,status-pause}');
+@source inline('{bg,text,border}-{level-0,level-1,level-2,level-3,level-4}');
+@source inline('{bg,text,border}-branch-{settings,production,info,service,help,usermgmt}');
+@source inline('{bg,text}-status-{run,standby,error,warning}-ink');
+@source inline('{w,h}-{1,2,3,4,6,8,12,15}');
+@source inline('rounded-{xs,sm,md,card,card-inner,pill}');

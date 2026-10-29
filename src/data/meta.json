@@ -1,0 +1,149 @@
+{
+  "generatedAt": "2026-10-29T13:45:19.376Z",
+  "sources": {
+    "xlsx": "Parameterliste-PreSeriesPhase-12.xlsx",
+    "clickdummy": "PID_Labeller_HMI_Clickdummy.html",
+    "clickdummyParamList": "Parameterliste-PreSeriesPhase (11)",
+    "clickdummyDiagram": "Menu_Structure20260921.drawio"
+  },
+  "counts": {
+    "params": 214,
+    "extraParams": 4,
+    "options": 127,
+    "backlog": 7,
+    "screens": 62,
+    "masks": 16
+  },
+  "links": [
+    {
+      "frm": "pconnector",
+      "to": "mio",
+      "why": "The full applicator block, gated on MIO2 = Applicator",
+      "proposed": true
+    },
+    {
+      "frm": "printers",
+      "to": "can",
+      "why": "Printfunction via CAN-Input is the same parameter as on the CAN screen",
+      "proposed": true
+    },
+    {
+      "frm": "mio",
+      "to": "applicatortest",
+      "why": "Set up the applicator here, try it out there - today that is a five-step walk through the menu",
+      "proposed": true
+    },
+    {
+      "frm": "mio",
+      "to": "pconnector",
+      "why": "The other half of the applicator setup",
+      "proposed": true
+    },
+    {
+      "frm": "unwinder",
+      "to": "label",
+      "why": "Roll and label geometry are usually set up together",
+      "proposed": true
+    },
+    {
+      "frm": "label",
+      "to": "start",
+      "why": "Start carries the same Multi Label and Partial Label rows",
+      "proposed": true
+    },
+    {
+      "frm": "label",
+      "to": "stop",
+      "why": "Stop carries the same label length and missing label rows",
+      "proposed": true
+    },
+    {
+      "frm": "batch",
+      "to": "info",
+      "why": "Batch counter and the machine counters belong to the same question: how much has run",
+      "proposed": true
+    }
+  ],
+  "checks": [
+    {
+      "sev": "gap",
+      "cat": "Type undecided",
+      "row": 23,
+      "id": "108",
+      "name": "IPAddress",
+      "msg": "Type = ?"
+    },
+    {
+      "sev": "gap",
+      "cat": "Type undecided",
+      "row": 24,
+      "id": "109",
+      "name": "SubnetMask",
+      "msg": "Type = ?"
+    },
+    {
+      "sev": "gap",
+      "cat": "Type undecided",
+      "row": 25,
+      "id": "110",
+      "name": "Gateway_Address",
+      "msg": "Type = ?"
+    },
+    {
+      "sev": "gap",
+      "cat": "Widget mismatch",
+      "row": 303,
+      "id": "700",
+      "name": "Info_Time",
+      "msg": "String with Number Keyboard"
+    },
+    {
+      "sev": "gap",
+      "cat": "Widget mismatch",
+      "row": 304,
+      "id": "701",
+      "name": "Info_Date",
+      "msg": "String with Number Keyboard"
+    },
+    {
+      "sev": "cosmetic",
+      "cat": "Duplicate text resource",
+      "row": 23,
+      "id": "108",
+      "name": "IPAddress",
+      "msg": "TextResID 16 is used by: IPAddress, Gateway_Address"
+    },
+    {
+      "sev": "cosmetic",
+      "cat": "No unit",
+      "row": 295,
+      "id": "620",
+      "name": "User_PW_Blocked_Old_Ones",
+      "msg": "editable number without unit"
+    },
+    {
+      "sev": "cosmetic",
+      "cat": "No unit",
+      "row": 296,
+      "id": "621",
+      "name": "User_PW_min_length",
+      "msg": "editable number without unit"
+    },
+    {
+      "sev": "cosmetic",
+      "cat": "Unit spelling",
+      "row": 124,
+      "id": "209",
+      "name": "Start_Input_min_pulse",
+      "msg": "unit \"mS\" - everywhere else \"ms\""
+    },
+    {
+      "sev": "cosmetic",
+      "cat": "Unit spelling",
+      "row": 125,
+      "id": "210",
+      "name": "Minimum_Time_Between_StartInp",
+      "msg": "unit \"mS\" - everywhere else \"ms\""
+    }
+  ]
+}
