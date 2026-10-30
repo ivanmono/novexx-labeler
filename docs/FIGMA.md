@@ -20,9 +20,29 @@ Variable naming mirrors `src/styles/tokens.css` semantic names: `colour/bg`, `co
 
 ## Sync (agent-driven, at each gate)
 
-1. Code → Figma: Playwright screenshots are the visual reference; `use_figma` creates or updates variables, component sets and frames. Frames generated earlier are replaced in place (matched by name); hand-edited nodes carry the plugin-data flag `hmi.handEdited=true` and are updated field by field, never recreated.
-2. Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are diffed against the last sync; token or variant changes are ported to `tokens.css` / the component module and logged as `DT-nn` in `docs/DESIGN-LOG.md`.
-3. Priority order: portrait dark complete first, then light, then landscape. Roughly 54 screens × 6 variants ≈ 324 frames, created in batches per area to respect MCP rate limits.
+Code → Figma runs through three small scripts in `scripts/figma/` plus the Desktop Bridge:
+
+| Step | Tool | What it does |
+|---|---|---|
+| 1. Serialize | `serialize-dom.js` (runs in the page) | Walks the rendered `.hmi` shell and emits a JSON layer tree: a frame for every element that paints or clips (background, gradient, border, shadow, overflow), text layers with the computed Figtree / Fira Code font, sprite icons as `icon/<name>` references with colour and rotation, `::before/::after` boxes that paint. |
+| 2. Capture | `npm run figma:capture` (`capture.mjs`, Playwright) | Drives the app through `window.__hmi` into each state listed in the script, injects the serializer and writes `test-results/figma/<name>.json` + a reference PNG per state. Frame names follow `<screen> / <theme> / <orientation> / <state>`. |
+| 3. Build | `build-frames.js` via `figma_execute` | Plain Plugin API code that recreates a capture on a page: gradients → `GRADIENT_LINEAR/RADIAL` with a computed transform, `color(srgb …)` / `oklab()` (Tailwind colour-mix output) → sRGB, box-shadow → drop shadows, per-side borders → thin rectangles, icons → recoloured **instances of the Icons v1 components** (so the designer edits one icon, not 300 vectors). The builder source is stored once in the file's plugin data (`hmi.builder`, `npm run figma:payload -- --store`) and each frame call is only the compact JSON (`npm run figma:payload -- --frames <dir> "<page>" <file.json>`). |
+
+Rules the builder follows:
+
+- Frames with the same name are replaced in place (position kept). A frame with plugin data `hmi.handEdited=true` is skipped and reported, never overwritten.
+- Text is truncated with an ellipsis only where the browser itself cut it (text wider than its box). Figma's Figtree metrics run a few percent wider than Chromium's, so shrink-wrapped labels keep their natural width and their clip box is opened instead.
+- Fonts: Figtree and Fira Code (both available in Figma); weight → style name; falls back to Inter only if a style is missing.
+
+Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes, SVGs that are not sprite icons (these are inlined as vectors instead).
+
+Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are diffed against the last sync; token or variant changes are ported to `tokens.css` / the component module and logged as `DT-nn` in `docs/DESIGN-LOG.md`.
+
+Priority order: portrait dark complete first, then light, then landscape. Roughly 54 screens × 6 variants ≈ 324 frames, created in batches per area.
+
+### Synced so far (2026-10-30)
+
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light. Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
 
 ## Icon export
 

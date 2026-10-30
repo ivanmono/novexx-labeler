@@ -30,20 +30,54 @@ const ROWS = {
 };
 const SPECIAL = new Set(['⇧', '⌫', '123', 'abc', '␣', '↵']);
 
-export function renderKeyboard({ layout = 'lower', enterLabel = '↵', enterIcon = null, compact = false } = {}) {
+export function renderKeyboard({
+  layout = 'lower',
+  enterLabel = '↵',
+  enterIcon = null,
+  compact = false,
+} = {}) {
   const rows = ROWS[layout] ?? ROWS.lower;
   return `
   <div class="keyboard select-none flex flex-col gap-1.5 ${compact ? 'keyboard--compact' : ''}" data-keyboard data-layout="${layout}" role="group" aria-label="Keyboard">
     ${rows
       .map(
-        (row, ri) => `<div class="flex gap-1.5 ${ri === 3 ? '' : ''}">${row
-          .map((k) => {
-            const special = SPECIAL.has(k);
-            const grow = k === '␣' ? 'flex-[4]' : k === '↵' ? 'flex-[2]' : k === '123' || k === 'abc' ? 'flex-[1.6]' : special ? 'flex-[1.4]' : 'flex-1';
-            const label = k === '␣' ? '' : k === '⌫' ? icon('back', { size: 24 }) : k === '↵' ? (enterIcon ? icon(enterIcon, { size: 24 }) : esc(enterLabel)) : k === '⇧' ? '⇧' : esc(k);
-            return `<button type="button" class="${cx('key pressable rounded-sm font-semibold grid place-items-center', grow, special ? 'key--special bg-surface-2 text-body-sm' : 'bg-key text-body-lg', k === '↵' && 'bg-brand text-on-brand', k === '⇧' && layout === 'upper' && 'ring-2 ring-brand')}" data-action="key" data-key="${esc(k)}" aria-label="${esc(k === '␣' ? 'space' : k === '⌫' ? 'backspace' : k === '↵' ? 'enter' : k)}">${label}</button>`;
-          })
-          .join('')}</div>`,
+        (row, ri) =>
+          `<div class="flex gap-1.5 ${ri === 3 ? '' : ''}">${row
+            .map((k) => {
+              const special = SPECIAL.has(k);
+              const grow =
+                k === '␣'
+                  ? 'flex-[4]'
+                  : k === '↵'
+                    ? 'flex-[2]'
+                    : k === '123' || k === 'abc'
+                      ? 'flex-[1.6]'
+                      : special
+                        ? 'flex-[1.4]'
+                        : 'flex-1';
+              const label =
+                k === '␣'
+                  ? ''
+                  : k === '⌫'
+                    ? icon('back', { size: 24 })
+                    : k === '↵'
+                      ? enterIcon
+                        ? icon(enterIcon, { size: 24 })
+                        : esc(enterLabel)
+                      : k === '⇧'
+                        ? '⇧'
+                        : esc(k);
+              // enter gets the brand fill on its own: two bg-* utilities on one element would
+              // leave the winner to the stylesheet order (seen as a grey key with a dark icon)
+              const tone =
+                k === '↵'
+                  ? 'key--special bg-brand text-on-brand text-body-sm'
+                  : special
+                    ? 'key--special bg-surface-2 text-body-sm'
+                    : 'bg-key text-body-lg';
+              return `<button type="button" class="${cx('key pressable rounded-sm font-semibold grid place-items-center', grow, tone, k === '⇧' && layout === 'upper' && 'ring-2 ring-brand')}" data-action="key" data-key="${esc(k)}" aria-label="${esc(k === '␣' ? 'space' : k === '⌫' ? 'backspace' : k === '↵' ? 'enter' : k)}">${label}</button>`;
+            })
+            .join('')}</div>`,
       )
       .join('')}
   </div>`;
@@ -53,7 +87,10 @@ export function renderKeyboard({ layout = 'lower', enterLabel = '↵', enterIcon
  * Mount keyboard behaviour on a container that holds (or will hold) a rendered keyboard.
  * Handles shift / layout switching internally and calls `onInput(char)`, `onBackspace()`, `onEnter()`.
  */
-export function mountKeyboard(container, { onInput, onBackspace, onEnter, layout = 'lower', enterLabel, enterIcon } = {}) {
+export function mountKeyboard(
+  container,
+  { onInput, onBackspace, onEnter, layout = 'lower', enterLabel, enterIcon } = {},
+) {
   let current = layout;
   const draw = () => {
     const kb = container.querySelector('[data-keyboard]');
@@ -96,12 +133,34 @@ export function mountKeyboard(container, { onInput, onBackspace, onEnter, layout
       }
     },
   });
-  return { dispose, setLayout: (l) => { current = l; draw(); }, get layout() { return current; } };
+  return {
+    dispose,
+    setLayout: (l) => {
+      current = l;
+      draw();
+    },
+    get layout() {
+      return current;
+    },
+  };
 }
 
 /** Numeric keypad: 3×4 digits plus a column of actions. `allowDecimal`/`allowSign` for floats. */
-export function renderNumpad({ allowDecimal = false, allowSign = false, showMinMax = false, enterIcon = 'activate' } = {}) {
-  const NAMES = { '⌫': 'backspace', C: 'clear', '↵': 'enter', MIN: 'minimum', MAX: 'maximum', '-': 'minus', '.': 'decimal point' };
+export function renderNumpad({
+  allowDecimal = false,
+  allowSign = false,
+  showMinMax = false,
+  enterIcon = 'activate',
+} = {}) {
+  const NAMES = {
+    '⌫': 'backspace',
+    C: 'clear',
+    '↵': 'enter',
+    MIN: 'minimum',
+    MAX: 'maximum',
+    '-': 'minus',
+    '.': 'decimal point',
+  };
   const key = (k, extra = '', content = null) =>
     `<button type="button" class="${cx('key pressable rounded-sm grid place-items-center font-semibold', extra)}" data-action="key" data-key="${esc(k)}" aria-label="${esc(NAMES[k] ?? k)}">${content ?? esc(k)}</button>`;
   const dig = (k) => key(k, 'bg-key text-title t-param');
@@ -114,7 +173,10 @@ export function renderNumpad({ allowDecimal = false, allowSign = false, showMinM
   </div>`;
 }
 
-export function mountNumpad(container, { onInput, onBackspace, onClear, onEnter, onMin, onMax } = {}) {
+export function mountNumpad(
+  container,
+  { onInput, onBackspace, onClear, onEnter, onMin, onMax } = {},
+) {
   return onAction(container, {
     key: (btn) => {
       const k = btn.dataset.key;

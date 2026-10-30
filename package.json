@@ -17,6 +17,8 @@
     "data:sync": "node scripts/extract-data.mjs",
     "data:validate": "node scripts/validate-data.mjs",
     "icons:sprite": "node scripts/build-sprite.mjs",
+    "figma:capture": "node scripts/figma/capture.mjs test-results/figma",
+    "figma:payload": "node scripts/figma/payload.mjs",
     "check": "npm run lint && npm run data:validate && npm test"
   },
   "devDependencies": {

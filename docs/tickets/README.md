@@ -40,7 +40,7 @@ Requirement trace: [../REQUIREMENTS-TRACE.md](../REQUIREMENTS-TRACE.md). Open po
 | [P1-12](P1-12.md) | Home screen | L | done |
 | [P1-13](P1-13.md) | Login flow | M | done |
 | [P1-14](P1-14.md) | Dev panel complete and Playwright harness | M | done |
-| [P1-15](P1-15.md) | Figma: shell components and first screens | M | todo |
+| [P1-15](P1-15.md) | Figma: shell components and first screens | M | in progress |
 | [P1-16](P1-16.md) | Stand-by state and wake | M | done |
 
 ## Phase 2 - Menu and standard parameter screens
