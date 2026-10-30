@@ -62,7 +62,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 ### Synced so far (2026-10-30)
 
-`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17). Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
 
 ## Icon export
 
