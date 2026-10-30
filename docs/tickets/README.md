@@ -6,13 +6,12 @@ Requirement trace: [../REQUIREMENTS-TRACE.md](../REQUIREMENTS-TRACE.md). Open po
 
 ## Redmine
 
-Mirrored in Redmine project [PID Labeler](https://projects.mono-software.com/projects/pid-labeler/issues) (id 294) since
-2026-10-30: one parent issue per phase, one child per ticket and gate, tracker Feature, assigned to Ivan Basic. Each
-ticket file carries its issue in a `- Redmine: #n` line. `node scripts/redmine-sync.mjs` (API key in env
-`REDMINE_API_KEY` or the git-ignored `.redmine-key`) creates missing issues and updates existing ones from the ticket
-files: title, description (goal, scope, refs, dependencies), status (done → Closed 100 %, in progress → In Progress 50 %,
-else New) and estimate (S 4 h, M 8 h, L 20 h). `--dry-run` lists without writing. Parents: Phase 0 #165192, Phase 1
-#165193, Phase 2 #165194, Phase 3 #165195, Phase 4 #165196, Phase 5 #165197.
+Mirrored in Redmine project [PID Labeler](https://projects.mono-software.com/projects/pid-labeler/issues) (id 294) as
+**one issue per phase**, assigned to Ivan Basic: Phase 0 #165192, Phase 1 #165193, Phase 2 #165194, Phase 3 #165195,
+Phase 4 #165196, Phase 5 #165197. Each phase issue carries this index's ticket table for that phase, a status derived
+from the tickets (all done → Closed, any started → In Progress, else New), done ratio = done / all and the summed
+estimate (S 4 h, M 8 h, L 20 h). `node scripts/redmine-sync.mjs` (API key in env `REDMINE_API_KEY` or the
+git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--dry-run` prints them.
 
 ## Phase 0 - Foundation and data pipeline
 

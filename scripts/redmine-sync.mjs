@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * Create the plan's tickets as Redmine issues (one parent issue per phase, one child per ticket / gate).
+ * Mirror the plan in Redmine as ONE issue per phase (no per-ticket issues, by request).
  *
- *   node scripts/redmine-sync.mjs --dry-run          print what would be created
- *   node scripts/redmine-sync.mjs                    create the issues, write "Redmine: #n" into each ticket file
+ *   node scripts/redmine-sync.mjs --dry-run      print the six phase issues as they would be written
+ *   node scripts/redmine-sync.mjs                create missing phase issues, update existing ones
  *
- * Auth: env REDMINE_API_KEY or the file .redmine-key in the repo root (git-ignored). Issues are assigned to the
- * key's owner. Idempotent: a ticket that already carries a "- Redmine: #n" line is skipped.
- * Status mapping: done → Closed, in progress → In Progress, todo/blocked → New (names looked up, first match wins).
+ * Each phase issue carries the phase's ticket table (id, title, size, status) from docs/tickets, a status derived
+ * from the tickets (all done → Closed, any started → In Progress, else New), done ratio = done tickets / all,
+ * estimated hours = sum of ticket sizes (S 4, M 8, L 20), and is assigned to the API key's owner.
+ *
+ * Auth: env REDMINE_API_KEY or the file .redmine-key in the repo root (git-ignored).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -49,59 +51,65 @@ const PHASES = {
 };
 const HOURS = { S: 4, M: 8, L: 20 };
 const dir = path.join(ROOT, 'docs/tickets');
-const section = (md, name) => {
-  const m = md.match(new RegExp(`^## ${name}\\s*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, 'm'));
-  return m ? m[1].trim() : '';
-};
 const tickets = fs
   .readdirSync(dir)
   .filter((f) => /^(P\d-\d+[a-c]?|G\d-\d)\.md$/.test(f))
   .map((f) => {
     const md = fs.readFileSync(path.join(dir, f), 'utf8');
     const id = f.replace(/\.md$/, '');
-    const title = md.match(/^# \S+\s*[-–]\s*(.+)$/m)?.[1]?.trim() ?? id;
     const meta = (k) => md.match(new RegExp(`^- ${k}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
-    const phase = Number(meta('Phase') || id[1]);
-    const redmine = md.match(/^- Redmine:\s*#(\d+)/m)?.[1];
-    // tickets have Goal + Scope; gates have Reviewed (checklist) + How
-    const goal = section(md, 'Goal') || section(md, 'How');
-    const scope = section(md, 'Scope') || section(md, 'Reviewed');
-    const refs = meta('Requirement refs');
-    const depends = meta('Depends on');
-    const gate = id.startsWith('G');
-    const description = [
-      goal,
-      scope ? `\n*Scope*\n\n${scope}` : '',
-      refs ? `\n*Requirement refs:* ${refs}` : '',
-      depends ? `\n*Depends on:* ${depends}` : '',
-      `\n*Ticket file:* docs/tickets/${f} in the NovexxLabelerApp repo`,
-    ]
-      .filter(Boolean)
-      .join('\n');
     return {
       id,
-      file: f,
-      phase,
-      gate,
-      title: gate ? `${id} · Gate: ${title.replace(/^Gate:\s*/i, '')}` : `${id} · ${title}`,
+      phase: Number(meta('Phase') || id[1]),
+      gate: id.startsWith('G'),
+      title: md.match(/^# \S+\s*[-–]\s*(.+)$/m)?.[1]?.trim() ?? id,
       size: meta('Size').replace(/\s.*$/, ''),
-      status: meta('Status').toLowerCase(),
-      description,
-      redmine,
+      status: meta('Status').toLowerCase().split('(')[0].trim() || 'todo', // "done (notes…)" → done
     };
   })
   .sort((a, b) => a.phase - b.phase || a.id.localeCompare(b.id, 'en', { numeric: true }));
 
+const MARK = { done: '✓', 'in progress': '▶', blocked: '✕', todo: '·' };
+const phaseIssue = (n) => {
+  const list = tickets.filter((t) => t.phase === Number(n));
+  const done = list.filter((t) => t.status === 'done').length;
+  const started = list.some((t) => t.status !== 'todo');
+  const hours = list.reduce((s, t) => s + (HOURS[t.size] ?? 0), 0);
+  const rows = list.map(
+    (t) =>
+      `| ${MARK[t.status] ?? '·'} | ${t.id} | ${t.gate ? '*' + t.title + '*' : t.title} | ${t.size || '–'} | ${t.status} |`,
+  );
+  const description = [
+    `Tickets of this phase as tracked in the repo (docs/tickets/*.md, docs/PLAN.md). ${done} of ${list.length} done.`,
+    '',
+    '| | ID | Ticket | Size | Status |',
+    '|---|---|---|---|---|',
+    ...rows,
+    '',
+    'Sizes: S ≤ ½ day, M ≈ 1 day, L 2–3 days. Gates are review checkpoints with the client/designer.',
+    'Figma: https://www.figma.com/design/kNEZtQrnGyteWqDZIi0JAf/Novexx-Presentations',
+  ].join('\n');
+  return {
+    subject: PHASES[n],
+    description,
+    statusKey: done === list.length ? 'done' : started ? 'in progress' : 'todo',
+    done_ratio: Math.round((done / list.length) * 100),
+    estimated_hours: hours,
+    count: list.length,
+  };
+};
+
 if (DRY) {
-  for (const t of tickets)
+  for (const n of Object.keys(PHASES)) {
+    const p = phaseIssue(n);
     console.log(
-      `${t.phase} ${t.id.padEnd(7)} ${t.status.padEnd(12)} ${t.size.padEnd(2)} ${t.title}${t.redmine ? ' (#' + t.redmine + ')' : ''}`,
+      `\n${p.subject}  [${p.statusKey}, ${p.done_ratio} %, ${p.estimated_hours} h, ${p.count} tickets]\n${p.description}`,
     );
-  console.log(`${tickets.length} tickets`);
+  }
   process.exit(0);
 }
 
-// ---- Redmine metadata ----------------------------------------------------------------------------
+// ---- Redmine ------------------------------------------------------------------------------------
 const me = (await api('GET', '/users/current.json')).user;
 const project = (await api('GET', `/projects/${PROJECT}.json?include=trackers`)).project;
 const trackers = project.trackers ?? (await api('GET', '/trackers.json')).trackers;
@@ -115,8 +123,8 @@ const statusFor = (s) => {
     s === 'done'
       ? [/^closed$/i, /^resolved$/i, /^done$/i]
       : s === 'in progress'
-        ? [/^in progress$/i, /^in bearbeitung$/i, /^doing$/i]
-        : [/^new$/i, /^neu$/i, /^to do$/i, /^open$/i];
+        ? [/^in progress$/i, /^doing$/i]
+        : [/^new$/i, /^to do$/i, /^open$/i];
   for (const re of want) {
     const hit = statuses.find((x) => re.test(x.name));
     if (hit) return hit;
@@ -127,8 +135,7 @@ console.log(
   `Redmine ${BASE} · project "${project.name}" (#${project.id}) · tracker "${tracker.name}" · assignee ${me.firstname} ${me.lastname} (#${me.id})`,
 );
 
-// ---- parents per phase (reuse an existing "Phase n" issue) --------------------------------------
-// all issues of the project (paginated; the API returns newest first and caps a page at 100)
+// all issues of the project (paginated; newest first, 100 per page)
 const existing = [];
 for (let offset = 0; ; offset += 100) {
   const page = await api(
@@ -138,72 +145,25 @@ for (let offset = 0; ; offset += 100) {
   existing.push(...page.issues);
   if (existing.length >= page.total_count || page.issues.length === 0) break;
 }
-const parents = {};
-for (const [n, name] of Object.entries(PHASES)) {
-  const have = existing.find((i) => i.subject === name);
-  if (have) {
-    parents[n] = have.id;
-    continue;
-  }
-  const inPhase = tickets.filter((t) => t.phase === Number(n));
-  const res = await api('POST', '/issues.json', {
-    issue: {
-      project_id: project.id,
-      tracker_id: tracker.id,
-      subject: name,
-      description: `Umbrella for the ${inPhase.length} tickets of this phase (see docs/PLAN.md). Children: ${inPhase.map((t) => t.id).join(', ')}.`,
-      assigned_to_id: me.id,
-      status_id: statusFor(
-        inPhase.every((t) => t.status === 'done')
-          ? 'done'
-          : inPhase.some((t) => t.status !== 'todo')
-            ? 'in progress'
-            : 'todo',
-      ).id,
-    },
-  });
-  parents[n] = res.issue.id;
-  console.log(`parent #${res.issue.id}  ${name}`);
-}
 
-// ---- children ---------------------------------------------------------------------------------
-let created = 0,
-  updated = 0;
-for (const t of tickets) {
+for (const n of Object.keys(PHASES)) {
+  const p = phaseIssue(n);
   const issue = {
-    subject: t.title,
-    description: t.description,
-    status_id: statusFor(t.status).id,
-    done_ratio: t.status === 'done' ? 100 : t.status === 'in progress' ? 50 : 0,
-  };
-  if (HOURS[t.size]) issue.estimated_hours = HOURS[t.size];
-  if (t.redmine) {
-    // keep an existing issue in step with the ticket file (title, description, status, estimate)
-    await api('PUT', `/issues/${t.redmine}.json`, {
-      issue: { ...issue, parent_issue_id: parents[t.phase] },
-    });
-    updated++;
-    continue;
-  }
-  Object.assign(issue, {
-    project_id: project.id,
-    tracker_id: tracker.id,
-    parent_issue_id: parents[t.phase],
+    subject: p.subject,
+    description: p.description,
+    status_id: statusFor(p.statusKey).id,
+    done_ratio: p.done_ratio,
+    estimated_hours: p.estimated_hours,
     assigned_to_id: me.id,
-  });
-  const res = await api('POST', '/issues.json', { issue });
-  created++;
-  const file = path.join(dir, t.file);
-  const md = fs.readFileSync(file, 'utf8');
-  fs.writeFileSync(
-    file,
-    md.replace(
-      /^(- Status:.*)$/m,
-      `$1\n- Redmine: #${res.issue.id} (${BASE}/issues/${res.issue.id})`,
-    ),
-  );
-  console.log(`#${res.issue.id}  ${t.title}`);
+  };
+  const have = existing.find((i) => i.subject === p.subject);
+  if (have) {
+    await api('PUT', `/issues/${have.id}.json`, { issue });
+    console.log(`updated #${have.id}  ${p.subject}  (${p.statusKey}, ${p.done_ratio} %)`);
+  } else {
+    const res = await api('POST', '/issues.json', {
+      issue: { ...issue, project_id: project.id, tracker_id: tracker.id },
+    });
+    console.log(`created #${res.issue.id}  ${p.subject}`);
+  }
 }
-console.log(
-  `${created} issues created, ${updated} updated, under ${Object.keys(parents).length} phase parents`,
-);
