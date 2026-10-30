@@ -8,6 +8,7 @@ https://www.figma.com/design/kNEZtQrnGyteWqDZIi0JAf/Novexx-Presentations
 | Page | Owner | Content |
 |---|---|---|
 | Presentation#1, Icons, Icon rules, Icons v1 | Mono design | Existing. **Never modified by the sync.** Icons v1 (node `2014:468`) is the source of the 67 `icon/<name>` components exported to `src/assets/icons`. |
+| Icons v1 – 24 px | generated (2026-10-30) | Mono's 67 icons cloned at 24×24 with a 1.5 px stroke, components `icon/24/<name>`, one grid frame. Scaled copies of Icons v1 (caps/joins as in the source); regenerate rather than hand-edit when Icons v1 changes. Not used by the app yet (the sprite is built from Icons v1 at 48 px / 2 px). |
 | HMI / 01 Tokens | generated | Variable collections `HMI Colour` (modes Dark, Light), `HMI Type`, `HMI Space`, `HMI Radius`; a token sheet frame mirroring `#/styleguide`. |
 | HMI / 02 Components | generated | One component set per `src/ui/components` module, variants per state (docx §5.4). |
 | HMI / 03 Screens – Portrait | generated | 480×800 frames, dark and light, one per screen. |
