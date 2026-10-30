@@ -9,8 +9,10 @@ import * as Home from './HomeScreen.js';
 import * as Placeholder from './PlaceholderScreen.js';
 import * as Login from './LoginScreen.js';
 import * as User from './UserScreen.js';
+import * as Components from './Components.js';
 
 export const screens = {
+  components: Components, // dev route: every component in every state, source of the Figma component sets
   home: Home,
   startup: Startup,
   styleguide: Styleguide,

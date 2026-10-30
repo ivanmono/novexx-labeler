@@ -27,6 +27,7 @@ const prune = (n) => {
       if (k === 'radius' && v.every((x) => x === 0)) continue;
       if ((k === 'fills' || k === 'children') && v.length === 0) continue;
       if (k === 'lines' && v === 1) continue;
+      if (k === 'children' && n.type === 'instance') continue; // the component set holds the subtree
       o[k] = prune(v);
     }
     return o;
@@ -38,6 +39,19 @@ const compact = (c) => JSON.stringify(prune(c));
 if (mode === '--store') {
   process.stdout.write(
     `figma.root.setPluginData('hmi.builder', ${JSON.stringify(builder)});\nreturn { stored: figma.root.getPluginData('hmi.builder').length };\n`,
+  );
+} else if (mode === '--components') {
+  // node payload.mjs --components <captureDir> "<page name>"  → builds the component sets from components.json
+  // optional filters: [set name] [variant substring] → smaller payloads per call
+  const [onlySet, onlyVariant] = files;
+  const sets = JSON.parse(readFileSync(resolve(dir, 'components.json'), 'utf8')).filter(
+    (v) =>
+      (!onlySet || v.set === onlySet) &&
+      (!onlyVariant ||
+        Object.entries(v.props).some(([k, val]) => `${k}=${val}`.includes(onlyVariant))),
+  );
+  process.stdout.write(
+    `const buildFrames = new Function(figma.root.getPluginData('hmi.builder') + '\\nreturn buildFrames;')();\nreturn await buildFrames(${compact(sets)}, ${JSON.stringify(page)}, { components: true });\n`,
   );
 } else if (mode === '--frames' || mode === '--inline') {
   const captures = files.map((f) => JSON.parse(readFileSync(resolve(dir, f), 'utf8')));

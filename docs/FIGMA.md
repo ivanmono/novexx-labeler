@@ -10,7 +10,7 @@ https://www.figma.com/design/kNEZtQrnGyteWqDZIi0JAf/Novexx-Presentations
 | Presentation#1, Icons, Icon rules, Icons v1 | Mono design            | Existing. **Never modified by the sync.** Icons v1 (node `2014:468`) is the source of the 67 `icon/<name>` components exported to `src/assets/icons`.                                                                                                                                                    |
 | Icons v1 – 24 px                            | generated (2026-10-30) | Mono's 67 icons cloned at 24×24 with a 1.5 px stroke, components `icon/24/<name>`, one grid frame. Scaled copies of Icons v1 (caps/joins as in the source); regenerate rather than hand-edit when Icons v1 changes. **Source of the app sprite and of the icon instances in the screen frames** (DT-01). |
 | HMI / 01 Tokens                             | generated              | Variable collections `HMI Colour` (modes Dark, Light), `HMI Type`, `HMI Space`, `HMI Radius`; a token sheet frame mirroring `#/styleguide`.                                                                                                                                                              |
-| HMI / 02 Components                         | generated              | One component set per `src/ui/components` module, variants per state (docx §5.4).                                                                                                                                                                                                                        |
+| HMI / 02 Components                         | generated              | One component set per `data-cmp` component, one variant per state (docx §5.4), auto layout, tokens bound. StatusBar (State × 8), NavBar (Level 0–4 × Line run/standby/warning/error), QuicklinkCard (filled, empty) so far; the screen frames place instances of them.                                   |
 | HMI / 03 Screens – Portrait                 | generated              | 480×800 frames, dark and light, one per screen.                                                                                                                                                                                                                                                          |
 | HMI / 03 Screens – Landscape LH             | generated              | 800×480 frames.                                                                                                                                                                                                                                                                                          |
 | HMI / 03 Screens – Landscape RH             | generated              | 800×480 frames.                                                                                                                                                                                                                                                                                          |
@@ -56,13 +56,44 @@ Rules the builder follows:
 
 Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes. SVGs that are not sprite icons (the logo mark) are inlined as vectors with `var(--token)` colours resolved to the computed value.
 
+### Components (page `HMI / 02 Components`)
+
+Components are generated from the same markup as the screens, so a screen frame and its component set never drift:
+
+- A render function marks its root with `data-cmp="<Set>" data-cmp-props="Prop=value,…"` (StatusBar, NavBar,
+  QuicklinkCard so far). The dev route `#/components` (`src/ui/screens/Components.js`) renders every variant once;
+  `npm run figma:capture -- --components` serializes that sheet to `components.json` and
+  `npm run figma:payload -- --components <dir> "HMI / 02 Components" [Set] [Prop=value]` builds the sets (the filters
+  keep one `figma_execute` call small). Variant names are `Prop=value, Prop=value`; an existing variant is refilled
+  in place (same node id, so instances follow), a new one joins the set.
+- Component captures are "full": every element becomes a frame and flex / grid containers (and plain blocks with one
+  child) become **auto layout** with the CSS gap, padding, justify and align. A frame **hugs** an axis when the element
+  has no `w-`/`h-`/`size-` class (for a component root: on the sheet wrapper) and is not stretched or grown by its
+  parent; `min-h-*` becomes a min height. Absolute children stay absolute. Text with `line-clamp-n` (or a
+  `truncate` line inside a component) gets a fixed width, auto height, `maxLines = n` and an ending ellipsis, so an
+  override wraps and truncates like the browser (a two-line quicklink title grows the card from 116 to 118 px, as in the
+  app).
+- Screen captures stop at a `data-cmp` root and emit an **instance**: variant by props, then overrides in DOM order
+  (texts; icon instances swapped to `icon/24/<name>` and recoloured; layer opacities by name). The instance is sized
+  like the browser box except on axes the component hugs.
+- The builder finds a component only as a variant inside a **component set named after the `data-cmp` value**
+  (`QuicklinkCard` → `State=filled`). Variants pulled out of their set (loose `QuicklinkCard/filled` components)
+  are not found and the frame build stops with an error; recombine them (Figma: select both → Combine as variants,
+  rename the set) rather than rebuilding.
+- Bridge quirks that cost an afternoon: a sequential `await` loop over `loadFontAsync` / `getMainComponentAsync` /
+  `exportAsync` never returns — collect the promises and `Promise.all` them; `fetch` is blocked in the plugin
+  sandbox, so the builder source and every payload go through the `figma_execute` argument; set
+  `layoutPositioning = 'ABSOLUTE'` before `x`/`y`, and `textTruncation` before `maxLines` (each resets the other).
+  A builder change is applied to the stored copy with the same string replace on both sides and verified with a
+  checksum, or re-stored whole.
+
 Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are diffed against the last sync; token or variant changes are ported to `tokens.css` / the component module and logged as `DT-nn` in `docs/DESIGN-LOG.md`.
 
 Priority order: portrait dark complete first, then light, then landscape. Roughly 54 screens × 6 variants ≈ 324 frames, created in batches per area.
 
 ### Synced so far (2026-10-30)
 
-`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). TitleBar, Toast, Modal, Sheet and the other components follow the same route.
 
 ## Icon export
 

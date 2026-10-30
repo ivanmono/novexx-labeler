@@ -13,19 +13,16 @@ import { esc, onAction, cx } from '../html.js';
 
 const QUICKLINK_IDS = [614, 615, 616, 617];
 
-export function render(ctx) {
-  const quickLinks = () =>
-    QUICKLINK_IDS.map((qid) => {
-      const pid = Number(ctx.store.getParam(qid));
-      const p = pid ? ctx.param(pid) : null;
-      // card geometry per DT-05: 116 px tall (114 inner + ring), 12 px padding, 4 px line gap,
-      // 20 px title on up to two lines, 14 px bold value
-      if (!p)
-        return `<div class="card-border opacity-50"><div class="p-3 min-h-[114px] flex flex-col justify-center gap-1"><div class="text-label text-muted">${esc(ctx.t('home.quicklinkEmpty'))}</div><div class="text-caption text-faint">${esc(ctx.t('home.quicklinkHint'))}</div></div></div>`;
-      const screen = p.screens[0];
-      const node = screen ? ctx.node(screen) : null;
-      return `
-        <button type="button" class="card-border card-border--surface pressable text-left" data-action="quick" data-pid="${p.id}" data-screen="${esc(screen ?? '')}">
+/**
+ * Quicklink card (Figma component set QuicklinkCard · State=filled|empty). Geometry per DT-05:
+ * 116 px tall (114 inner + ring), 12 px padding, 4 px line gap, 20 px title on up to two lines,
+ * 14 px bold value.
+ */
+export function renderQuickCard(ctx, p) {
+  const screen = p.screens[0];
+  const node = screen ? ctx.node(screen) : null;
+  return `
+        <button type="button" class="card-border card-border--surface pressable text-left" data-action="quick" data-pid="${p.id}" data-screen="${esc(screen ?? '')}" data-cmp="QuicklinkCard" data-cmp-props="State=filled">
           <div class="p-3 min-h-[114px] flex items-center gap-3">
             ${node ? icon(node.icon, { size: 32, class: `text-branch-${node.branch ?? 'settings'} shrink-0` }) : ''}
             <span class="min-w-0 flex-1 flex flex-col gap-1">
@@ -35,6 +32,18 @@ export function render(ctx) {
             </span>
           </div>
         </button>`;
+}
+
+export function renderQuickEmpty(ctx) {
+  return `<div class="card-border opacity-50" data-cmp="QuicklinkCard" data-cmp-props="State=empty"><div class="p-3 min-h-[114px] flex flex-col justify-center gap-1"><div class="text-label text-muted">${esc(ctx.t('home.quicklinkEmpty'))}</div><div class="text-caption text-faint">${esc(ctx.t('home.quicklinkHint'))}</div></div></div>`;
+}
+
+export function render(ctx) {
+  const quickLinks = () =>
+    QUICKLINK_IDS.map((qid) => {
+      const pid = Number(ctx.store.getParam(qid));
+      const p = pid ? ctx.param(pid) : null;
+      return p ? renderQuickCard(ctx, p) : renderQuickEmpty(ctx);
     }).join('');
 
   const draw = () => {

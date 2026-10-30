@@ -380,7 +380,95 @@
     };
   }
 
-  function walk(el, base, out) {
+  // ---- components: `data-cmp="<Set>" data-cmp-props="Prop=value,…"` on a component root ----------
+  const parseProps = (s) =>
+    Object.fromEntries(
+      (s || '')
+        .split(',')
+        .filter(Boolean)
+        .map((kv) => kv.split('=').map((x) => x.trim())),
+    );
+  const collect = (n, type, acc = []) => {
+    if (n.type === type) acc.push(n);
+    for (const c of n.children || []) collect(c, type, acc);
+    return acc;
+  };
+  const JUSTIFY = {
+    'flex-start': 'start',
+    start: 'start',
+    normal: 'start',
+    left: 'start',
+    center: 'center',
+    'flex-end': 'end',
+    end: 'end',
+    right: 'end',
+    'space-between': 'between',
+  };
+  const ALIGN = {
+    'flex-start': 'start',
+    start: 'start',
+    center: 'center',
+    'flex-end': 'end',
+    end: 'end',
+    stretch: 'stretch',
+    normal: 'stretch',
+    baseline: 'start',
+  };
+  /**
+   * Auto-layout facts for the builder (full mode only): a flex container (or a single-child grid)
+   * becomes an auto-layout frame; children carry grow / stretch / absolute positioning.
+   */
+  function flexInfo(el, cs, rel, o) {
+    const out = {};
+    if (cs.position === 'absolute' || cs.position === 'fixed') out.abs = true;
+    if (!o.full) return out;
+    const isFlex = /flex/.test(cs.display);
+    const isGrid = /grid/.test(cs.display) && el.children.length <= 1;
+    // a plain block with one child (an element or a text run) becomes a one-column layout, so the
+    // component hugs its content in Figma (a longer override wraps and grows instead of clipping)
+    const hasKids = [...el.childNodes].some(
+      (c) => c.nodeType === 1 || (c.nodeType === 3 && c.textContent.trim()),
+    );
+    const isBlock =
+      !isFlex && !isGrid && hasKids && el.children.length <= 1 && !/inline/.test(cs.display);
+    if (isFlex || isGrid || isBlock) {
+      const col = isBlock || (isFlex && cs.flexDirection.startsWith('column'));
+      out.layout = {
+        dir: col ? 'col' : 'row',
+        gap: isBlock ? 0 : px(col ? cs.rowGap : cs.columnGap) || 0,
+        pad: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(px),
+        justify: isBlock
+          ? 'start'
+          : (JUSTIFY[isGrid ? cs.justifyItems : cs.justifyContent] ?? 'start'),
+        align: isBlock ? 'stretch' : (ALIGN[cs.alignItems] ?? (isGrid ? 'start' : 'stretch')),
+      };
+      // hug sizing: no explicit size class (on the element, or on the sheet wrapper for a component
+      // root) and not stretched / grown by the parent → the frame follows its content
+      const cls = [...el.classList, ...(o.parent ? [] : [...el.parentElement.classList])];
+      out.layout.hugW = !cls.some((c) => /^(w-|size-)/.test(c)) && !el.style.width;
+      out.layout.hugH = !cls.some((c) => /^(h-|size-)/.test(c)) && !el.style.height;
+      if (cls.some((c) => /^min-h-/.test(c))) out.layout.minH = px(cs.minHeight);
+    }
+    const p = o.parent;
+    if (p?.layout && !out.abs) {
+      if (parseFloat(cs.flexGrow) > 0) out.grow = true;
+      const self =
+        cs.alignSelf === 'auto' || cs.alignSelf === 'normal' ? p.layout.align : ALIGN[cs.alignSelf];
+      const col = p.layout.dir === 'col';
+      const inner = col
+        ? p.w - p.layout.pad[1] - p.layout.pad[3]
+        : p.h - p.layout.pad[0] - p.layout.pad[2];
+      if (self === 'stretch' && Math.abs((col ? rel.w : rel.h) - inner) < 1) out.stretch = true;
+      if (out.layout) {
+        if (col ? out.stretch : out.grow) out.layout.hugW = false;
+        if (col ? out.grow : out.stretch) out.layout.hugH = false;
+      }
+    }
+    if (out.abs && out.layout) out.layout.hugW = out.layout.hugH = false; // absolute: keep the box
+    return out;
+  }
+
+  function walk(el, base, out, o = {}) {
     if (el.id === 'dev-panel' || el.hasAttribute('data-sprite')) return;
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden') return;
@@ -394,6 +482,32 @@
       w: px(r.width),
       h: px(r.height),
     };
+
+    // a component root on a screen → an instance of the Figma variant, with text / icon / opacity
+    // overrides in DOM order; the full subtree stays attached as fallback when the set is missing
+    if (o.mode === 'screen' && el.dataset.cmp && !o.inCmp) {
+      const sub = [];
+      walk(el, base, sub, { ...o, full: true, inCmp: true });
+      const root = sub[0];
+      if (root) {
+        out.push({
+          ...root,
+          type: 'instance',
+          set: el.dataset.cmp,
+          props: parseProps(el.dataset.cmpProps),
+          texts: collect(root, 'text').map((t) => t.text),
+          icons: collect(root, 'icon').map((i) => ({
+            icon: i.icon,
+            color: i.color,
+            token: i.token,
+          })),
+          opacities: collect(root, 'frame')
+            .filter((f) => f !== root && f.opacity != null && f.opacity < 1)
+            .map((f) => ({ name: f.name, opacity: f.opacity })),
+        });
+      }
+      return;
+    }
 
     if (el.tagName.toLowerCase() === 'svg') {
       // Sprite icons map 1:1 to the Icons v1 components in Figma → emit name + colour only;
@@ -439,6 +553,7 @@
     const clip =
       /hidden|auto|scroll|clip/.test(cs.overflow) || /hidden|auto|scroll/.test(cs.overflowY);
     const emit =
+      o.full ||
       paint.fills.length ||
       paint.border ||
       paint.shadow ||
@@ -446,18 +561,20 @@
       opacity < 1 ||
       el.classList.contains('hmi');
     const painted = paint.fills.length || paint.border || paint.shadow;
-    const name = nameOf(el);
+    const name = el.dataset.cmp && o.inCmp && !o.parent?.inCmp ? el.dataset.cmp : nameOf(el);
     const node = emit
       ? {
           type: 'frame',
-          name: !painted && /^(div|span|p|h\d)$/.test(name) ? 'clip' : name,
+          name: !painted && !o.full && /^(div|span|p|h\d)$/.test(name) ? 'clip' : name,
           ...rel,
           opacity,
           clip,
           ...paint,
+          ...flexInfo(el, cs, rel, o),
           children: [],
         }
       : null;
+    if (node && o.inCmp) node.inCmp = true;
     const target = node ? node.children : out;
 
     const before = pseudo(el, '::before', base);
@@ -484,24 +601,52 @@
             italic: cs.fontStyle === 'italic',
           },
           truncate: cs.textOverflow === 'ellipsis',
+          // line-clamp-n → n lines then an ellipsis; in full mode a truncating single line too
+          maxLines:
+            parseInt(cs.webkitLineClamp) > 0
+              ? parseInt(cs.webkitLineClamp)
+              : o.full && cs.textOverflow === 'ellipsis' && cs.whiteSpace === 'nowrap'
+                ? 1
+                : null,
           boxX: rel.x,
           boxW: rel.w,
         });
       } else if (child.nodeType === Node.ELEMENT_NODE) {
-        walk(child, base, target);
+        walk(child, base, target, { ...o, parent: node ?? o.parent });
       }
     }
     const after = pseudo(el, '::after', base);
     if (after) target.push(after);
-    if (node) out.push(node);
+    if (node) {
+      delete node.inCmp;
+      out.push(node);
+    }
   }
 
-  window.__hmiSerialize = function (selector = '.hmi') {
+  /**
+   * Component sheet (#/components): every `[data-cmp]` root that is not nested in another one,
+   * serialized in full mode with its own box as origin → [{ set, props, root }].
+   */
+  window.__hmiSerializeComponents = function (selector = '[data-components]') {
+    const host = document.querySelector(selector);
+    colourIndex = null;
+    const roots = [...host.querySelectorAll('[data-cmp]')].filter(
+      (el) => !el.parentElement.closest('[data-cmp]'),
+    );
+    return roots.map((el) => {
+      const b = el.getBoundingClientRect();
+      const out = [];
+      walk(el, b, out, { mode: 'components', full: true, inCmp: true });
+      return { set: el.dataset.cmp, props: parseProps(el.dataset.cmpProps), root: out[0] };
+    });
+  };
+
+  window.__hmiSerialize = function (selector = '.hmi', { full = false } = {}) {
     const root = document.querySelector(selector);
     const base = root.getBoundingClientRect();
     colourIndex = null; // theme may have changed since the last call
     const out = [];
-    walk(root, base, out);
+    walk(root, base, out, { mode: 'screen', full });
     const tree = out[0];
     tree.theme = document.documentElement.dataset.theme;
     tree.orientation = document.documentElement.dataset.orientation;

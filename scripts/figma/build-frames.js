@@ -8,7 +8,7 @@
  * Plain Plugin API only (no helper wrappers): set fontName before characters, async font loads.
  */
 // eslint-disable-next-line no-unused-vars
-async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
+async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}) {
   // ---- colour parsing -------------------------------------------------------------------
   const parseColor = (s) => {
     if (!s) return null;
@@ -268,8 +268,179 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     if (fam) t.setBoundVariable('fontFamily', fam);
   }
 
+  // ---- auto layout (full-mode captures: component sheet) -----------------------------------------
+  const AXIS = {
+    start: 'MIN',
+    center: 'CENTER',
+    end: 'MAX',
+    between: 'SPACE_BETWEEN',
+    stretch: 'MIN',
+  };
+  function applyLayout(f, L, w, h) {
+    f.layoutMode = L.dir === 'col' ? 'VERTICAL' : 'HORIZONTAL';
+    f.primaryAxisSizingMode = 'FIXED';
+    f.counterAxisSizingMode = 'FIXED';
+    f.itemSpacing = L.gap;
+    [f.paddingTop, f.paddingRight, f.paddingBottom, f.paddingLeft] = L.pad;
+    f.primaryAxisAlignItems = AXIS[L.justify] ?? 'MIN';
+    f.counterAxisAlignItems = L.align === 'stretch' ? 'MIN' : (AXIS[L.align] ?? 'MIN');
+    f.resize(Math.max(0.01, w), Math.max(0.01, h));
+    // hug: the serializer saw no explicit size and no stretch/grow from the parent
+    const col = L.dir === 'col';
+    if (L.minH) f.minHeight = L.minH;
+    if (col ? L.hugH : L.hugW) f.primaryAxisSizingMode = 'AUTO';
+    if (col ? L.hugW : L.hugH) f.counterAxisSizingMode = 'AUTO';
+  }
+  function applyChildLayout(c, ch, ox, oy, L) {
+    if (ch.abs) {
+      c.layoutPositioning = 'ABSOLUTE';
+      c.x = ch.x - ox;
+      c.y = ch.y - oy;
+      return;
+    }
+    if (ch.grow) c.layoutGrow = 1;
+    if (ch.stretch) c.layoutAlign = 'STRETCH';
+    // a text run in a stretching column fills the width (so an override wraps instead of overflowing)
+    if (c.type === 'TEXT' && L.dir === 'col' && L.align === 'stretch' && !L.hugW)
+      c.layoutAlign = 'STRETCH';
+  }
+  /** Size, paint, layout and children of a frame-like node `n` into an existing frame / component `f`. */
+  async function fillFrame(f, n, ox, oy) {
+    f.resize(Math.max(0.01, n.w), Math.max(0.01, n.h));
+    f.clipsContent = !!n.clip;
+    f.opacity = n.opacity ?? 1;
+    const fills = [];
+    for (const p of n.fills || []) {
+      if (p.kind === 'solid') {
+        const s = boundSolid(parseColor(p.color), p.token, p.alpha);
+        if (s) fills.push(s);
+      } else if (p.kind === 'image') {
+        splitTop(p.css).forEach((layer, i) => {
+          const g = gradientPaint(layer, n.w, n.h, p.stops?.[i] || []);
+          if (g) fills.unshift(g); // CSS lists top layer first; Figma paints last on top
+        });
+      }
+    }
+    f.fills = fills;
+    const [tl, tr, br, bl] = n.radius || [0, 0, 0, 0];
+    f.topLeftRadius = tl;
+    f.topRightRadius = tr;
+    f.bottomRightRadius = br;
+    f.bottomLeftRadius = bl;
+    if (n.radiusToken) bindRadius(f, n.radiusToken);
+    if (n.layout) applyLayout(f, n.layout, n.w, n.h); // before borders/children: ABSOLUTE needs a layout parent
+    if (n.border) {
+      const [t, r, b, l] = n.border.widths;
+      const tokens = n.border.tokens || [];
+      const uniform = t === r && r === b && b === l;
+      if (uniform) {
+        const c = parseColor(n.border.colors[0]);
+        if (c) {
+          f.strokes = [boundSolid(c, tokens[0])];
+          f.strokeWeight = t;
+          f.strokeAlign = 'INSIDE';
+        }
+      } else {
+        // per-side borders → thin rectangles (Figma has per-side weights only on frames with
+        // uniform colour, and CSS mixes colours), keep it simple and visible
+        const sides = [
+          [t, 0, 0, n.w, t, n.border.colors[0], tokens[0]],
+          [r, n.w - r, 0, r, n.h, n.border.colors[1], tokens[1]],
+          [b, 0, n.h - b, n.w, b, n.border.colors[2], tokens[2]],
+          [l, 0, 0, l, n.h, n.border.colors[3], tokens[3]],
+        ];
+        for (const [wgt, x, y, w, h, col, token] of sides) {
+          if (!wgt) continue;
+          const c = parseColor(col);
+          if (!c || c.a === 0) continue;
+          const rct = figma.createRectangle();
+          f.appendChild(rct);
+          rct.name = 'border';
+          if (n.layout) rct.layoutPositioning = 'ABSOLUTE'; // before x/y: auto layout would move it first
+          rct.x = x;
+          rct.y = y;
+          rct.resize(Math.max(0.01, w), Math.max(0.01, h));
+          rct.fills = [boundSolid(c, token)];
+        }
+      }
+    }
+    if (n.shadow) f.effects = shadowEffects(n.shadow);
+    for (const ch of n.children || []) {
+      const c = await build(ch, f, n.x, n.y, n.layout);
+      if (c && n.layout) applyChildLayout(c, ch, n.x, n.y, n.layout);
+    }
+    return f;
+  }
+
+  // ---- component instances (screen captures: `data-cmp` roots) -----------------------------------
+  const variantName = (props) =>
+    Object.entries(props || {})
+      .map(([k, v]) => `${k}=${v}`)
+      .join(', ');
+  const componentFor = (set, props) =>
+    componentSets.get(set)?.children.find((c) => c.name === variantName(props)) ?? null;
+  async function placeInstance(n, parent, ox, oy) {
+    const comp = componentFor(n.set, n.props);
+    if (!comp)
+      throw new Error(`no component ${n.set} / ${variantName(n.props)} — build the set first`);
+    const inst = comp.createInstance();
+    parent.appendChild(inst);
+    inst.name = `${n.set} / ${variantName(n.props)}`;
+    inst.x = n.x - ox;
+    inst.y = n.y - oy;
+    // size like the browser box, but keep the component's hug axes (they follow the overrides)
+    const sizing = (horizontal) =>
+      inst.layoutMode === 'NONE'
+        ? 'FIXED'
+        : (inst.layoutMode === 'HORIZONTAL') === horizontal
+          ? inst.primaryAxisSizingMode
+          : inst.counterAxisSizingMode;
+    const hugW = sizing(true) === 'AUTO';
+    const hugH = sizing(false) === 'AUTO';
+    const dw = !hugW && Math.abs(inst.width - n.w) > 0.5;
+    const dh = !hugH && Math.abs(inst.height - n.h) > 0.5;
+    if (dw || dh) {
+      inst.resize(dw ? n.w : inst.width, dh ? n.h : inst.height);
+      if (hugW) inst.layoutSizingHorizontal = 'HUG';
+      if (hugH) inst.layoutSizingVertical = 'HUG';
+    }
+    // overrides, matched in DOM order (the variant was built from the same markup);
+    // one Promise.all per kind: sequential awaits of loadFontAsync / getMainComponentAsync hang the bridge
+    const texts = inst.findAll((x) => x.type === 'TEXT').slice(0, (n.texts || []).length);
+    const changed = texts.filter((t, i) => t.characters !== n.texts[i]);
+    await Promise.all(changed.map((t) => figma.loadFontAsync(t.fontName)));
+    changed.forEach((t) => {
+      t.characters = n.texts[texts.indexOf(t)];
+    });
+    const icons = inst.findAll((x) => x.type === 'INSTANCE' && x.name.startsWith('icon/'));
+    const nIcons = Math.min(icons.length, (n.icons || []).length);
+    const mains = await Promise.all(icons.slice(0, nIcons).map((ic) => ic.getMainComponentAsync()));
+    for (let i = 0; i < nIcons; i++) {
+      const want = iconComponents.get(`icon/24/${n.icons[i].icon}`);
+      const main = mains[i];
+      if (want && main && main.id !== want.id) {
+        icons[i].swapComponent(want);
+        icons[i].name = `icon/${n.icons[i].icon}`;
+      }
+      const c = parseColor(n.icons[i].color);
+      if (c) {
+        const paint = boundSolid({ ...c, a: 1 }, n.icons[i].token);
+        for (const v of icons[i].findAll((x) => 'strokes' in x)) {
+          if (v.strokes.length) v.strokes = [paint];
+          if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
+        }
+      }
+    }
+    for (const o of n.opacities || []) {
+      const t = inst.findOne((x) => x.name === o.name);
+      if (t) t.opacity = o.opacity;
+    }
+    return inst;
+  }
+
   // ---- node creation ------------------------------------------------------------------------
-  async function build(n, parent, ox = 0, oy = 0) {
+  async function build(n, parent, ox = 0, oy = 0, L = null) {
+    if (n.type === 'instance') return placeInstance(n, parent, ox, oy);
     if (n.type === 'text') {
       const t = figma.createText();
       parent.appendChild(t);
@@ -287,6 +458,19 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
           n.font.align
         ] || 'LEFT';
       t.textAlignHorizontal = align;
+      if (n.maxLines && !(L && L.hugW)) {
+        // clamped text (line-clamp-n, or a truncating line in a component): fixed box width, auto
+        // height up to n lines, ellipsis — overrides wrap and truncate like the browser
+        t.textAutoResize = 'HEIGHT';
+        t.x = n.boxX - ox;
+        t.y = n.y - oy;
+        t.resize(n.boxW, n.h);
+        t.textAutoResize = 'HEIGHT';
+        t.textTruncation = 'ENDING'; // before maxLines: setting truncation resets it to 1
+        t.maxLines = n.maxLines;
+        t.opacity = n.opacity ?? 1;
+        return t;
+      }
       const truncated = n.truncate && n.w > n.boxW + 0.5; // only where the browser itself cut the text
       if (n.lines > 1 || truncated) {
         t.textAutoResize = 'HEIGHT';
@@ -377,65 +561,54 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     f.name = n.name;
     f.x = n.x - ox;
     f.y = n.y - oy;
-    f.resize(Math.max(0.01, n.w), Math.max(0.01, n.h));
-    f.clipsContent = !!n.clip;
-    f.opacity = n.opacity ?? 1;
-    const fills = [];
-    for (const p of n.fills || []) {
-      if (p.kind === 'solid') {
-        const s = boundSolid(parseColor(p.color), p.token, p.alpha);
-        if (s) fills.push(s);
-      } else if (p.kind === 'image') {
-        splitTop(p.css).forEach((layer, i) => {
-          const g = gradientPaint(layer, n.w, n.h, p.stops?.[i] || []);
-          if (g) fills.unshift(g); // CSS lists top layer first; Figma paints last on top
-        });
-      }
+    return fillFrame(f, n, n.x, n.y);
+  }
+
+  // ---- component sets (page "HMI / 02 Components") --------------------------------------------------
+  // One set per `data-cmp` name, one variant per props string. An existing variant is refilled in place
+  // (same node id → instances on the screen frames follow); new variants join the existing set.
+  async function buildComponentSets(SETS, page) {
+    const bySet = new Map();
+    for (const s of SETS) {
+      if (!bySet.has(s.set)) bySet.set(s.set, []);
+      bySet.get(s.set).push(s);
     }
-    f.fills = fills;
-    const [tl, tr, br, bl] = n.radius || [0, 0, 0, 0];
-    f.topLeftRadius = tl;
-    f.topRightRadius = tr;
-    f.bottomRightRadius = br;
-    f.bottomLeftRadius = bl;
-    if (n.radiusToken) bindRadius(f, n.radiusToken);
-    if (n.border) {
-      const [t, r, b, l] = n.border.widths;
-      const tokens = n.border.tokens || [];
-      const uniform = t === r && r === b && b === l;
-      if (uniform) {
-        const c = parseColor(n.border.colors[0]);
-        if (c) {
-          f.strokes = [boundSolid(c, tokens[0])];
-          f.strokeWeight = t;
-          f.strokeAlign = 'INSIDE';
+    const results = [];
+    let y = page.children.reduce((m, c) => Math.max(m, c.y + c.height + 80), 0);
+    for (const [name, variants] of bySet) {
+      let set = page.findOne((x) => x.type === 'COMPONENT_SET' && x.name === name);
+      const fresh = [];
+      for (const v of variants) {
+        const vname = variantName(v.props);
+        const root = { ...v.root, name: vname, x: 0, y: 0 };
+        let comp = set?.children.find((c) => c.name === vname);
+        if (comp) {
+          for (const ch of [...comp.children]) ch.remove();
+          await fillFrame(comp, root, 0, 0);
+        } else {
+          const f = await build(root, page, 0, 0);
+          comp = figma.createComponentFromNode(f);
+          comp.name = vname;
+          fresh.push(comp);
         }
-      } else {
-        // per-side borders → thin rectangles (Figma has per-side weights only on frames with
-        // uniform colour, and CSS mixes colours), keep it simple and visible
-        const sides = [
-          [t, 0, 0, n.w, t, n.border.colors[0], tokens[0]],
-          [r, n.w - r, 0, r, n.h, n.border.colors[1], tokens[1]],
-          [b, 0, n.h - b, n.w, b, n.border.colors[2], tokens[2]],
-          [l, 0, 0, l, n.h, n.border.colors[3], tokens[3]],
-        ];
-        for (const [wgt, x, y, w, h, col, token] of sides) {
-          if (!wgt) continue;
-          const c = parseColor(col);
-          if (!c || c.a === 0) continue;
-          const rct = figma.createRectangle();
-          f.appendChild(rct);
-          rct.name = 'border';
-          rct.x = x;
-          rct.y = y;
-          rct.resize(Math.max(0.01, w), Math.max(0.01, h));
-          rct.fills = [boundSolid(c, token)];
-        }
+        comp.setPluginData('hmi.generated', new Date().toISOString());
       }
+      if (!set) {
+        set = figma.combineAsVariants(fresh, page);
+        set.name = name;
+        set.layoutMode = 'VERTICAL';
+        set.primaryAxisSizingMode = 'AUTO';
+        set.counterAxisSizingMode = 'AUTO';
+        set.itemSpacing = 24;
+        set.paddingTop = set.paddingBottom = set.paddingLeft = set.paddingRight = 24;
+        set.x = 0;
+        set.y = y;
+        y += set.height + 80;
+      } else for (const c of fresh) set.appendChild(c);
+      set.setPluginData('hmi.generated', new Date().toISOString());
+      results.push({ set: name, id: set.id, variants: set.children.map((c) => c.name) });
     }
-    if (n.shadow) f.effects = shadowEffects(n.shadow);
-    for (const ch of n.children || []) await build(ch, f, n.x, n.y);
-    return f;
+    return results;
   }
 
   // ---- page + placement -------------------------------------------------------------------------
@@ -461,6 +634,15 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     page.name = PAGE;
   }
   await figma.setCurrentPageAsync(page);
+  // component sets for instance placement (and the target of a components build)
+  const componentSets = new Map();
+  const cmpPage = components
+    ? page
+    : figma.root.children.find((p) => p.name === 'HMI / 02 Components');
+  if (cmpPage)
+    for (const s of cmpPage.findAll((x) => x.type === 'COMPONENT_SET'))
+      componentSets.set(s.name, s);
+  if (components) return buildComponentSets(CAPTURES, page);
   const results = [];
   let cursorX = page.children.reduce((m, c) => Math.max(m, c.x + c.width + gap), 0);
   for (const cap of CAPTURES) {

@@ -207,6 +207,30 @@ const STATES = [
 
 mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch();
+
+// --components: serialize the component sheet (#/components) → components.json, one entry per variant
+if (args.includes('--components')) {
+  const page = await browser.newPage({
+    viewport: { width: 480, height: 800 },
+    deviceScaleFactor: 1,
+  });
+  await page.goto(`${base}/?nosplash#/components`);
+  await page.waitForFunction(() => window.__hmi?.ctx);
+  await page.evaluate(() => {
+    window.__hmi.set('theme', 'dark');
+    window.__hmi.set('lang', 'en');
+    window.__hmi.ctx.toast.hide();
+  });
+  await page.waitForSelector('[data-components]');
+  await page.evaluate(() => document.fonts.ready);
+  await page.addScriptTag({ content: serializer });
+  const sets = await page.evaluate(() => window.__hmiSerializeComponents());
+  writeFileSync(resolve(outDir, 'components.json'), JSON.stringify(sets));
+  console.log(`captured ${sets.length} variants → components.json`);
+  await browser.close();
+  process.exit(0);
+}
+
 const index = [];
 for (const s of STATES) {
   if (only && !only.includes(s.screen)) continue;

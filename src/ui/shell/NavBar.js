@@ -23,7 +23,7 @@ export function renderNavBar({ level = 0, userName = null, canBack = true, machi
   const st = statusOf(machine);
   const lvl = Math.max(0, Math.min(4, Number(level) || 0));
   return `
-  <nav class="hmi__nav nav-bar relative flex items-stretch justify-between select-none" data-level="${lvl}" aria-label="Navigation">
+  <nav class="hmi__nav nav-bar relative flex items-stretch justify-between select-none" data-level="${lvl}" data-cmp="NavBar" data-cmp-props="Level=${lvl},Line=${LINE[st.key] ?? 'standby'}" aria-label="Navigation">
     <span class="nav-bar__line absolute" style="background:var(--hmi-gradient-${LINE[st.key] ?? 'standby'})" aria-hidden="true"></span>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1" data-action="back" ${canBack ? '' : 'aria-disabled="true"'}>
       ${icon('back', { size: 32 })}<span class="t-caption">${esc(t('nav.back'))}</span>
