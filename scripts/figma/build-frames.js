@@ -202,6 +202,68 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     throw new Error('no font');
   }
 
+  // ---- tokens: bind Figma variables / text styles where the serializer named one -----------
+  // (variables, textStyles and colourCollection are loaded in the page section below, before build runs)
+  const boundSolid = (c, token, alpha) => {
+    const v = token && variables.get(token);
+    if (!v) return solid(c);
+    const base = c || { r: 0, g: 0, b: 0, a: 1 };
+    const paint = {
+      type: 'SOLID',
+      color: { r: base.r, g: base.g, b: base.b },
+      opacity: alpha ?? 1,
+    };
+    return figma.variables.setBoundVariableForPaint(paint, 'color', v);
+  };
+  const bindRadius = (f, token) => {
+    const v = variables.get(token);
+    if (!v) return;
+    for (const k of ['topLeftRadius', 'topRightRadius', 'bottomRightRadius', 'bottomLeftRadius'])
+      f.setBoundVariable(k, v);
+  };
+  const SIZE_TOKEN = {
+    12: 'caption',
+    14: 'label',
+    16: 'body-sm',
+    18: 'body',
+    20: 'body-lg',
+    24: 'title',
+    32: 'hero',
+    48: 'display',
+  };
+  /** Exact match → HMI/* text style; otherwise bind font size and family variables (weight stays free). */
+  async function applyType(t, fnt) {
+    const styleName = (
+      (STYLE_BY_WEIGHT[fnt.weight] || 'Regular') + (fnt.italic ? ' Italic' : '')
+    ).replace(' ', '');
+    const lhPct = fnt.lineHeight ? (fnt.lineHeight / fnt.size) * 100 : null;
+    const lsPct = ((fnt.letterSpacing || 0) / fnt.size) * 100;
+    const style = textStyles.find(
+      (s) =>
+        s.fontName.family === fnt.family &&
+        s.fontName.style.replace(' ', '') === styleName &&
+        s.fontSize === fnt.size &&
+        (lhPct == null
+          ? s.lineHeight.unit === 'AUTO'
+          : s.lineHeight.unit === 'PERCENT' && Math.abs(s.lineHeight.value - lhPct) < 1) &&
+        Math.abs((s.letterSpacing.unit === 'PERCENT' ? s.letterSpacing.value : 0) - lsPct) < 0.5,
+    );
+    if (style) {
+      await t.setTextStyleIdAsync(style.id);
+      return;
+    }
+    const sz = variables.get(`type/size/${SIZE_TOKEN[fnt.size]}`);
+    if (sz) t.setBoundVariable('fontSize', sz);
+    const fam = variables.get(
+      fnt.family === 'Fira Code'
+        ? 'type/family/mono'
+        : fnt.family === 'Figtree'
+          ? 'type/family/sans'
+          : '',
+    );
+    if (fam) t.setBoundVariable('fontFamily', fam);
+  }
+
   // ---- node creation ------------------------------------------------------------------------
   async function build(n, parent, ox = 0, oy = 0) {
     if (n.type === 'text') {
@@ -212,8 +274,9 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       t.fontSize = n.font.size;
       if (n.font.lineHeight) t.lineHeight = { value: n.font.lineHeight, unit: 'PIXELS' };
       if (n.font.letterSpacing) t.letterSpacing = { value: n.font.letterSpacing, unit: 'PIXELS' };
+      await applyType(t, n.font);
       const c = parseColor(n.font.color);
-      if (c) t.fills = [solid(c)];
+      if (c || n.font.token) t.fills = [boundSolid(c, n.font.token, n.font.alpha)];
       t.name = n.name;
       const align =
         { left: 'LEFT', start: 'LEFT', center: 'CENTER', right: 'RIGHT', end: 'RIGHT' }[
@@ -269,7 +332,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
         inst.opacity = n.opacity ?? 1;
         const c = parseColor(n.color);
         if (c) {
-          const paint = solid({ ...c, a: 1 });
+          const paint = boundSolid({ ...c, a: 1 }, n.token);
           for (const v of inst.findAll((x) => 'strokes' in x)) {
             if (v.strokes.length) v.strokes = [paint];
             if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
@@ -315,7 +378,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     const fills = [];
     for (const p of n.fills || []) {
       if (p.kind === 'solid') {
-        const s = solid(parseColor(p.color));
+        const s = boundSolid(parseColor(p.color), p.token, p.alpha);
         if (s) fills.push(s);
       } else if (p.kind === 'image') {
         for (const layer of splitTop(p.css)) {
@@ -330,13 +393,15 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     f.topRightRadius = tr;
     f.bottomRightRadius = br;
     f.bottomLeftRadius = bl;
+    if (n.radiusToken) bindRadius(f, n.radiusToken);
     if (n.border) {
       const [t, r, b, l] = n.border.widths;
+      const tokens = n.border.tokens || [];
       const uniform = t === r && r === b && b === l;
       if (uniform) {
         const c = parseColor(n.border.colors[0]);
         if (c) {
-          f.strokes = [solid(c)];
+          f.strokes = [boundSolid(c, tokens[0])];
           f.strokeWeight = t;
           f.strokeAlign = 'INSIDE';
         }
@@ -344,12 +409,12 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
         // per-side borders → thin rectangles (Figma has per-side weights only on frames with
         // uniform colour, and CSS mixes colours), keep it simple and visible
         const sides = [
-          [t, 0, 0, n.w, t, n.border.colors[0]],
-          [r, n.w - r, 0, r, n.h, n.border.colors[1]],
-          [b, 0, n.h - b, n.w, b, n.border.colors[2]],
-          [l, 0, 0, l, n.h, n.border.colors[3]],
+          [t, 0, 0, n.w, t, n.border.colors[0], tokens[0]],
+          [r, n.w - r, 0, r, n.h, n.border.colors[1], tokens[1]],
+          [b, 0, n.h - b, n.w, b, n.border.colors[2], tokens[2]],
+          [l, 0, 0, l, n.h, n.border.colors[3], tokens[3]],
         ];
-        for (const [wgt, x, y, w, h, col] of sides) {
+        for (const [wgt, x, y, w, h, col, token] of sides) {
           if (!wgt) continue;
           const c = parseColor(col);
           if (!c || c.a === 0) continue;
@@ -359,7 +424,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
           rct.x = x;
           rct.y = y;
           rct.resize(Math.max(0.01, w), Math.max(0.01, h));
-          rct.fills = [solid(c)];
+          rct.fills = [boundSolid(c, token)];
         }
       }
     }
@@ -374,8 +439,17 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
   // the app sprite is built from the 24 px / 1.5 px set (docs/FIGMA.md, DT-01)
   const iconsPage = figma.root.children.find((p) => p.name === 'Icons v1 – 24 px');
   if (iconsPage)
-    for (const c of iconsPage.findAll((x) => x.type === 'COMPONENT' && x.name.startsWith('icon/24/')))
+    for (const c of iconsPage.findAll(
+      (x) => x.type === 'COMPONENT' && x.name.startsWith('icon/24/'),
+    ))
       iconComponents.set(c.name, c);
+  // tokens (page "HMI / 01 Tokens"): collections HMI Colour (modes Dark/Light), HMI Radius, HMI Type; text styles HMI/*
+  const variables = new Map();
+  for (const v of await figma.variables.getLocalVariablesAsync()) variables.set(v.name, v);
+  const colourCollection = (await figma.variables.getLocalVariableCollectionsAsync()).find(
+    (c) => c.name === 'HMI Colour',
+  );
+  const textStyles = await figma.getLocalTextStylesAsync();
   let page = figma.root.children.find((p) => p.name === PAGE);
   if (!page) {
     page = figma.createPage();
@@ -400,6 +474,11 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
     const root = cap.root;
     root.name = cap.name;
     const frame = await build(root, page, -x, -y); // capture coords are absolute → page position via offset
+    // the frame carries its theme as the HMI Colour mode, so a designer can flip Dark ↔ Light on the frame
+    const mode = colourCollection?.modes.find(
+      (m) => m.name.toLowerCase() === (root.theme || 'dark'),
+    );
+    if (mode) frame.setExplicitVariableModeForCollection(colourCollection, mode.modeId);
     frame.setPluginData('hmi.generated', new Date().toISOString());
     results.push({ name: cap.name, id: frame.id, x, y });
   }

@@ -146,7 +146,8 @@ Exit: `npm run dev` shows an empty shell in all three layouts; `npm test` passes
 | P1-14 | Dev panel complete; Playwright harness with layout × theme matrix and screenshot naming | M |
 | P1-15 | Figma: `02 Components` shell parts (status bar, title bar, nav bar, toast, modal) with variants; `03 Screens` start-up + home in 3 layouts × 2 themes | M |
 | P1-16 | Stand-by state: HMI_Standby_Timer (613) dims/locks to a stand-by screen after inactivity, wake on touch, status bar "stand-by" state (prototype has a standby home; clickdummy has none) | M |
-| G1-2 | **Gate**: start-up, home (all machine states, L0), login, stand-by; Figma sync of P1-15 happens after this gate's tweaks | – |
+| P1-17 | Figma: generated frames bind the HMI variables (colour, radius, type) and `HMI/*` text styles and carry their theme as the `HMI Colour` mode; serializer names the token behind every value (added 2026-10-30, before the G1-2 tweaks so tweaks land on tokens) | M |
+| G1-2 | **Gate**: start-up, home (all machine states, L0), login, stand-by; Figma sync of P1-15 happens after this gate's tweaks. First input: the designer's frame `home / dark / portrait / ready-L0 - tweak` (Figma node 2045:1372), reviewed after P1-17 | – |
 
 Exit: boot → home → login → level badge changes; machine state cycles from the dev panel and the shell reacts; screenshots exist for home in all 6 combinations.
 

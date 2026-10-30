@@ -42,6 +42,7 @@ Requirement trace: [../REQUIREMENTS-TRACE.md](../REQUIREMENTS-TRACE.md). Open po
 | [P1-14](P1-14.md) | Dev panel complete and Playwright harness | M | done |
 | [P1-15](P1-15.md) | Figma: shell components and first screens | M | in progress |
 | [P1-16](P1-16.md) | Stand-by state and wake | M | done |
+| [P1-17](P1-17.md) | Figma: tokens bound in the generated frames (variables, text styles, theme mode) | M | done |
 
 ## Phase 2 - Menu and standard parameter screens
 
