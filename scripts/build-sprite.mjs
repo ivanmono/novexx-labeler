@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 /**
- * Normalise the SVGs in src/assets/icons (exported from Figma page "Icons v1", 48 px canvas,
- * 2 px stroke) and build src/assets/icons/sprite.svg plus src/assets/icons/index.json.
+ * Normalise the SVGs in src/assets/icons (exported from Figma page "Icons v1 – 24 px": 24 px canvas,
+ * 1.5 px stroke, see docs/FIGMA.md) and build src/assets/icons/sprite.svg plus src/assets/icons/index.json.
  *
  * Normalisation (ICON_RULES.md §1 and §5):
  *   - drop background rectangles (any <rect> with a fill) and the frame wrapper
- *   - stroke colour → currentColor, keep stroke-width 2, round caps and joins
+ *   - stroke colour → currentColor, keep the exported stroke-width (1.5), caps and joins
+ *   - canvas size read from the source viewBox; a file on another canvas is reported
  *   - no ids, no fills other than "none"
  * Idempotent: running it twice yields the same files.
  */
@@ -15,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(ROOT, 'src/assets/icons');
+const CANVAS = 24;
 
 const names = fs
   .readdirSync(DIR)
@@ -48,13 +50,16 @@ const symbols = [];
 const index = {};
 for (const name of names) {
   const file = path.join(DIR, `${name}.svg`);
-  const inner = normalise(fs.readFileSync(file, 'utf8'));
+  const raw = fs.readFileSync(file, 'utf8');
+  const size = Number(raw.match(/viewBox="0 0 (\d+) (\d+)"/)?.[1] ?? CANVAS);
+  if (size !== CANVAS) console.warn(`warn: ${name}.svg is on a ${size} px canvas, expected ${CANVAS}`);
+  const inner = normalise(raw);
   if (!inner.includes('stroke="currentColor"') && !inner.includes('fill="currentColor"')) {
     console.warn(`warn: ${name}.svg has no currentColor stroke after normalisation`);
   }
-  const clean = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">\n${inner}\n</svg>\n`;
+  const clean = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none">\n${inner}\n</svg>\n`;
   fs.writeFileSync(file, clean);
-  symbols.push(`<symbol id="icon-${name}" viewBox="0 0 48 48" fill="none">\n${inner}\n</symbol>`);
+  symbols.push(`<symbol id="icon-${name}" viewBox="0 0 ${size} ${size}" fill="none">\n${inner}\n</symbol>`);
   index[name] = { paths: (inner.match(/<path/g) ?? []).length };
 }
 const sprite = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n${symbols.join('\n')}\n</svg>\n`;

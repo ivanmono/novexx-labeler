@@ -8,7 +8,7 @@ https://www.figma.com/design/kNEZtQrnGyteWqDZIi0JAf/Novexx-Presentations
 | Page | Owner | Content |
 |---|---|---|
 | Presentation#1, Icons, Icon rules, Icons v1 | Mono design | Existing. **Never modified by the sync.** Icons v1 (node `2014:468`) is the source of the 67 `icon/<name>` components exported to `src/assets/icons`. |
-| Icons v1 – 24 px | generated (2026-10-30) | Mono's 67 icons cloned at 24×24 with a 1.5 px stroke, components `icon/24/<name>`, one grid frame. Scaled copies of Icons v1 (caps/joins as in the source); regenerate rather than hand-edit when Icons v1 changes. Not used by the app yet (the sprite is built from Icons v1 at 48 px / 2 px). |
+| Icons v1 – 24 px | generated (2026-10-30) | Mono's 67 icons cloned at 24×24 with a 1.5 px stroke, components `icon/24/<name>`, one grid frame. Scaled copies of Icons v1 (caps/joins as in the source); regenerate rather than hand-edit when Icons v1 changes. **Source of the app sprite and of the icon instances in the screen frames** (DT-01). |
 | HMI / 01 Tokens | generated | Variable collections `HMI Colour` (modes Dark, Light), `HMI Type`, `HMI Space`, `HMI Radius`; a token sheet frame mirroring `#/styleguide`. |
 | HMI / 02 Components | generated | One component set per `src/ui/components` module, variants per state (docx §5.4). |
 | HMI / 03 Screens – Portrait | generated | 480×800 frames, dark and light, one per screen. |
@@ -27,7 +27,7 @@ Code → Figma runs through three small scripts in `scripts/figma/` plus the Des
 |---|---|---|
 | 1. Serialize | `serialize-dom.js` (runs in the page) | Walks the rendered `.hmi` shell and emits a JSON layer tree: a frame for every element that paints or clips (background, gradient, border, shadow, overflow), text layers with the computed Figtree / Fira Code font, sprite icons as `icon/<name>` references with colour and rotation, `::before/::after` boxes that paint. |
 | 2. Capture | `npm run figma:capture` (`capture.mjs`, Playwright) | Drives the app through `window.__hmi` into each state listed in the script, injects the serializer and writes `test-results/figma/<name>.json` + a reference PNG per state. Frame names follow `<screen> / <theme> / <orientation> / <state>`. |
-| 3. Build | `build-frames.js` via `figma_execute` | Plain Plugin API code that recreates a capture on a page: gradients → `GRADIENT_LINEAR/RADIAL` with a computed transform, `color(srgb …)` / `oklab()` (Tailwind colour-mix output) → sRGB, box-shadow → drop shadows, per-side borders → thin rectangles, icons → recoloured **instances of the Icons v1 components** (so the designer edits one icon, not 300 vectors). The builder source is stored once in the file's plugin data (`hmi.builder`, `npm run figma:payload -- --store`) and each frame call is only the compact JSON (`npm run figma:payload -- --frames <dir> "<page>" <file.json>`). |
+| 3. Build | `build-frames.js` via `figma_execute` | Plain Plugin API code that recreates a capture on a page: gradients → `GRADIENT_LINEAR/RADIAL` with a computed transform, `color(srgb …)` / `oklab()` (Tailwind colour-mix output) → sRGB, box-shadow → drop shadows, per-side borders → thin rectangles, icons → recoloured **instances of the `Icons v1 – 24 px` components** (so the designer edits one icon, not 300 vectors). The builder source is stored once in the file's plugin data (`hmi.builder`, `npm run figma:payload -- --store`) and each frame call is only the compact JSON (`npm run figma:payload -- --frames <dir> "<page>" <file.json>`). |
 
 Rules the builder follows:
 
@@ -47,7 +47,9 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 ## Icon export
 
-Agent step (plan P0-04): `download_assets(nodeId, svg)` for each `icon/*` component on Icons v1, saved to `src/assets/icons/<name>.svg`, then `npm run icons:sprite` normalises (background rects removed, stroke → `currentColor`, 2 px, round caps/joins) and builds `sprite.svg`. Re-run when Mono adds or changes icons.
+Agent step (plan P0-04, re-done for DT-01 on 2026-10-30): export every `icon/24/*` component on `Icons v1 – 24 px` as SVG and save it to `src/assets/icons/<name>.svg`, then `npm run icons:sprite` normalises (background rects removed, stroke → `currentColor`, stroke width kept at 1.5, caps/joins as exported) and builds `sprite.svg` with `viewBox="0 0 24 24"`. Re-run when Mono adds or changes icons: regenerate the 24 px page from Icons v1 first.
+
+Export through the Desktop Bridge: `exportAsync({ format: 'SVG', svgSimplifyStroke: true })` on all components **in one `Promise.all`** (a sequential `await` loop over more than two exports never returns), then write the saved tool result to the icon files with a Node one-liner. The Icons v1 (48 px, 2 px) files are no longer in the repo; the 24 px set renders at 18–64 px in the app, so a 24 px icon shows a 1.5 px line and a 48 px one a 3 px line (previously 1 px and 2 px).
 
 ## Write access note (2026-10-29)
 

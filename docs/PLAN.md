@@ -253,7 +253,7 @@ Exit: every node in the draw.io tree plus the four docx-only screens is reachabl
 - Diagnosis activation toggle gets a dummy param ID 900; Secure Code params 901–905; QR URL template 906.
 - Date/time (700/701) get a dedicated picker sheet (not in §7.2's table).
 - Rewinder stays a placeholder (D-Series, crypto-chip gated); Bus & Network card placeholder with dynamic name.
-- Icons v1 (48 px, stroke 2) override the docx's 24 px proposals; names are identical.
+- Icons v1 geometry overrides the docx's 24 px proposals; names are identical. Since DT-01 the app uses the 24 px / 1.5 px derivative (`Icons v1 – 24 px`).
 - Dummy persistence via localStorage; factory reset from the dev panel.
 - "Write level 4" rows (619–627) are shown locked at L3; whether an L4 session may edit them is for PID to confirm (docx defines L4 as reset / create-admin only).
 - Touch targets are checked in-browser at 1:1 pixel size; the demo-display check (§10.1) needs PID hardware.

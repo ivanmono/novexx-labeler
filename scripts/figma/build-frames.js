@@ -252,7 +252,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       return t;
     }
     if (n.type === 'icon') {
-      const comp = iconComponents.get(`icon/${n.icon}`) || iconComponents.get('icon/tbd');
+      const comp = iconComponents.get(`icon/24/${n.icon}`) || iconComponents.get('icon/24/tbd');
       if (comp) {
         const inst = comp.createInstance();
         parent.appendChild(inst);
@@ -371,9 +371,10 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
   // ---- page + placement -------------------------------------------------------------------------
   await figma.loadAllPagesAsync();
   const iconComponents = new Map();
-  const iconsPage = figma.root.children.find((p) => p.name === 'Icons v1');
+  // the app sprite is built from the 24 px / 1.5 px set (docs/FIGMA.md, DT-01)
+  const iconsPage = figma.root.children.find((p) => p.name === 'Icons v1 – 24 px');
   if (iconsPage)
-    for (const c of iconsPage.findAll((x) => x.type === 'COMPONENT' && x.name.startsWith('icon/')))
+    for (const c of iconsPage.findAll((x) => x.type === 'COMPONENT' && x.name.startsWith('icon/24/')))
       iconComponents.set(c.name, c);
   let page = figma.root.children.find((p) => p.name === PAGE);
   if (!page) {
