@@ -54,7 +54,7 @@ Rules the builder follows:
   serializer matches a gradient layer only when all its opaque stops belong to one family in order, so a grey that two
   families share never cross-binds; `transparent` stops stay unbound.
 
-Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes, SVGs that are not sprite icons (these are inlined as vectors instead).
+Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes. SVGs that are not sprite icons (the logo mark) are inlined as vectors with `var(--token)` colours resolved to the computed value.
 
 Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are diffed against the last sync; token or variant changes are ported to `tokens.css` / the component module and logged as `DT-nn` in `docs/DESIGN-LOG.md`.
 
@@ -62,7 +62,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 ### Synced so far (2026-10-30)
 
-`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. Shell components (`02 Components`), start-up, user and stand-by frames follow with P1-15.
 
 ## Icon export
 

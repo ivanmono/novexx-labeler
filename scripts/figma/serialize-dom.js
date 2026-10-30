@@ -268,6 +268,27 @@
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${px(r.width)}" height="${px(r.height)}" fill="none" stroke="${color}">${inner}</svg>`;
   }
 
+  /** Non-sprite inline SVG (e.g. the logo mark): the markup itself, currentColor resolved, sized to its box */
+  function inlineSvg(svgEl, color) {
+    const r = svgEl.getBoundingClientRect();
+    const clone = svgEl.cloneNode(true);
+    clone.setAttribute('width', String(px(r.width)));
+    clone.setAttribute('height', String(px(r.height)));
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    // resolve var(--token) references (the logo mark paints with var(--hmi-brand)) to computed colours
+    const probe = document.createElement('i');
+    document.body.appendChild(probe);
+    const parts = clone.outerHTML.split('currentColor').join(color).split('var(');
+    let out = parts[0];
+    for (let i = 1; i < parts.length; i++) {
+      const end = parts[i].indexOf(')');
+      probe.style.color = 'var(' + parts[i].slice(0, end) + ')';
+      out += getComputedStyle(probe).color + parts[i].slice(end + 1);
+    }
+    probe.remove();
+    return out;
+  }
+
   function textLines(node, cs, base) {
     const range = document.createRange();
     range.selectNodeContents(node);
@@ -408,7 +429,7 @@
           opacity,
         });
       else {
-        const svg = spriteSvg(el, cs.color);
+        const svg = spriteSvg(el, cs.color) ?? inlineSvg(el, cs.color);
         if (svg) out.push({ type: 'svg', name: nameOf(el), ...rel, opacity, svg });
       }
       return;

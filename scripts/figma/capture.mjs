@@ -112,6 +112,60 @@ const STATES = [
       );
     },
   },
+  // start-up (docx §8.17): progress against previous boots, "still starting", failed start; no bars
+  ...[
+    ['booting', { booted: false, bootProgress: 0.45, bootLong: false, bootError: null }],
+    ['still-starting', { booted: false, bootProgress: 0.99, bootLong: true, bootError: null }],
+    [
+      'failed',
+      {
+        booted: false,
+        bootProgress: 0.6,
+        bootLong: false,
+        bootError: 'E-900 Firmware image signature invalid',
+      },
+    ],
+  ].map(([state, machine]) => ({
+    screen: 'startup',
+    theme: 'dark',
+    orientation: 'portrait',
+    state,
+    route: '',
+    level: 0,
+    steps: async (page) => {
+      await page.evaluate((m) => {
+        window.__hmi.store.set('machine', m);
+        window.__hmi.go('startup');
+      }, machine);
+      await page.waitForSelector('[data-startup]');
+      await page.waitForTimeout(400); // progress bar width transition
+    },
+  })),
+  {
+    screen: 'user',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'L1',
+    route: '',
+    level: 1, // set before navigating: the user screen redirects to login at level 0
+    steps: async (page) => {
+      await page.evaluate(() => window.__hmi.go('user'));
+      await page.waitForFunction(() => location.hash.includes('user'));
+      await page.waitForTimeout(150);
+    },
+  },
+  {
+    screen: 'standby',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'dimmed',
+    route: '',
+    level: 0,
+    steps: async (page) => {
+      await page.evaluate(() => window.__hmi.set('state', 'standby'));
+      await page.waitForSelector('[data-standby]');
+    },
+  },
   {
     screen: 'home',
     theme: 'light',
@@ -119,6 +173,27 @@ const STATES = [
     state: 'ready-L0',
     route: '',
     level: 0,
+  },
+  {
+    screen: 'startup',
+    theme: 'light',
+    orientation: 'portrait',
+    state: 'booting',
+    route: '',
+    level: 0,
+    steps: async (page) => {
+      await page.evaluate(() => {
+        window.__hmi.store.set('machine', {
+          booted: false,
+          bootProgress: 0.45,
+          bootLong: false,
+          bootError: null,
+        });
+        window.__hmi.go('startup');
+      });
+      await page.waitForSelector('[data-startup]');
+      await page.waitForTimeout(400);
+    },
   },
   {
     screen: 'login',
