@@ -92,14 +92,68 @@
   --hmi-branch-help: var(--raw-brand-500);
   --hmi-branch-usermgmt: var(--raw-purple-500);
 
-  --hmi-gradient-stroke: linear-gradient(99deg, #43464b 0%, #777f8f 48%, #59606d 100%);
-  --hmi-gradient-stroke-strong: linear-gradient(146deg, #c6cbdd 0%, #2d303b 53%, #c6cbdd 100%);
-  --hmi-gradient-surface: linear-gradient(152deg, #313648 0%, #424756 100%);
-  --hmi-gradient-page: radial-gradient(46.66% 78.22% at 98.75% 0.31%, #4c546c 0%, #1d2028 100%);
-  --hmi-gradient-run: linear-gradient(90deg, transparent 0%, var(--raw-brand-300) 50%, transparent 100%);
-  --hmi-gradient-standby: linear-gradient(90deg, transparent 0%, var(--raw-yellow-500) 50%, transparent 100%);
-  --hmi-gradient-error: linear-gradient(90deg, transparent 0%, var(--raw-red-400) 50%, transparent 100%);
-  --hmi-gradient-warning: linear-gradient(90deg, transparent 0%, var(--raw-orange-500) 50%, transparent 100%);
+  /* gradient stops are tokens of their own (Figma: colour/gradient/<name>/<stop>, bound per stop);
+     the gradients below are defined once and pick up the light stops through var() */
+  --hmi-gradient-stroke-0: #43464b;
+  --hmi-gradient-stroke-1: #777f8f;
+  --hmi-gradient-stroke-2: #59606d;
+  --hmi-gradient-stroke-strong-0: #c6cbdd;
+  --hmi-gradient-stroke-strong-1: #2d303b;
+  --hmi-gradient-stroke-strong-2: #c6cbdd;
+  --hmi-gradient-surface-0: var(--raw-navy-700);
+  --hmi-gradient-surface-1: #424756;
+  --hmi-gradient-page-0: #4c546c;
+  --hmi-gradient-page-1: var(--raw-navy-800);
+  --hmi-gradient-run-mid: var(--raw-brand-300);
+  --hmi-gradient-standby-mid: var(--raw-yellow-500);
+  --hmi-gradient-error-mid: var(--raw-red-400);
+  --hmi-gradient-warning-mid: var(--raw-orange-500);
+  --hmi-gradient-stroke: linear-gradient(
+    99deg,
+    var(--hmi-gradient-stroke-0) 0%,
+    var(--hmi-gradient-stroke-1) 48%,
+    var(--hmi-gradient-stroke-2) 100%
+  );
+  --hmi-gradient-stroke-strong: linear-gradient(
+    146deg,
+    var(--hmi-gradient-stroke-strong-0) 0%,
+    var(--hmi-gradient-stroke-strong-1) 53%,
+    var(--hmi-gradient-stroke-strong-2) 100%
+  );
+  --hmi-gradient-surface: linear-gradient(
+    152deg,
+    var(--hmi-gradient-surface-0) 0%,
+    var(--hmi-gradient-surface-1) 100%
+  );
+  --hmi-gradient-page: radial-gradient(
+    46.66% 78.22% at 98.75% 0.31%,
+    var(--hmi-gradient-page-0) 0%,
+    var(--hmi-gradient-page-1) 100%
+  );
+  --hmi-gradient-run: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--hmi-gradient-run-mid) 50%,
+    transparent 100%
+  );
+  --hmi-gradient-standby: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--hmi-gradient-standby-mid) 50%,
+    transparent 100%
+  );
+  --hmi-gradient-error: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--hmi-gradient-error-mid) 50%,
+    transparent 100%
+  );
+  --hmi-gradient-warning: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--hmi-gradient-warning-mid) 50%,
+    transparent 100%
+  );
 
   --hmi-shadow-card: 0 8px 18px 0 rgb(0 0 0 / 0.25);
   --hmi-glow-brand: 0 0 25px 0 rgb(136 230 198 / 0.5);
@@ -150,10 +204,17 @@
   --hmi-branch-help: var(--raw-brand-700);
   --hmi-branch-usermgmt: var(--raw-purple-700);
 
-  --hmi-gradient-stroke: linear-gradient(99deg, #d5dae3 0%, #aeb6c4 48%, #c3cad6 100%);
-  --hmi-gradient-stroke-strong: linear-gradient(146deg, #ffffff 0%, #aeb6c4 53%, #ffffff 100%);
-  --hmi-gradient-surface: linear-gradient(152deg, #ffffff 0%, #f0f3f8 100%);
-  --hmi-gradient-page: radial-gradient(46.66% 78.22% at 98.75% 0.31%, #ffffff 0%, #e9edf3 100%);
+  /* light gradient stops; the gradient definitions above pick them up (status lines keep their hue) */
+  --hmi-gradient-stroke-0: #d5dae3;
+  --hmi-gradient-stroke-1: #aeb6c4;
+  --hmi-gradient-stroke-2: #c3cad6;
+  --hmi-gradient-stroke-strong-0: var(--raw-light-100);
+  --hmi-gradient-stroke-strong-1: #aeb6c4;
+  --hmi-gradient-stroke-strong-2: var(--raw-light-100);
+  --hmi-gradient-surface-0: var(--raw-light-100);
+  --hmi-gradient-surface-1: #f0f3f8;
+  --hmi-gradient-page-0: var(--raw-light-100);
+  --hmi-gradient-page-1: var(--raw-light-200);
 
   --hmi-shadow-card: 0 8px 18px 0 rgb(32 60 83 / 0.12);
   --hmi-glow-brand: 0 0 25px 0 rgb(32 164 152 / 0.35);

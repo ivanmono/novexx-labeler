@@ -43,11 +43,16 @@ Rules the builder follows:
   Token source of truth is the Tailwind utility on the element (`bg-surface`, `text-level-3`); the fallback is the
   computed value matched against the probed `--hmi-*` variables of the current theme, first match in a fixed
   priority order (bg, surface, surface-2, line, …, status, status-ink, level, branch). Literal `text-black` /
-  `text-white` and the brand wordmark (23 px) stay raw on purpose. Not bound: gradients, shadows, spacing.
+  `text-white` and the brand wordmark (23 px) stay raw on purpose. Not bound: shadows, spacing.
 - Name mapping `tokens.css` ↔ Figma: `--hmi-<name>` ↔ `colour/<name>`, except `--hmi-status-X-ink` ↔
   `colour/status-ink/X`, `--hmi-keyboard-key[-pressed]` ↔ `colour/key[-pressed]`; Tailwind `text-muted` /
   `text-faint` are `colour/text-muted` / `colour/text-faint`. Radii `--radius-*` ↔ `radius/*`, type sizes
   `--text-*` ↔ `type/size/*`.
+- **Gradients** are bound per stop. Every stop of `--hmi-gradient-*` is a token of its own in `tokens.css`
+  (`--hmi-gradient-stroke-0 … -2`, `-stroke-strong-0 … -2`, `-surface-0/1`, `-page-0/1`, `-run-mid`, `-standby-mid`,
+  `-error-mid`, `-warning-mid`) ↔ `colour/gradient/<family>/<stop>` in HMI Colour with Dark and Light values. The
+  serializer matches a gradient layer only when all its opaque stops belong to one family in order, so a grey that two
+  families share never cross-binds; `transparent` stops stay unbound.
 
 Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes, SVGs that are not sprite icons (these are inlined as vectors instead).
 

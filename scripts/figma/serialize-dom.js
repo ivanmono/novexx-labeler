@@ -59,9 +59,27 @@
     'branch-service',
     'branch-usermgmt',
   ];
+  // gradient stop tokens (`--hmi-gradient-<name>-<stop>`), bound per stop on GRADIENT paints
+  const GRADIENT_VARS = [
+    'gradient-stroke-0',
+    'gradient-stroke-1',
+    'gradient-stroke-2',
+    'gradient-stroke-strong-0',
+    'gradient-stroke-strong-1',
+    'gradient-stroke-strong-2',
+    'gradient-surface-0',
+    'gradient-surface-1',
+    'gradient-page-0',
+    'gradient-page-1',
+    'gradient-run-mid',
+    'gradient-standby-mid',
+    'gradient-error-mid',
+    'gradient-warning-mid',
+  ];
   /** `--hmi-<v>` → Figma variable name in collection "HMI Colour" */
   const figmaName = (v) => {
     let m;
+    if ((m = v.match(/^gradient-(.+)-(\d+|mid)$/))) return `colour/gradient/${m[1]}/${m[2]}`;
     if ((m = v.match(/^status-(\w+)-ink$/))) return `colour/status-ink/${m[1]}`;
     if ((m = v.match(/^(status|level|branch)-(\w+)$/))) return `colour/${m[1]}/${m[2]}`;
     if (v === 'keyboard-key') return 'colour/key';
@@ -100,9 +118,11 @@
       };
     return null;
   }
+  let gradIndex = null; // computed colour string → gradient stop token names (current theme)
   function buildColourIndex() {
     colourIndex = new Map();
     rgbIndex = new Map();
+    gradIndex = new Map();
     const probe = document.createElement('i');
     probe.style.cssText = 'position:absolute;visibility:hidden';
     document.body.appendChild(probe);
@@ -117,7 +137,65 @@
         rgbIndex.get(rgb.key).push(figmaName(v));
       }
     }
+    for (const v of GRADIENT_VARS) {
+      probe.style.color = `var(--hmi-${v})`;
+      const c = getComputedStyle(probe).color;
+      if (!gradIndex.has(c)) gradIndex.set(c, []);
+      gradIndex.get(c).push(figmaName(v));
+    }
     probe.remove();
+  }
+  /** split a CSS list on top-level commas (gradient layers, stops) */
+  function splitTop(s) {
+    const out = [];
+    let depth = 0;
+    let cur = '';
+    for (const ch of s) {
+      if (ch === '(') depth++;
+      if (ch === ')') depth--;
+      if (ch === ',' && depth === 0) {
+        out.push(cur.trim());
+        cur = '';
+      } else cur += ch;
+    }
+    if (cur.trim()) out.push(cur.trim());
+    return out;
+  }
+  /**
+   * Gradient stop tokens per background layer: `[[tokenOrNull, …] …]`. A stop matches when its computed colour
+   * equals a probed `--hmi-gradient-*` value; a group is used only when every opaque stop of the layer matches the
+   * same gradient family (stroke, surface, …) in order, so equal greys in two families never cross-bind.
+   */
+  function gradientStopTokens(bgImage) {
+    if (!colourIndex) buildColourIndex();
+    const layers = splitTop(bgImage).map((layer) => {
+      const m = layer.match(/^(?:linear|radial)-gradient\((.*)\)$/);
+      if (!m) return null;
+      const stops = splitTop(m[1]).filter((p) =>
+        /^(rgba?\(|color\(|oklab\(|oklch\(|transparent)/.test(p),
+      );
+      const colours = stops.map(
+        (p) => p.match(/^(rgba?\([^)]*\)|color\([^)]*\)|okl(?:ab|ch)\([^)]*\)|transparent)/)[1],
+      );
+      const candidates = colours.map((c) =>
+        isTransparent(c) ? 'transparent' : gradIndex.get(c) || [],
+      );
+      const families = new Set();
+      for (const c of candidates)
+        if (c !== 'transparent') for (const t of c) families.add(t.replace(/\/[^/]+$/, ''));
+      for (const fam of families) {
+        const picked = candidates.map((c, i) => {
+          if (c === 'transparent') return null;
+          return (
+            c.find((t) => t.startsWith(fam + '/') && (t.endsWith('/mid') || t.endsWith('/' + i))) ||
+            undefined
+          );
+        });
+        if (!picked.includes(undefined)) return picked;
+      }
+      return null;
+    });
+    return layers.some(Boolean) ? layers : undefined;
   }
   /** Token candidates from utility classes (`bg-surface`, `text-level-3`, `bg-status-error/15`); walks up for inherited colour */
   function classCandidates(el, prefixes, inherit) {
@@ -220,7 +298,11 @@
         ...withToken(cs.backgroundColor, el ? classCandidates(el, ['bg'], false) : []),
       });
     if (cs.backgroundImage && cs.backgroundImage !== 'none')
-      fills.push({ kind: 'image', css: cs.backgroundImage });
+      fills.push({
+        kind: 'image',
+        css: cs.backgroundImage,
+        stops: gradientStopTokens(cs.backgroundImage),
+      });
     const bw = ['Top', 'Right', 'Bottom', 'Left'].map((s) => px(cs[`border${s}Width`]));
     const bc = ['Top', 'Right', 'Bottom', 'Left'].map((s) => cs[`border${s}Color`]);
     const bcands = el ? classCandidates(el, ['border', 'ring'], false) : [];

@@ -75,14 +75,18 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       [-d / det, a / det, (c * d - a * f) / det],
     ];
   };
-  const parseStops = (parts) =>
+  // `tokens[i]` (from the serializer) binds stop i to a colour/gradient/* variable
+  const parseStops = (parts, tokens = []) =>
     parts.map((p, i) => {
       const m = p.match(/^(.*?)(?:\s+([\d.]+)%)?$/);
       const c = parseColor(m[1].trim()) || { r: 0, g: 0, b: 0, a: 1 };
       const pos = m[2] != null ? +m[2] / 100 : i / Math.max(1, parts.length - 1);
-      return { position: pos, color: { r: c.r, g: c.g, b: c.b, a: c.a } };
+      const stop = { position: pos, color: { r: c.r, g: c.g, b: c.b, a: c.a } };
+      const v = tokens[i] && variables.get(tokens[i]);
+      if (v) stop.boundVariables = { color: { type: 'VARIABLE_ALIAS', id: v.id } };
+      return stop;
     });
-  const gradientPaint = (css, w, h) => {
+  const gradientPaint = (css, w, h, tokens) => {
     let m = css.match(/^linear-gradient\((.*)\)$/);
     if (m) {
       const parts = splitTop(m[1]);
@@ -110,7 +114,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       return {
         type: 'GRADIENT_LINEAR',
         gradientTransform: invert(M),
-        gradientStops: parseStops(parts),
+        gradientStops: parseStops(parts, tokens),
       };
     }
     m = css.match(/^radial-gradient\((.*)\)$/);
@@ -141,7 +145,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       return {
         type: 'GRADIENT_RADIAL',
         gradientTransform: invert(M),
-        gradientStops: parseStops(parts),
+        gradientStops: parseStops(parts, tokens),
       };
     }
     return null;
@@ -381,10 +385,10 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
         const s = boundSolid(parseColor(p.color), p.token, p.alpha);
         if (s) fills.push(s);
       } else if (p.kind === 'image') {
-        for (const layer of splitTop(p.css)) {
-          const g = gradientPaint(layer, n.w, n.h);
+        splitTop(p.css).forEach((layer, i) => {
+          const g = gradientPaint(layer, n.w, n.h, p.stops?.[i] || []);
           if (g) fills.unshift(g); // CSS lists top layer first; Figma paints last on top
-        }
+        });
       }
     }
     f.fills = fills;
