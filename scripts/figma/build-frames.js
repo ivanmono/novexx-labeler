@@ -291,7 +291,8 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80 } = {}) {
       if (n.lines > 1 || truncated) {
         t.textAutoResize = 'HEIGHT';
         t.x = (n.lines > 1 ? n.x : n.boxX) - ox;
-        t.resize(n.lines > 1 ? n.w : n.boxW, n.h);
+        t.resize(n.lines > 1 ? Math.max(n.w, n.boxW || 0) : n.boxW, n.h); // multi-line: full column, Figma's Figtree is wider
+        t.textAutoResize = 'HEIGHT'; // resize() resets auto-resize to NONE; multi-line must keep growing
         t.y = n.y - oy;
         if (truncated) {
           t.textAutoResize = 'NONE';
