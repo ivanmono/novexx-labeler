@@ -30,11 +30,13 @@ export function statusOf(machine) {
 /** Option icons shown on the bar, derived from parameters and machine options. */
 export function statusIcons({ getParam, machine }) {
   const out = [];
-  if (Number(getParam(105)) === 107 || getParam(108)) out.push({ name: 'network', title: 'Network' });
+  if (Number(getParam(105)) === 107 || getParam(108))
+    out.push({ name: 'network', title: 'Network' });
   if (getParam(113)) out.push({ name: 'signal', title: 'WLAN' });
   if (getParam(112)) out.push({ name: 'webserver', title: 'Web server' });
   if (getParam(238)) out.push({ name: 'can', title: 'CAN' });
-  if (machine?.options?.busCard) out.push({ name: 'card', title: machine.options.busCardName ?? 'Bus card' });
+  if (machine?.options?.busCard)
+    out.push({ name: 'card', title: machine.options.busCardName ?? 'Bus card' });
   if (getParam(146)) out.push({ name: 'printer', title: 'Printer' });
   if (getParam(900)) out.push({ name: 'logs', title: t('status.recording'), accent: true });
   return out;
@@ -45,7 +47,7 @@ export function renderStatusBar({ machine, getParam, session }) {
   const icons = statusIcons({ getParam, machine });
   const secure = session?.level === 4 && session.elevatedUntil ? hhmm(session.elevatedUntil) : null;
   return `
-  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-4 text-chrome select-none" data-status="${st.key}" role="status" aria-live="polite">
+  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-6 text-chrome select-none" data-status="${st.key}" role="status" aria-live="polite">
     <div class="status-bar__state flex items-center gap-2 min-w-0">
       <span class="status-bar__dot size-3 rounded-pill bg-${st.color} shrink-0" aria-hidden="true"></span>
       <span class="status-bar__label text-body-sm font-semibold text-text truncate">${esc(t(st.label))}</span>
@@ -69,12 +71,23 @@ export function mountStatusBar(host, ctx) {
   const unsubs = [
     ctx.store.subscribe((s) => s.machine, rerender),
     ctx.store.subscribe((s) => s.session, rerender),
-    ctx.store.onAnyParam((id) => { if (['105','108','112','113','146','238','900'].includes(id)) rerender(); }),
+    ctx.store.onAnyParam((id) => {
+      if (['105', '108', '112', '113', '146', '238', '900'].includes(id)) rerender();
+    }),
     ctx.onLanguage(rerender),
   ];
-  return { get el() { return current; }, unmount: () => unsubs.forEach((u) => u()) };
+  return {
+    get el() {
+      return current;
+    },
+    unmount: () => unsubs.forEach((u) => u()),
+  };
 }
 
 function snapshot(ctx) {
-  return { machine: ctx.store.get('machine'), getParam: ctx.store.getParam, session: ctx.store.get('session') };
+  return {
+    machine: ctx.store.get('machine'),
+    getParam: ctx.store.getParam,
+    session: ctx.store.get('session'),
+  };
 }

@@ -46,7 +46,7 @@
   }
   [data-orientation='portrait'] .hmi,
   [data-orientation='portrait-flipped'] .hmi {
-    grid-template-rows: var(--spacing-bar) 1fr var(--spacing-bar);
+    grid-template-rows: var(--spacing-status) 1fr var(--spacing-bar);
     grid-template-columns: 1fr;
     grid-template-areas: 'status' 'main' 'nav';
   }
@@ -109,7 +109,10 @@
   /* ---- touch feedback: no hover on a touch panel, only pressed ----------- */
   /* embedded performance budget: short, transform/opacity-only transitions, opt-in */
   .pressable {
-    transition: transform 120ms var(--ease-hmi), opacity 120ms var(--ease-hmi), filter 120ms var(--ease-hmi);
+    transition:
+      transform 120ms var(--ease-hmi),
+      opacity 120ms var(--ease-hmi),
+      filter 120ms var(--ease-hmi);
   }
   .pressable:active,
   .pressable[data-pressed='true'] {
@@ -157,6 +160,23 @@
   .nav-bar__btn,
   .nav-bar__user {
     min-height: var(--spacing-touch);
+  }
+  /* portrait: the level badge breaks out of the bar and sits on the state line (DT-06);
+     screens keep 32 px clearance above the nav bar for it */
+  .nav-bar__user {
+    position: relative;
+  }
+  [data-orientation^='portrait'] .nav-bar__badge {
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  [data-orientation^='portrait'] .nav-bar__name {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
   }
   /* landscape: the bars are columns on the edges */
   [data-orientation^='landscape'] .status-bar {

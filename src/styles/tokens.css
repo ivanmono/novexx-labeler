@@ -306,7 +306,7 @@
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-card: 24px;
-  --radius-card-inner: 23px;
+  --radius-card-inner: 24px; /* same as the border so inner surface and gradient ring read as one shape (DT-05) */
   --radius-pill: 9999px;
 
   --shadow-card: var(--hmi-shadow-card);
@@ -317,7 +317,8 @@
   /* touch targets (docx §3.2: ≥60 px primary, ≥48 px list rows) */
   --spacing-touch: 60px;
   --spacing-touch-row: 48px;
-  --spacing-bar: 80px; /* status / nav bar thickness */
+  --spacing-bar: 80px; /* nav bar thickness (and both bars in landscape) */
+  --spacing-status: 48px; /* status bar height in portrait (DT-03) */
   --spacing-title: 64px;
 
   --ease-hmi: cubic-bezier(0.2, 0, 0, 1);

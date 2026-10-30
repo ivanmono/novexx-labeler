@@ -8,7 +8,16 @@ import { t } from '../../core/i18n.js';
 import { esc, el, onAction } from '../html.js';
 import { statusOf } from './StatusBar.js';
 
-const LINE = { run: 'run', ready: 'run', pause: 'standby', standby: 'standby', warning: 'warning', alarm: 'error', offline: 'standby', booting: 'standby' };
+const LINE = {
+  run: 'run',
+  ready: 'run',
+  pause: 'standby',
+  standby: 'standby',
+  warning: 'warning',
+  alarm: 'error',
+  offline: 'standby',
+  booting: 'standby',
+};
 
 export function renderNavBar({ level = 0, userName = null, canBack = true, machine }) {
   const st = statusOf(machine);
@@ -21,7 +30,7 @@ export function renderNavBar({ level = 0, userName = null, canBack = true, machi
     </button>
     <button type="button" class="nav-bar__user pressable flex flex-col items-center justify-center gap-0.5 flex-1" data-action="user" aria-label="${esc(t(`level.${lvl}`))}">
       <span class="nav-bar__badge grid place-items-center size-11 rounded-pill text-body-sm font-bold text-black bg-level-${lvl}" data-badge>${esc(t(`level.short.${lvl}`))}</span>
-      <span class="t-caption text-level-${lvl} truncate max-w-full px-1">${esc(userName ?? t(`level.${lvl}`))}</span>
+      <span class="nav-bar__name t-caption text-level-${lvl} truncate max-w-full px-1 text-center">${esc(userName ?? t(`level.${lvl}`))}</span>
     </button>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1 ${lvl === 0 ? 'opacity-60' : ''}" data-action="menu">
       ${icon('menu', { size: 32 })}<span class="t-caption">${esc(t('nav.menu'))}</span>
@@ -53,10 +62,23 @@ export function mountNavBar(host, ctx) {
     ctx.onRoute(rerender),
     ctx.onLanguage(rerender),
   ];
-  return { get el() { return current; }, unmount: () => { dispose(); unsubs.forEach((u) => u()); } };
+  return {
+    get el() {
+      return current;
+    },
+    unmount: () => {
+      dispose();
+      unsubs.forEach((u) => u());
+    },
+  };
 }
 
 function snapshot(ctx) {
   const session = ctx.store.get('session');
-  return { level: session.level, userName: session.user?.name ?? null, canBack: ctx.router.canGoBack, machine: ctx.store.get('machine') };
+  return {
+    level: session.level,
+    userName: session.user?.name ?? null,
+    canBack: ctx.router.canGoBack,
+    machine: ctx.store.get('machine'),
+  };
 }

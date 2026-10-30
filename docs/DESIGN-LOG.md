@@ -29,10 +29,42 @@ Where: `src/assets/icons/*.svg`, `src/assets/icons/sprite.svg` (viewBox 0 0 24 2
 Before → after: `test-results/figma/*.png` captured before and after; Figma frames on `HMI / 03 Screens – Portrait` had their 94 icon instances swapped in place
 Status: both
 
-## DT-02 · (pending) designer tweak of the home screen (2026-10-30, G1-2)
+## DT-02 · Designer tweak of the home screen, read into DT-03 … DT-06 (2026-10-30, G1-2)
 
 Source: figma node 2045:1372, frame `home / dark / portrait / ready-L0 - tweak` on `HMI / 03 Screens – Portrait`
-Change: to be read after P1-17 lands (tokens bound), so the diff can be expressed in tokens / components
-Where: tbd
-Before → after: `home / dark / portrait / ready-L0` vs the tweak frame
-Status: pending review
+Change: the frame was compared node by node with the generated home frame; every difference is logged below as its own DT. The 38 px gaps between header, centre block, cards and nav bar in the tweak are auto-layout leftover space, not a chosen value, and were not copied.
+Where: see DT-03 … DT-06
+Before → after: `home / dark / portrait / ready-L0` (generated) vs `home / dark / portrait / ready-L0 - tweak`
+Status: both (all four applied, confirmed in chat: "all")
+
+## DT-03 · Compact header: 48 px status bar, 24 px side margins (2026-10-30, G1-2)
+
+Source: figma node 2045:1372 (designer tweak)
+Change: portrait status bar 80 → 48 px (new token `--spacing-status` / Figma `size/status`; the nav bar and both bars in landscape keep 80); status bar side padding 16 → 24; home top row 24 px side padding, 8 px vertical padding, 4 px gap between device name and type/serial. Header total 144 → 108 px.
+Where: `src/styles/tokens.css`, `src/styles/components.css` (portrait grid rows), `src/ui/shell/StatusBar.js`, `src/ui/screens/HomeScreen.js` (home__top)
+Before → after: `test-results/figma/home-dark-portrait-ready-l0.png` before/after; Figma frames rebuilt
+Status: both
+
+## DT-04 · Centre block on a 32 px rhythm, smaller state pill (2026-10-30, G1-2)
+
+Source: figma node 2045:1372
+Change: gap between start button, state pill and login hint 12 → 32 px; pill 40 → 28 px tall with 8 px horizontal padding and a 12 px caption on a 12 px line.
+Where: `src/ui/screens/HomeScreen.js` (home__center, home__pill)
+Before → after: home frames before/after
+Status: both
+
+## DT-05 · Quicklink cards: 116 px, 20 px title on two lines, 14 px bold value (2026-10-30, G1-2)
+
+Source: figma node 2045:1372
+Change: card 85 → 116 px (114 inner + 1 px ring), 12 px padding, icon centred; text column with 4 px gaps; title 18 → 20 px semibold, clamped to two lines instead of truncating; value 16 px semibold → 14 px bold (Fira Code, brand-hi); inner radius 23 → 24 so surface and gradient ring share one radius (token `--radius-card-inner` / Figma `radius/card-inner`).
+Where: `src/ui/screens/HomeScreen.js` (quickLinks), `src/styles/tokens.css`
+Before → after: home frames before/after
+Status: both
+
+## DT-06 · Level badge breaks out of the nav bar (2026-10-30, G1-2)
+
+Source: figma node 2045:1372
+Change: in portrait the level badge sits 17 px above the nav bar's top edge, on the state line, with the user/level caption 40 px below the bar top. Screens keep 32 px clearance above the nav bar (home quicklinks and login keypad: bottom padding 12 → 32). Landscape unchanged.
+Where: `src/styles/components.css` (.nav-bar__badge, .nav-bar__name), `src/ui/shell/NavBar.js`, `src/ui/screens/HomeScreen.js`, `src/ui/screens/LoginScreen.js`
+Before → after: home and login frames before/after
+Status: both

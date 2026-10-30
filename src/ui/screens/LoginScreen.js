@@ -67,14 +67,17 @@ export function render(ctx) {
             </div>
             <div class="text-label text-status-error-ink font-semibold h-5 mt-1 px-1" data-error aria-live="polite"></div>
           </div>
-          <div class="px-3 pb-3 mt-auto" data-keys></div>
+          <div class="px-3 pb-8 mt-auto" data-keys></div>
         </div>`,
       mount(el) {
         const host = el.querySelector('[data-keys]');
         const field = el.querySelector('[data-field]');
         const error = el.querySelector('[data-error]');
         let keyDispose = null;
-        const update = () => { field.textContent = masked(); error.textContent = ''; };
+        const update = () => {
+          field.textContent = masked();
+          error.textContent = '';
+        };
         const submit = () => {
           if (user.password === password) {
             ctx.login(user);
@@ -93,15 +96,30 @@ export function render(ctx) {
           if (mode === 'num') {
             host.innerHTML = renderNumpad({ enterIcon: 'activate' });
             keyDispose = mountNumpad(host, {
-              onInput: (k) => { password += k; update(); },
-              onBackspace: () => { password = password.slice(0, -1); update(); },
-              onClear: () => { password = ''; update(); },
+              onInput: (k) => {
+                password += k;
+                update();
+              },
+              onBackspace: () => {
+                password = password.slice(0, -1);
+                update();
+              },
+              onClear: () => {
+                password = '';
+                update();
+              },
               onEnter: submit,
             });
           } else {
             const kb = mountKeyboard(host, {
-              onInput: (k) => { password += k; update(); },
-              onBackspace: () => { password = password.slice(0, -1); update(); },
+              onInput: (k) => {
+                password += k;
+                update();
+              },
+              onBackspace: () => {
+                password = password.slice(0, -1);
+                update();
+              },
               onEnter: submit,
               enterIcon: 'activate',
             });
@@ -116,9 +134,15 @@ export function render(ctx) {
             btn.setAttribute('aria-label', ctx.t(show ? 'login.hide' : 'login.show'));
             field.textContent = masked();
           },
-          mode: () => { mode = mode === 'num' ? 'abc' : 'num'; mountKeys(); },
+          mode: () => {
+            mode = mode === 'num' ? 'abc' : 'num';
+            mountKeys();
+          },
         });
-        return () => { dispose(); keyDispose?.(); };
+        return () => {
+          dispose();
+          keyDispose?.();
+        };
       },
     });
   }
