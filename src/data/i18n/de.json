@@ -127,5 +127,16 @@
   "edit.empty": "Wert eingeben",
   "edit.invalidIp": "Adresse wie 192.168.0.10 eingeben",
   "edit.tooLong": "Höchstens {n} Zeichen",
-  "action.confirmMove": "Dadurch bewegt sich die Maschine. Fortfahren?"
+  "action.confirmMove": "Dadurch bewegt sich die Maschine. Fortfahren?",
+  "list.empty": "Nichts anzuzeigen",
+  "screen.favourites": "Favoriten",
+  "favourites.title": "Favoriten",
+  "favourites.add": "Zu Favoriten hinzufügen",
+  "favourites.remove": "Aus Favoriten entfernen",
+  "favourites.empty": "Noch keine Favoriten. Hilfe eines Parameters öffnen und ihn hier hinzufügen.",
+  "quicklink.allParameters": "Alle Parameter",
+  "help.range": "Bereich {min} – {max} {unit}",
+  "help.default": "Standard {v}",
+  "help.access": "Lesen ab Stufe {r}, ändern ab Stufe {w}",
+  "help.placeholder": "Platzhalter, bis PID die Hilfetexte liefert (bis 600 Zeichen)."
 }

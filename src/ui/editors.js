@@ -8,6 +8,7 @@ import { openSelectionList } from './components/SelectionList.js';
 import { openNumericKeypad } from './components/NumericKeypad.js';
 import { openAlphaKeyboard } from './components/AlphaKeyboard.js';
 import { openSlider } from './components/Slider.js';
+import { openQuicklinkPicker } from './components/QuicklinkPicker.js';
 
 /** Height left under a row for the sheet, in portrait; null when the sheet docks sideways. */
 export function sheetHeightBelow(rowEl, mainEl, isLandscape, { gap = 8, min = 320 } = {}) {
@@ -32,6 +33,8 @@ export function openEditor(ctx, param, rowEl = null) {
       ctx.sheet.el.querySelector('.sheet__panel').style.maxHeight = maxHeight;
     return p;
   };
+  if (param.unit === 'ParamID')
+    return withHeight(() => openQuicklinkPicker(ctx, param, { onPick: set }));
   switch (param.control) {
     case 'toggle':
       return set(!ctx.store.getParam(param.id));

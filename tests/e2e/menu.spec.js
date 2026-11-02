@@ -58,7 +58,10 @@ test.describe('menu screens (P2-01, P2-02)', () => {
     for (const m of menus) {
       await open(page, `screen/${m.id}`, { level: 3 });
       await expect(page.locator('[data-menu]')).toHaveAttribute('data-menu', m.id);
-      await expect(page.locator('[data-tiles] .menu-tile')).toHaveCount(m.children.length);
+      // Settings carries the runtime Favourites node in addition to the tree's children
+      const live = await page.evaluate((id) => window.__hmi.ctx.node(id).children.length, m.id);
+      expect(live).toBeGreaterThanOrEqual(m.children.length);
+      await expect(page.locator('[data-tiles] .menu-tile')).toHaveCount(live);
     }
   });
 

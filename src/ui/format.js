@@ -9,6 +9,10 @@ export function paramLabel(ctx, param) {
 /** Display value for a parameter's current value, with option label or unit. */
 export function formatParamValue(ctx, param, value = ctx.store.getParam(param.id)) {
   if (value == null || value === '') return '—';
+  if (param.unit === 'ParamID') {
+    const target = ctx.param(value);
+    return target ? paramLabel(ctx, target) : String(value);
+  }
   switch (param.control) {
     case 'toggle':
       return t(value ? 'common.on' : 'common.off');
@@ -23,7 +27,8 @@ export function formatParamValue(ctx, param, value = ctx.store.getParam(param.id
     }
     case 'display':
     case 'state': {
-      if (typeof value === 'number') return `${fmtNumber(value, Number.isInteger(value) ? 0 : 1)}${param.unit ? ` ${param.unit}` : ''}`;
+      if (typeof value === 'number')
+        return `${fmtNumber(value, Number.isInteger(value) ? 0 : 1)}${param.unit ? ` ${param.unit}` : ''}`;
       if (typeof value === 'boolean') return t(value ? 'common.yes' : 'common.no');
       return String(value);
     }

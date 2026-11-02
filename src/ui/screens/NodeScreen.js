@@ -5,11 +5,13 @@
  */
 import * as Menu from './MenuScreen.js';
 import * as ParamList from './ParamListScreen.js';
+import * as Favourites from './FavouritesScreen.js';
 import * as Placeholder from './PlaceholderScreen.js';
 
 export function render(ctx, info) {
   const node = ctx.node(info.arg);
   if (node?.kind === 'menu') return Menu.render(ctx, info);
   if (node?.kind === 'list') return ParamList.render(ctx, info);
+  if (node?.kind === 'favourites') return Favourites.render(ctx, info);
   return Placeholder.render(ctx, info);
 }

@@ -45,12 +45,11 @@ export function renderParamRow(row) {
       : readOnly
         ? ''
         : icon('chevron', { size: 22, class: 'text-faint shrink-0' });
-  return `<${tag} ${interactive ? 'type="button"' : ''} class="${cx('param-row w-full text-left flex items-center gap-3 pr-3 min-h-touch-row', INDENT[Math.min(indent, 2)], interactive && 'pressable', !last && 'border-b border-line-soft')}" data-row="${pid}" ${interactive ? `data-action="${locked ? 'locked' : action ? 'run' : 'edit'}" data-pid="${pid}"` : ''} ${locked && needLevel != null ? `data-need-level="${needLevel}"` : ''} ${changed ? 'data-changed="true"' : ''} ${live ? 'data-live="true"' : ''} data-cmp="ParamRow" data-cmp-props="State=${state},Indent=${Math.min(indent, 2)}">
+  const main = `<${tag} ${interactive ? 'type="button"' : ''} class="${cx('param-row flex-1 min-w-0 text-left flex items-center gap-3 pr-2 min-h-touch-row', INDENT[Math.min(indent, 2)], interactive && 'pressable')}" data-row="${pid}" ${interactive ? `data-action="${locked ? 'locked' : action ? 'run' : 'edit'}" data-pid="${pid}"` : ''} ${locked && needLevel != null ? `data-need-level="${needLevel}"` : ''} ${changed ? 'data-changed="true"' : ''} ${live ? 'data-live="true"' : ''}>
       <span class="flex-1 min-w-0 py-2.5 flex items-baseline gap-2">
         <span class="${cx('text-body truncate', locked ? 'text-muted' : 'text-text')}">${esc(label)}</span>
         <span class="t-param text-caption text-faint shrink-0" aria-label="ParamID">${pid}</span>
         ${favourite ? '<span class="text-brand text-label shrink-0" aria-label="favourite">★</span>' : ''}
-        ${help ? icon('help', { size: 16, class: 'text-faint shrink-0 self-center' }) : ''}
       </span>
       <span class="flex items-center gap-2 shrink-0 max-w-[55%]">
         ${changed ? '<span class="size-2 rounded-pill bg-brand shrink-0" aria-label="changed from default"></span>' : ''}
@@ -58,4 +57,9 @@ export function renderParamRow(row) {
         ${affordance}
       </span>
     </${tag}>`;
+  // the help indicator is its own touch target (docx §7.1), so the row keeps one action
+  const helpBtn = help
+    ? `<button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-faint shrink-0" data-action="help" data-help-for="${pid}" aria-label="Help">${icon('help', { size: 20 })}</button>`
+    : '';
+  return `<div class="${cx('param-row-wrap flex items-stretch pr-1', !last && 'border-b border-line-soft')}" data-cmp="ParamRow" data-cmp-props="State=${state},Indent=${Math.min(indent, 2)},Help=${help ? 'yes' : 'no'}">${main}${helpBtn}</div>`;
 }

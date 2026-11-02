@@ -12,6 +12,7 @@ import { canReadParam, canWriteParam, writeLevel } from '../../core/access.js';
 import { parseCondition, evalCondition, conditionRefs } from '../../core/conditions.js';
 import { formatParamValue, paramLabel } from '../format.js';
 import { openEditor } from '../editors.js';
+import { openHelp } from '../components/HelpModal.js';
 import { esc, onAction } from '../html.js';
 
 const READ_ONLY_CONTROLS = new Set(['display', 'state']);
@@ -61,6 +62,7 @@ export function listRows(node, env) {
       live,
       changed,
       favourite: favourites.has(p.id),
+      help: true, // every parameter has a help text (placeholder until PID delivers them, docx §7.1)
       needLevel: locked ? need : null,
       param: p,
     });
@@ -90,15 +92,15 @@ const COMMANDS = { Run: 'Run', Pause: 'Pause', Online: 'Online', Offline: 'Offli
 /** Actions that move the machine confirm first (P2-10): start trigger, run, manual feed, tests. */
 const CONFIRM_ACTIONS = new Set([2, 6, 7, 800, 803, 804, 805, 806, 807, 808]);
 
-export function render(ctx, { arg }) {
-  const node = ctx.node(arg);
+export function render(ctx, { arg }, nodeOverride = null) {
+  const node = nodeOverride ?? ctx.node(arg);
   const env = () => ({
     level: ctx.level,
     getParam: ctx.store.getParam,
     param: ctx.param,
     label: (p) => paramLabel(ctx, p),
     value: (p) => formatParamValue(ctx, p),
-    favourites: ctx.store.get('favourites'),
+    favourites: ctx.favourites(),
   });
   const condIds = conditionIds(node, ctx.param);
   const pidsOnScreen = new Set((node.items ?? []).map((i) => i.pid).filter((x) => x != null));
@@ -126,7 +128,11 @@ export function render(ctx, { arg }) {
       .join('');
     return `
       <div class="param-list flex-1 min-h-0 scroll-y p-4 flex flex-col gap-4" data-list="${esc(node.id)}" data-rows="${rows.filter((r) => r.kind === 'row').length}">
-        <div class="card-border"><div class="py-1" data-rows-host>${rows.map(rowHtml).join('')}</div></div>
+        ${
+          rows.length
+            ? `<div class="card-border"><div class="py-1" data-rows-host>${rows.map(rowHtml).join('')}</div></div>`
+            : `<div class="flex-1 grid place-items-center text-center text-muted text-body p-6" data-list-empty>${esc(ctx.t(node.emptyKey ?? 'list.empty'))}</div>`
+        }
         ${links ? `<div class="card-border"><div class="py-1">${links}</div></div>` : ''}
       </div>`;
   };
@@ -170,6 +176,10 @@ export function render(ctx, { arg }) {
           else ctx.toast.reject(ctx.t('toast.rejected'));
         },
         goto: (btn) => ctx.goScreen(btn.dataset.id),
+        help: (btn) => {
+          const p = ctx.param(btn.dataset.helpFor);
+          if (p) openHelp(ctx, p);
+        },
       });
       const unsubs = [
         ctx.store.subscribe((s) => s.session.level, redraw),

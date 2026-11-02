@@ -26,6 +26,11 @@ import { screens } from './ui/screens/index.js';
 export async function boot(root, { skipBoot = false } = {}) {
   // ---- static data ---------------------------------------------------------
   const paramsById = new Map(paramsJson.map((p) => [p.id, p]));
+  // Favourites is a view on the user's starred parameters, not a tree node from the diagram
+  // (docx §6.2): placed under Settings at runtime until the data pipeline carries it.
+  const settingsNode = treeJson.children.find((n) => n.id === 'settings');
+  if (settingsNode && !settingsNode.children.some((n) => n.id === 'favourites'))
+    settingsNode.children.unshift({ id: 'favourites', title: 'Favourites', subtitle: null, icon: 'listeye', kind: 'favourites', branch: 'settings', depth: 2, parent: 'settings', path: ['Main Menu', 'Settings', 'Favourites'], children: [] });
   const nodesById = new Map();
   (function walk(n) {
     nodesById.set(n.id, n);
@@ -41,7 +46,7 @@ export async function boot(root, { skipBoot = false } = {}) {
     users: snap?.users ?? usersSeed.users,
     formats: snap?.formats ?? [],
     logs: snap?.logs ?? [],
-    favourites: snap?.favourites ?? [],
+    favourites: Array.isArray(snap?.favourites) ? snap.favourites : [],
     settings: snap?.settings ?? { firstStartDone: false },
     session: { level: 0, user: null, elevatedUntil: null, loginAt: null },
     ui: { route: null },
@@ -115,6 +120,17 @@ export async function boot(root, { skipBoot = false } = {}) {
       router.go(ctx.level === 0 ? 'login' : 'user');
     },
     canOpen: (node) => canOpenNode(node, ctx.level, paramsById),
+    // the favourites slice is a plain array: `store.set` merges patches, so it is replaced whole
+    favourites: () => (Array.isArray(store.get('favourites')) ? store.get('favourites') : []),
+    isFavourite: (id) => ctx.favourites().includes(Number(id)),
+    toggleFavourite(id) {
+      const pid = Number(id);
+      const cur = ctx.favourites();
+      const next = cur.includes(pid) ? cur.filter((x) => x !== pid) : [...cur, pid];
+      store.replace('favourites', next);
+      ctx.log('favourite', `${ctx.param(pid)?.name ?? pid}: ${next.includes(pid) ? 'added' : 'removed'}`, { pid });
+      return next.includes(pid);
+    },
     touch: () => sim.touch(),
 
     // ---- session -----------------------------------------------------------
