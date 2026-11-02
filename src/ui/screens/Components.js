@@ -9,6 +9,11 @@ import { esc } from '../html.js';
 import { renderStatusBar } from '../shell/StatusBar.js';
 import { renderNavBar } from '../shell/NavBar.js';
 import { renderQuickCard, renderQuickEmpty } from './HomeScreen.js';
+import { renderTitleBar } from '../shell/TitleBar.js';
+import { renderToast } from '../shell/Toast.js';
+import { renderModal } from '../shell/ModalHost.js';
+import { renderSheet } from '../shell/SheetHost.js';
+import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
   booted: true,
@@ -60,6 +65,49 @@ export function render(ctx) {
     `<div class="w-[218px] grid">${renderQuickCard(ctx, quickParam)}</div>`,
     `<div class="w-[218px] grid">${renderQuickEmpty(ctx)}</div>`,
   ];
+  // TitleBar · Back × Subtitle, plus one branch-marked variant per main-menu branch
+  const titleBars = [
+    { title: ctx.t('login.title') },
+    { title: ctx.t('login.title'), subtitle: 's.operator · L1 Operator' },
+    { title: menuTree.title ?? 'Main menu', back: false },
+    ...menuTree.children.map((m) => ({ title: m.title, branch: m.branch })),
+  ].map((p) => `<div class="w-[480px] grid">${renderTitleBar(p)}</div>`);
+  const toasts = [
+    renderToast({ text: ctx.t('toast.saved'), kind: 'ok' }),
+    renderToast({ text: ctx.t('toast.needsLevel', { n: 3 }), kind: 'reject' }),
+  ].map((h) => `<div class="flex">${h}</div>`);
+  const body = (text) => `<p>${esc(text)}</p>`;
+  const modals = [
+    { kind: 'info', body: body('Format Bottle 330 ml loaded.') },
+    {
+      kind: 'error',
+      title: 'E-207',
+      body: body('Missing label at the dispensing edge. Check the label roll and the sensor.'),
+    },
+    {
+      kind: 'confirm',
+      title: ctx.t('home.start'),
+      body: body('Start the machine? Labels are dispensed as soon as the start sensor triggers.'),
+      okLabel: ctx.t('action.confirm'),
+    },
+    {
+      kind: 'confirm',
+      destructive: true,
+      title: ctx.t('action.overwrite'),
+      body: body('Bottle 330 ml will be overwritten with the live values. 12 parameters differ.'),
+      okLabel: ctx.t('action.overwrite'),
+    },
+    {
+      kind: 'help',
+      title: 'Fixed Speed',
+      body: body(
+        'Dispensing speed used when Speed Selection is set to Fixed. The help text is shown in full; longer texts scroll.',
+      ),
+    },
+  ].map((m) => `<div class="w-[440px] grid">${renderModal(m)}</div>`);
+  const sheets = [
+    `<div class="w-[480px] grid">${renderSheet({ title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
+  ];
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -69,6 +117,10 @@ export function render(ctx) {
         ${section('StatusBar · State', statusBars)}
         ${section('NavBar · Level × Line', navBars)}
         ${section('QuicklinkCard · State', quickCards)}
+        ${section('TitleBar · Back × Subtitle × Branch', titleBars)}
+        ${section('Toast · Kind', toasts)}
+        ${section('Modal · Kind × Destructive', modals)}
+        ${section('Sheet', sheets)}
       </div>`,
   });
 }

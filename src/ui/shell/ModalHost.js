@@ -13,7 +13,7 @@ export function renderModal({ kind = 'info', title, body = '', destructive = fal
   const tone = kind === 'error' || destructive ? 'text-status-error-ink' : 'text-brand-hi';
   return `
   <div class="modal absolute inset-0 z-40 grid place-items-center p-4 bg-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" data-kind="${kind}">
-    <div class="card-border card-border--strong w-full max-w-[440px] max-h-full flex ${extraClass}">
+    <div class="card-border card-border--strong w-full max-w-[440px] max-h-full flex ${extraClass}" data-cmp="Modal" data-cmp-props="Kind=${kind},Destructive=${destructive ? 'yes' : 'no'}">
       <div class="flex flex-col min-h-0 w-full">
         <div class="flex items-center gap-3 px-5 pt-5 pb-3">
           <span class="${tone}">${icon(iconName, { size: 32 })}</span>

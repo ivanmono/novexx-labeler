@@ -9,7 +9,7 @@ export function renderToast({ text, kind = 'ok' }) {
   const reject = kind === 'reject';
   return `
   <div class="toast pointer-events-none absolute inset-x-4 bottom-4 z-30 flex justify-center" role="status" aria-live="assertive" data-kind="${kind}">
-    <div class="toast__box flex items-center gap-2 px-4 py-3 rounded-md shadow-card text-body-sm font-semibold ${reject ? 'bg-status-error text-white' : 'bg-brand text-on-brand'}">
+    <div class="toast__box flex items-center gap-2 px-4 py-3 rounded-md shadow-card text-body-sm font-semibold ${reject ? 'bg-status-error text-white' : 'bg-brand text-on-brand'}" data-cmp="Toast" data-cmp-props="Kind=${kind}">
       ${icon(reject ? 'alarm' : 'activate', { size: 24 })}<span>${esc(text)}</span>
     </div>
   </div>`;

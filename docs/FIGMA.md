@@ -61,13 +61,17 @@ Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::pl
 Components are generated from the same markup as the screens, so a screen frame and its component set never drift:
 
 - A render function marks its root with `data-cmp="<Set>" data-cmp-props="Prop=value,…"` (StatusBar, NavBar,
-  QuicklinkCard so far). The dev route `#/components` (`src/ui/screens/Components.js`) renders every variant once;
+  QuicklinkCard, TitleBar, Toast, Modal, Sheet so far). The dev route `#/components` (`src/ui/screens/Components.js`) renders every variant once;
   `npm run figma:capture -- --components` serializes that sheet to `components.json` and
   `npm run figma:payload -- --components <dir> "HMI / 02 Components" [Set] [Prop=value]` builds the sets (the filters
   keep one `figma_execute` call small). Variant names are `Prop=value, Prop=value`; an existing variant is refilled
   in place (same node id, so instances follow), a new one joins the set.
-- Component captures are "full": every element becomes a frame and flex / grid containers (and plain blocks with one
-  child) become **auto layout** with the CSS gap, padding, justify and align. A frame **hugs** an axis when the element
+- Component captures are "full": every element becomes a frame and flex / grid containers become **auto layout**
+  with the CSS gap, padding, justify and align. A plain block becomes a column too: with one child (centred in the
+  box, as a button label, → justify centre) or with block children stacked at one constant gap (the `mt-3` between
+  the two paragraphs of a destructive dialog). A negative margin on the first / last child (`-ml-2` on the title-bar
+  back button, `-mr-2` on the sheet close) shrinks the padding to where the child starts, since auto layout has no
+  margins; a zero-height spacer (`<span class="w-2">`) stays as an 8 × 0 frame so it keeps its place in the row. A frame **hugs** an axis when the element
   has no `w-`/`h-`/`size-` class (for a component root: on the sheet wrapper) and is not stretched or grown by its
   parent; `min-h-*` becomes a min height. Absolute children stay absolute. Text with `line-clamp-n` (or a
   `truncate` line inside a component) gets a fixed width, auto height, `maxLines = n` and an ending ellipsis, so an
@@ -75,7 +79,10 @@ Components are generated from the same markup as the screens, so a screen frame 
   app).
 - Screen captures stop at a `data-cmp` root and emit an **instance**: variant by props, then overrides in DOM order
   (texts; icon instances swapped to `icon/24/<name>` and recoloured; layer opacities by name). The instance is sized
-  like the browser box except on axes the component hugs.
+  like the browser box except on axes the component hugs. Everything inside a `data-cmp` root is the component's
+  own content: a Modal or Sheet body placed by a screen (an editor, a help text with a different structure) is not
+  carried into the instance yet — the body text is an override only while the structure matches the variant.
+  Editors in sheets get a slot/overlay treatment with P2-16.
 - The builder finds a component only as a variant inside a **component set named after the `data-cmp` value**
   (`QuicklinkCard` → `State=filled`). Variants pulled out of their set (loose `QuicklinkCard/filled` components)
   are not found and the frame build stops with an error; recombine them (Figma: select both → Combine as variants,
@@ -93,7 +100,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 ### Synced so far (2026-10-30)
 
-`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). TitleBar, Toast, Modal, Sheet and the other components follow the same route.
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). 2026-11-02: TitleBar (Back × Subtitle, plus one branch-marked variant per main-menu branch), Toast (ok, reject), Modal (info, error, confirm, confirm destructive, help) and Sheet sets added; the login and user frames rebuilt with TitleBar instances. Toast, Modal and Sheet have no screen frame yet (no captured state shows them). The remaining components (Card, StatePill, StartButton, Key, NumpadKey, ProfileRow, ListRow, Button, LogoMark, ProgressBar) follow the same route.
 
 ## Icon export
 

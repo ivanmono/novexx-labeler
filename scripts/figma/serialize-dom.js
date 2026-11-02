@@ -424,30 +424,95 @@
     if (!o.full) return out;
     const isFlex = /flex/.test(cs.display);
     const isGrid = /grid/.test(cs.display) && el.children.length <= 1;
-    // a plain block with one child (an element or a text run) becomes a one-column layout, so the
-    // component hugs its content in Figma (a longer override wraps and grows instead of clipping)
-    const hasKids = [...el.childNodes].some(
-      (c) => c.nodeType === 1 || (c.nodeType === 3 && c.textContent.trim()),
+    // a plain block becomes a one-column layout, so the component hugs its content in Figma (a
+    // longer override wraps and grows instead of clipping): with one child (an element or a text
+    // run), or with block-level children stacked at one constant gap (margins between them)
+    const flow = [...el.childNodes].filter(
+      (c) =>
+        (c.nodeType === 1 && !/absolute|fixed/.test(getComputedStyle(c).position)) ||
+        (c.nodeType === 3 && c.textContent.trim()),
     );
+    let blockGap = 0;
+    let blockJustify = 'start';
+    // a single child sitting centred in the content box (a button label) → justify centre
+    const centred = () => {
+      const c = flow[0];
+      const b =
+        c.nodeType === 1
+          ? c.getBoundingClientRect()
+          : (() => {
+              const r = document.createRange();
+              r.selectNodeContents(c);
+              return r.getBoundingClientRect();
+            })();
+      const box = el.getBoundingClientRect();
+      const top = b.top - (box.top + px(cs.borderTopWidth) + px(cs.paddingTop));
+      const bottom = box.bottom - px(cs.borderBottomWidth) - px(cs.paddingBottom) - b.bottom;
+      if (top > 0.5 && Math.abs(top - bottom) < 1.5) blockJustify = 'center';
+      return true;
+    };
+    const stacked = () => {
+      if (flow.some((c) => c.nodeType !== 1 || /inline/.test(getComputedStyle(c).display)))
+        return false;
+      const boxes = flow.map((c) => c.getBoundingClientRect());
+      const top = el.getBoundingClientRect().top + px(cs.borderTopWidth) + px(cs.paddingTop);
+      if (Math.abs(boxes[0].top - top) > 0.5) return false; // margin above the first child
+      const gaps = boxes.slice(1).map((b, i) => b.top - boxes[i].bottom);
+      if (gaps.some((g) => g < -0.5 || Math.abs(g - gaps[0]) > 0.5)) return false;
+      blockGap = Math.max(0, Math.round(gaps[0] ?? 0));
+      return true;
+    };
     const isBlock =
-      !isFlex && !isGrid && hasKids && el.children.length <= 1 && !/inline/.test(cs.display);
+      !isFlex &&
+      !isGrid &&
+      flow.length > 0 &&
+      !/inline/.test(cs.display) &&
+      (flow.length === 1 ? centred() : stacked());
     if (isFlex || isGrid || isBlock) {
       const col = isBlock || (isFlex && cs.flexDirection.startsWith('column'));
       out.layout = {
         dir: col ? 'col' : 'row',
-        gap: isBlock ? 0 : px(col ? cs.rowGap : cs.columnGap) || 0,
+        gap: isBlock ? blockGap : px(col ? cs.rowGap : cs.columnGap) || 0,
         pad: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(px),
         justify: isBlock
-          ? 'start'
+          ? blockJustify
           : (JUSTIFY[isGrid ? cs.justifyItems : cs.justifyContent] ?? 'start'),
         align: isBlock ? 'stretch' : (ALIGN[cs.alignItems] ?? (isGrid ? 'start' : 'stretch')),
       };
-      // hug sizing: no explicit size class (on the element, or on the sheet wrapper for a component
-      // root) and not stretched / grown by the parent → the frame follows its content
-      const cls = [...el.classList, ...(o.parent ? [] : [...el.parentElement.classList])];
+      // hug sizing: no explicit size class (on the element, or on the sheet wrappers above a
+      // component root, up to its section) and not stretched / grown by the parent → the frame
+      // follows its content
+      const cls = [...el.classList];
+      if (!o.parent)
+        for (
+          let a = el.parentElement;
+          a && !a.hasAttribute('data-cmp-section');
+          a = a.parentElement
+        )
+          cls.push(...a.classList);
       out.layout.hugW = !cls.some((c) => /^(w-|size-)/.test(c)) && !el.style.width;
       out.layout.hugH = !cls.some((c) => /^(h-|size-)/.test(c)) && !el.style.height;
       if (cls.some((c) => /^min-h-/.test(c))) out.layout.minH = px(cs.minHeight);
+      // a negative margin on the first / last child (`-ml-2` on a bar button) pulls it into the
+      // padding; auto layout has no margins, so the padding shrinks to where the child starts
+      const flowEls = flow.filter(
+        (c) => c.nodeType === 1 && getComputedStyle(c).display !== 'none',
+      );
+      if (flowEls.length) {
+        const box = el.getBoundingClientRect();
+        const first = flowEls[0].getBoundingClientRect();
+        const last = flowEls[flowEls.length - 1].getBoundingClientRect();
+        const col = out.layout.dir === 'col';
+        const lead = col
+          ? first.top - box.top - px(cs.borderTopWidth)
+          : first.left - box.left - px(cs.borderLeftWidth);
+        const trail = col
+          ? box.bottom - px(cs.borderBottomWidth) - last.bottom
+          : box.right - px(cs.borderRightWidth) - last.right;
+        const [i0, i1] = col ? [0, 2] : [3, 1];
+        out.layout.pad[i0] = Math.max(0, Math.min(out.layout.pad[i0], px(lead)));
+        out.layout.pad[i1] = Math.max(0, Math.min(out.layout.pad[i1], px(trail)));
+      }
     }
     const p = o.parent;
     if (p?.layout && !out.abs) {
@@ -475,7 +540,10 @@
     const opacity = px(cs.opacity);
     if (opacity === 0) return;
     const r = el.getBoundingClientRect();
-    if (r.width <= 0 || r.height <= 0) return;
+    // a zero-height (or -width) element still takes space in an auto-layout row (a spacer span):
+    // keep it in full mode when it is a flow child of a layout
+    const spacer = o.full && o.parent?.layout && (r.width > 0 || r.height > 0);
+    if ((r.width <= 0 || r.height <= 0) && !spacer) return;
     const rel = {
       x: px(r.left - base.left),
       y: px(r.top - base.top),

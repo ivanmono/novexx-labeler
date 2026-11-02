@@ -12,8 +12,8 @@ export function renderSheet({ title, body = '', closeLabel }) {
   return `
   <div class="sheet absolute inset-0 z-30 flex flex-col justify-end" data-sheet>
     <div class="sheet__backdrop absolute inset-0 bg-overlay" data-action="close" aria-hidden="true"></div>
-    <section class="sheet__panel relative card-border card-border--strong rounded-b-none" role="dialog" aria-modal="true" aria-label="${esc(title ?? '')}">
-      <div class="flex flex-col min-h-0 rounded-b-none!">
+    <section class="sheet__panel relative card-border card-border--strong rounded-b-none" role="dialog" aria-modal="true" aria-label="${esc(title ?? '')}" data-cmp="Sheet" data-cmp-props="State=default">
+      <div class="flex flex-col min-h-0 w-full rounded-b-none!">
         <div class="flex items-center gap-2 px-4 pt-3 pb-2">
           <span class="sheet__grip mx-auto absolute left-1/2 -translate-x-1/2 top-1.5 w-10 h-1 rounded-pill bg-line" aria-hidden="true"></span>
           <h2 class="text-body-lg font-semibold truncate flex-1 min-w-0">${esc(title ?? '')}</h2>
