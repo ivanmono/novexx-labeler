@@ -1,5 +1,28 @@
 # Plan — Labeller HMI functional app with dummy data
 
+## Where we are (2026-11-02)
+
+Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
+
+- **Phase 2 in progress.** Done: P2-01 … P2-09, P2-11, P2-12, P2-16. Partly: P2-10 (confirmation in the
+  rows works; a dedicated pressed action-button variant is open). Open: **P2-13** (HMI screen specifics:
+  language, date/time picker for 700/701, orientation, dark mode, logo, quicklinks), P2-14 (§7.3 checklist),
+  P2-15 (Phase 2 tests; most flows already have e2e specs under `tests/e2e/`).
+- **Gates:** G2-1 and G2-2 have not been held as reviews yet (no DT entries since DT-06 at G1-2); G2-3 is
+  the next planned gate. The three go together once P2-13 and P2-14 are in.
+- **App state:** menus, parameter lists, all editors (toggle, selection list, numeric keypad, text keyboard,
+  slider, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
+  badge or the dev panel (level 0–4). Tests: 69 unit (`npx vitest run`), 76 e2e (`npx playwright test`).
+- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 21 sets / 124 variants;
+  `HMI / 03 Screens – Portrait` 26 dark frames + 3 light. Light and landscape frames come in P4-09. The
+  builder is stored in the file (`hmi.builder`, len 29370, checksum 2929863182, see FIGMA.md for the
+  checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
+  section of `docs/FIGMA.md` before touching it — every quirk listed there cost a failed run.
+- **Last commit:** `aea0a16` (Figma sync P2-16). Working tree clean. Repo is local only (no remote yet,
+  P5-05).
+- **Open questions for PID** live in `docs/OPEN-POINTS.md` (slider parameter list, L4 semantics, date/time
+  widget, browser engine, 180° rotation); assumptions taken meanwhile are recorded there.
+
 ## Context
 
 PID Group commissioned Mono to design and build the next-generation HMI for its labeller machines (4.3", 800×480, capacitive touch, gloves). Four inputs exist:

@@ -57,25 +57,25 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 
 | ID                | Title                                                    | Size | Status |
 | ----------------- | -------------------------------------------------------- | ---- | ------ |
-| [P2-01](P2-01.md) | MenuScreen with tiles and paging                         | M    | todo   |
+| [P2-01](P2-01.md) | MenuScreen with tiles and paging                         | M    | done     |
 | [G2-1](G2-1.md)   | **Gate: menus**                                          | -    | todo   |
-| [P2-02](P2-02.md) | Wire all 16 menu nodes and cross-link hints              | S    | todo   |
+| [P2-02](P2-02.md) | Wire all 16 menu nodes and cross-link hints              | S    | done     |
 | [G2-2](G2-2.md)   | **Gate: parameter row and editors**                      | -    | todo   |
-| [P2-03](P2-03.md) | ParamRow and GroupHeader                                 | L    | todo   |
+| [P2-03](P2-03.md) | ParamRow and GroupHeader                                 | L    | done     |
 | [G2-3](G2-3.md)   | **Gate: favourites, search, HMI screen, edit checklist** | -    | todo   |
-| [P2-04](P2-04.md) | ParamListScreen                                          | M    | todo   |
-| [P2-05](P2-05.md) | ToggleBar                                                | S    | todo   |
-| [P2-06](P2-06.md) | SelectionList sheet                                      | M    | todo   |
-| [P2-07](P2-07.md) | NumericKeypad                                            | M    | todo   |
-| [P2-08](P2-08.md) | AlphaKeyboard                                            | M    | todo   |
-| [P2-09](P2-09.md) | Slider                                                   | M    | todo   |
-| [P2-10](P2-10.md) | Action buttons with confirmation                         | S    | todo   |
-| [P2-11](P2-11.md) | Help modal                                               | S    | todo   |
-| [P2-12](P2-12.md) | Favourites                                               | M    | todo   |
+| [P2-04](P2-04.md) | ParamListScreen                                          | M    | done     |
+| [P2-05](P2-05.md) | ToggleBar                                                | S    | done     |
+| [P2-06](P2-06.md) | SelectionList sheet                                      | M    | done     |
+| [P2-07](P2-07.md) | NumericKeypad                                            | M    | done     |
+| [P2-08](P2-08.md) | AlphaKeyboard                                            | M    | done     |
+| [P2-09](P2-09.md) | Slider                                                   | M    | done     |
+| [P2-10](P2-10.md) | Action buttons with confirmation                         | S    | partly   |
+| [P2-11](P2-11.md) | Help modal                                               | S    | done     |
+| [P2-12](P2-12.md) | Favourites                                               | M    | done     |
 | [P2-13](P2-13.md) | HMI screen specifics                                     | M    | todo   |
 | [P2-14](P2-14.md) | Edit-behaviour checklist (§7.3)                          | S    | todo   |
 | [P2-15](P2-15.md) | Phase 2 tests                                            | M    | todo   |
-| [P2-16](P2-16.md) | Figma: parameter components and screens                  | L    | todo   |
+| [P2-16](P2-16.md) | Figma: parameter components and screens                  | L    | done     |
 
 ## Phase 3 - Special screens
 
