@@ -111,7 +111,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 2026-11-02 (P2-16): GroupHeader (State), OptionRow (Selected), Pager (Position × 3), MenuTile (State × Link, 4),
 Slider (State × 3) and ParamRow (State default · locked · readonly · action × Indent 0–2 × Changed, plus
-Indent=0 Help=no — 25 variants) added: 20 sets, 124 variants in all. Portrait dark frames: menu root-L1,
+Indent=0 Help=no — 25 variants) added: 21 sets, 124 variants in all. Portrait dark frames: menu root-L1,
 options-L3 (disabled option tiles), digitalio-L3 (linked tiles with the cross-link sub-line); list speed-L2,
 hmi-L3, usersettings-L3 (group header, locked W4 rows); editor select (Sheet slot with OptionRow instances),
 numeric-error (Sheet slot with the field, the inline range message and 16 NumpadKey instances), slider (Sheet
