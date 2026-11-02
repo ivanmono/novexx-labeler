@@ -112,5 +112,10 @@
   "severity.mid": "Mittel",
   "severity.low": "Niedrig",
   "time.justNow": "gerade eben",
-  "time.minAgo": "vor {n} min"
+  "time.minAgo": "vor {n} min",
+  "menu.optionMissing": "Option nicht installiert",
+  "menu.linkTo": "auch unter {path}",
+  "pager.prev": "Vorherige Seite",
+  "pager.next": "Nächste Seite",
+  "pager.label": "Seite {n} von {m}"
 }

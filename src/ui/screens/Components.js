@@ -21,6 +21,9 @@ import { renderButton } from '../components/Button.js';
 import { renderKey, renderNumpadKey } from '../components/Keyboard.js';
 import { icon } from '../components/Icon.js';
 import { statusOf } from '../shell/StatusBar.js';
+import { renderMenuTile } from '../components/MenuTile.js';
+import { renderPager } from '../components/Pager.js';
+import { tileFor } from './MenuScreen.js';
 import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
@@ -171,6 +174,14 @@ export function render(ctx) {
     renderProgressBar({ value: 0.45 }),
     renderProgressBar({ value: 0.6, tone: 'error' }),
   ].map((h) => `<div class="w-[320px] grid">${h}</div>`);
+  const menuTiles = [
+    tileFor(ctx, ctx.node('speed')),
+    { ...tileFor(ctx, ctx.node('buscard')), disabled: true, subtitle: ctx.t('menu.optionMissing') },
+    tileFor(ctx, ctx.node('ref-mio')),
+  ].map((tile) => `<div class="w-[218px] grid">${renderMenuTile(tile)}</div>`);
+  const pagers = [0, 1, 2].map(
+    (page) => `<div class="w-[448px] grid">${renderPager({ page, pages: 3 })}</div>`,
+  );
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -192,6 +203,8 @@ export function render(ctx) {
         ${section('Key · Kind × Content', keys)}
         ${section('NumpadKey · Kind × Content', numpadKeys)}
         ${section('ProgressBar · Tone', progress)}
+        ${section('MenuTile · State × Link', menuTiles)}
+        ${section('Pager · Position', pagers)}
       </div>`,
   });
 }
