@@ -26,6 +26,8 @@ import { renderPager } from '../components/Pager.js';
 import { tileFor } from './MenuScreen.js';
 import { renderParamRow } from '../components/ParamRow.js';
 import { renderGroupHeader } from '../components/GroupHeader.js';
+import { renderOptionRow } from '../components/SelectionList.js';
+import { renderSlider } from '../components/Slider.js';
 import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
@@ -200,6 +202,14 @@ export function render(ctx) {
     row({ indent: 2 }),
   ].map((r) => `<div class="w-[448px] grid">${renderParamRow({ ...r, last: true })}</div>`);
   const groupHeaders = [`<div class="w-[448px] grid">${renderGroupHeader('Information')}</div>`];
+  const optionRows = [
+    renderOptionRow({ id: 119, label: ctx.t(ctx.option(119).labelKey), selected: true, last: true }),
+    renderOptionRow({ id: 120, label: ctx.t(ctx.option(120).labelKey), selected: false, last: true }),
+  ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
+  const sliderParam = ctx.param(122);
+  const sliders = [30, 1, 60].map(
+    (v) => `<div class="w-[448px] grid">${renderSlider(sliderParam, v)}</div>`,
+  );
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -225,6 +235,8 @@ export function render(ctx) {
         ${section('Pager · Position', pagers)}
         ${section('ParamRow · State × Indent', paramRows)}
         ${section('GroupHeader', groupHeaders)}
+        ${section('OptionRow · Selected', optionRows)}
+        ${section('Slider · State', sliders)}
       </div>`,
   });
 }

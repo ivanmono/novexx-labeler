@@ -231,6 +231,37 @@
     background-image: none;
   }
 
+  /* ---- slider (P2-09): brand track up to the thumb, 32 px thumb for gloves --------- */
+  .slider__input {
+    appearance: none;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(
+      to right,
+      var(--hmi-brand) 0 var(--pct, 0%),
+      var(--hmi-surface-2) var(--pct, 0%) 100%
+    );
+    outline: none;
+  }
+  .slider__input::-webkit-slider-thumb {
+    appearance: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--hmi-text);
+    border: 3px solid var(--hmi-brand);
+  }
+  .slider__input::-moz-range-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--hmi-text);
+    border: 3px solid var(--hmi-brand);
+  }
+  .slider[data-dragging='true'] .slider__input::-webkit-slider-thumb {
+    transform: scale(1.1);
+  }
+
   /* ---- sheet ------------------------------------------------------------------ */
   .sheet__panel {
     max-height: 72%;

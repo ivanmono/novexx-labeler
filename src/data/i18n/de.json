@@ -120,5 +120,12 @@
   "pager.label": "Seite {n} von {m}",
   "list.planned": "geplant",
   "list.seeAlso": "Siehe auch",
-  "toast.editorPending": "Editor noch nicht verfügbar"
+  "toast.editorPending": "Editor noch nicht verfügbar",
+  "list.end": "Ende der Liste",
+  "edit.outOfRange": "Wert zwischen {min} und {max} {unit} eingeben",
+  "edit.integerOnly": "Nur ganze Zahlen",
+  "edit.empty": "Wert eingeben",
+  "edit.invalidIp": "Adresse wie 192.168.0.10 eingeben",
+  "edit.tooLong": "Höchstens {n} Zeichen",
+  "action.confirmMove": "Dadurch bewegt sich die Maschine. Fortfahren?"
 }

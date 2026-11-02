@@ -11,6 +11,7 @@ import { renderGroupHeader } from '../components/GroupHeader.js';
 import { canReadParam, canWriteParam, writeLevel } from '../../core/access.js';
 import { parseCondition, evalCondition, conditionRefs } from '../../core/conditions.js';
 import { formatParamValue, paramLabel } from '../format.js';
+import { openEditor } from '../editors.js';
 import { esc, onAction } from '../html.js';
 
 const READ_ONLY_CONTROLS = new Set(['display', 'state']);
@@ -86,6 +87,8 @@ export function conditionIds(node, param) {
 
 /** Simulator commands behind the runtime action parameters (docx §7.2 Action). */
 const COMMANDS = { Run: 'Run', Pause: 'Pause', Online: 'Online', Offline: 'Offline' };
+/** Actions that move the machine confirm first (P2-10): start trigger, run, manual feed, tests. */
+const CONFIRM_ACTIONS = new Set([2, 6, 7, 800, 803, 804, 805, 806, 807, 808]);
 
 export function render(ctx, { arg }) {
   const node = ctx.node(arg);
@@ -143,17 +146,20 @@ export function render(ctx, { arg }) {
       const dispose = onAction(el, {
         edit: (btn) => {
           const p = ctx.param(btn.dataset.pid);
-          if (!p) return;
-          if (p.control === 'toggle') {
-            ctx.store.setParam(p.id, !ctx.store.getParam(p.id), { source: 'ui' });
-            return;
-          }
-          ctx.toast.reject(ctx.t('toast.editorPending'));
+          if (p) openEditor(ctx, p, btn);
         },
         locked: (btn) => ctx.toast.reject(ctx.t('toast.needsLevel', { n: btn.dataset.needLevel })),
-        run: (btn) => {
+        run: async (btn) => {
           const p = ctx.param(btn.dataset.pid);
           if (!p) return;
+          if (CONFIRM_ACTIONS.has(p.id)) {
+            const go = await ctx.modal.confirm({
+              title: paramLabel(ctx, p),
+              body: `<p>${esc(ctx.t('action.confirmMove'))}</p>`,
+              okLabel: ctx.t('action.start'),
+            });
+            if (!go) return;
+          }
           const ok =
             p.name === 'Alarm_Reset'
               ? (ctx.sim.resetAlarm(), true)
