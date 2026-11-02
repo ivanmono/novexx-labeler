@@ -7,6 +7,7 @@
  */
 import { icon } from '../components/Icon.js';
 import { renderLogo } from '../components/Logo.js';
+import { renderButton } from '../components/Button.js';
 import { statusOf } from '../shell/StatusBar.js';
 import { formatParamValue, paramLabel, relTime } from '../format.js';
 import { esc, onAction, cx } from '../html.js';
@@ -38,6 +39,27 @@ export function renderQuickEmpty(ctx) {
   return `<div class="card-border opacity-50" data-cmp="QuicklinkCard" data-cmp-props="State=empty"><div class="p-3 min-h-[114px] flex flex-col justify-center gap-1"><div class="text-label text-muted">${esc(ctx.t('home.quicklinkEmpty'))}</div><div class="text-caption text-faint">${esc(ctx.t('home.quicklinkHint'))}</div></div></div>`;
 }
 
+/** Start / pause control (Figma StartButton · Machine=ready|run|alarm × Locked=yes|no). */
+export function renderStartButton(ctx, machine, level) {
+  const st = statusOf(machine);
+  const running = machine.state === 'run';
+  const glow =
+    st.key === 'alarm' ? 'shadow-glow-error' : running ? 'shadow-glow-run' : 'shadow-glow-brand';
+  const disabled = st.key === 'alarm' || st.key === 'booting';
+  const locked = level < 1 && !running;
+  const machineKey = running ? 'run' : st.key === 'alarm' ? 'alarm' : 'ready';
+  return `<button type="button" class="${cx('home__run pressable grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
+            <span class="grid place-items-center rounded-pill size-full ${running ? 'text-status-run' : locked ? 'text-muted' : 'text-brand-hi'}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
+          </button>`;
+}
+
+/** Machine-state pill under the start control (Figma StatePill · State). */
+export function renderStatePill(ctx, st) {
+  return `<div class="home__pill inline-flex items-center gap-2 px-2 h-7 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
+            <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
+          </div>`;
+}
+
 export function render(ctx) {
   const quickLinks = () =>
     QUICKLINK_IDS.map((qid) => {
@@ -49,13 +71,9 @@ export function render(ctx) {
   const draw = () => {
     const m = ctx.store.get('machine');
     const st = statusOf(m);
-    const running = m.state === 'run';
     const name = ctx.store.getParam(600) ?? '';
     const nErr = m.errors.length;
     const nWarn = m.warnings.length;
-    const glow =
-      st.key === 'alarm' ? 'shadow-glow-error' : running ? 'shadow-glow-run' : 'shadow-glow-brand';
-    const btnDisabled = st.key === 'alarm' || st.key === 'booting';
     return `
       <div class="home flex-1 min-h-0 flex flex-col select-none" data-home data-state="${st.key}">
         <div class="home__top flex items-center justify-between px-6 py-2">
@@ -63,12 +81,8 @@ export function render(ctx) {
           <div class="text-right min-w-0 flex flex-col gap-1"><div class="text-body font-semibold truncate">${esc(name)}</div><div class="text-label text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
         </div>
         <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-8 py-2">
-          <button type="button" class="${cx('home__run pressable grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${btnDisabled ? 'aria-disabled="true"' : ''}>
-            <span class="grid place-items-center rounded-pill size-full ${running ? 'text-status-run' : ctx.level < 1 ? 'text-muted' : 'text-brand-hi'}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
-          </button>
-          <div class="home__pill inline-flex items-center gap-2 px-2 h-7 rounded-pill bg-surface-2" role="status">
-            <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
-          </div>
+          ${renderStartButton(ctx, m, ctx.level)}
+          ${renderStatePill(ctx, st)}
           ${ctx.level < 1 ? `<div class="text-label text-muted flex items-center gap-1">${icon('lock', { size: 18 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
         </div>
         <div class="home__quick grid grid-cols-2 gap-3 px-4 pb-8" data-quicklinks>${quickLinks()}</div>
@@ -116,8 +130,8 @@ export function render(ctx) {
             }
           </div>
           <div class="flex gap-3 p-4">
-            ${m.warnings.length ? `<button type="button" class="pressable flex-1 h-touch rounded-md bg-surface-2 text-body font-semibold" data-action="ackWarnings">${esc(ctx.t('home.ackWarnings'))}</button>` : ''}
-            ${m.errors.length ? `<button type="button" class="pressable flex-1 h-touch rounded-md bg-status-error text-white text-body font-semibold" data-action="resetAlarm">${esc(ctx.t('home.resetAlarm'))}</button>` : ''}
+            ${m.warnings.length ? renderButton({ label: ctx.t('home.ackWarnings'), action: 'ackWarnings', extra: 'flex-1' }) : ''}
+            ${m.errors.length ? renderButton({ label: ctx.t('home.resetAlarm'), action: 'resetAlarm', tone: 'danger', extra: 'flex-1' }) : ''}
           </div>
         </div></div>
       </div>`;

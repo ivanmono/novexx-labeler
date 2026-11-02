@@ -412,6 +412,25 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     changed.forEach((t) => {
       t.characters = n.texts[texts.indexOf(t)];
     });
+    // text colour overrides (a level-coloured value in a plain row): bound token or plain colour
+    (n.textColors || []).forEach((tc, i) => {
+      const t = texts[i];
+      if (!t || !tc) return;
+      const c = parseColor(tc.color);
+      const cur = Array.isArray(t.fills) && t.fills[0];
+      const curVar = cur && cur.boundVariables && cur.boundVariables.color;
+      const want = tc.token && variables.get(tc.token);
+      const same = want
+        ? !!curVar && curVar.id === want.id
+        : !!c &&
+          !!cur &&
+          cur.type === 'SOLID' &&
+          !curVar &&
+          Math.abs(cur.color.r - c.r) < 0.01 &&
+          Math.abs(cur.color.g - c.g) < 0.01 &&
+          Math.abs(cur.color.b - c.b) < 0.01;
+      if (!same && (c || want)) t.fills = [boundSolid(c, tc.token, tc.alpha)];
+    });
     const icons = inst.findAll((x) => x.type === 'INSTANCE' && x.name.startsWith('icon/'));
     const nIcons = Math.min(icons.length, (n.icons || []).length);
     const mains = await Promise.all(icons.slice(0, nIcons).map((ic) => ic.getMainComponentAsync()));
@@ -434,6 +453,12 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     for (const o of n.opacities || []) {
       const t = inst.findOne((x) => x.name === o.name);
       if (t) t.opacity = o.opacity;
+    }
+    // size overrides for named parts (`data-cmp-part`, e.g. the filled bar of a progress bar)
+    for (const s of n.sizes || []) {
+      const f = inst.findOne((x) => x.name === s.name);
+      if (f && (Math.abs(f.width - s.w) > 0.5 || Math.abs(f.height - s.h) > 0.5))
+        f.resize(Math.max(0.01, s.w), Math.max(0.01, s.h));
     }
     return inst;
   }

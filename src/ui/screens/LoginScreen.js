@@ -8,6 +8,21 @@ import { renderNumpad, mountNumpad, mountKeyboard } from '../components/Keyboard
 import { fmtDate } from '../format.js';
 import { esc, onAction, cx } from '../html.js';
 
+/** Profile row on the login screen (Figma ProfileRow · Level × Enabled). */
+export function renderProfileRow(ctx, u) {
+  return `
+            <button type="button" class="${cx('card-border text-left pressable', !u.enabled && 'opacity-40')}" data-action="pick" data-id="${esc(u.id)}" ${!u.enabled ? 'aria-disabled="true"' : ''} data-cmp="ProfileRow" data-cmp-props="Level=${u.level},Enabled=${u.enabled ? 'yes' : 'no'}">
+              <div class="flex items-center gap-4 px-4 min-h-[72px]">
+                <span class="grid place-items-center size-12 rounded-pill bg-level-${u.level} text-black font-bold">${esc(`L${u.level}`)}</span>
+                <span class="flex-1 min-w-0">
+                  <span class="block text-body-lg font-semibold truncate">${esc(u.name)}</span>
+                  <span class="block text-label text-muted truncate">${esc(ctx.t(`level.${u.level}`))} · ${esc(ctx.t('login.lastChange', { date: fmtDate(u.lastPasswordChange) }))}</span>
+                </span>
+                ${icon('chevron', { size: 24, class: 'text-faint' })}
+              </div>
+            </button>`;
+}
+
 export function render(ctx) {
   const users = ctx.store.get('users');
   showProfiles();
@@ -18,21 +33,7 @@ export function render(ctx) {
       html: `
         <div class="flex-1 scroll-y p-4 flex flex-col gap-3" data-profiles>
           <div class="t-caption text-muted">${esc(ctx.t('login.choose'))}</div>
-          ${users
-            .map(
-              (u) => `
-            <button type="button" class="${cx('card-border text-left pressable', !u.enabled && 'opacity-40')}" data-action="pick" data-id="${esc(u.id)}" ${!u.enabled ? 'aria-disabled="true"' : ''}>
-              <div class="flex items-center gap-4 px-4 min-h-[72px]">
-                <span class="grid place-items-center size-12 rounded-pill bg-level-${u.level} text-black font-bold">${esc(`L${u.level}`)}</span>
-                <span class="flex-1 min-w-0">
-                  <span class="block text-body-lg font-semibold truncate">${esc(u.name)}</span>
-                  <span class="block text-label text-muted truncate">${esc(ctx.t(`level.${u.level}`))} · ${esc(ctx.t('login.lastChange', { date: fmtDate(u.lastPasswordChange) }))}</span>
-                </span>
-                ${icon('chevron', { size: 24, class: 'text-faint' })}
-              </div>
-            </button>`,
-            )
-            .join('')}
+          ${users.map((u) => renderProfileRow(ctx, u)).join('')}
         </div>`,
       mount(el) {
         return onAction(el, {

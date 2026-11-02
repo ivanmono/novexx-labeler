@@ -230,6 +230,7 @@
 
   function nameOf(el) {
     const d = el.dataset || {};
+    if (d.cmpPart) return d.cmpPart; // a named part of a component (size override target)
     for (const k of [
       'icon',
       'action',
@@ -572,6 +573,16 @@
           opacities: collect(root, 'frame')
             .filter((f) => f !== root && f.opacity != null && f.opacity < 1)
             .map((f) => ({ name: f.name, opacity: f.opacity })),
+          // text colours by DOM order (a level-coloured value in a plain row) and the sizes of
+          // named parts (`data-cmp-part`, e.g. the filled bar of a progress bar)
+          textColors: collect(root, 'text').map((t) => ({
+            color: t.font.color,
+            token: t.font.token,
+            alpha: t.font.alpha,
+          })),
+          sizes: collect(root, 'frame')
+            .filter((f) => f.part)
+            .map((f) => ({ name: f.name, w: f.w, h: f.h })),
         });
       }
       return;
@@ -639,6 +650,7 @@
           clip,
           ...paint,
           ...flexInfo(el, cs, rel, o),
+          part: el.dataset.cmpPart ? true : undefined,
           children: [],
         }
       : null;

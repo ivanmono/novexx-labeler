@@ -30,6 +30,44 @@ const ROWS = {
 };
 const SPECIAL = new Set(['⇧', '⌫', '123', 'abc', '␣', '↵']);
 
+/** One keyboard key (Figma Key · Kind=char|special|enter × Content=text|icon|none). */
+export function renderKey(k, { layout = 'lower', enterLabel = '↵', enterIcon = null } = {}) {
+  const special = SPECIAL.has(k);
+  const grow =
+    k === '␣'
+      ? 'flex-[4]'
+      : k === '↵'
+        ? 'flex-[2]'
+        : k === '123' || k === 'abc'
+          ? 'flex-[1.6]'
+          : special
+            ? 'flex-[1.4]'
+            : 'flex-1';
+  const label =
+    k === '␣'
+      ? ''
+      : k === '⌫'
+        ? icon('back', { size: 24 })
+        : k === '↵'
+          ? enterIcon
+            ? icon(enterIcon, { size: 24 })
+            : esc(enterLabel)
+          : k === '⇧'
+            ? '⇧'
+            : esc(k);
+  // enter gets the brand fill on its own: two bg-* utilities on one element would
+  // leave the winner to the stylesheet order (seen as a grey key with a dark icon)
+  const tone =
+    k === '↵'
+      ? 'key--special bg-brand text-on-brand text-body-sm'
+      : special
+        ? 'key--special bg-surface-2 text-body-sm'
+        : 'bg-key text-body-lg';
+  const kind = k === '↵' ? 'enter' : special ? 'special' : 'char';
+  const content = k === '␣' ? 'none' : k === '⌫' || (k === '↵' && enterIcon) ? 'icon' : 'text';
+  return `<button type="button" class="${cx('key pressable rounded-sm font-semibold grid place-items-center', grow, tone, k === '⇧' && layout === 'upper' && 'ring-2 ring-brand')}" data-action="key" data-key="${esc(k)}" aria-label="${esc(k === '␣' ? 'space' : k === '⌫' ? 'backspace' : k === '↵' ? 'enter' : k)}" data-cmp="Key" data-cmp-props="Kind=${kind},Content=${content}">${label}</button>`;
+}
+
 export function renderKeyboard({
   layout = 'lower',
   enterLabel = '↵',
@@ -41,42 +79,9 @@ export function renderKeyboard({
   <div class="keyboard select-none flex flex-col gap-1.5 ${compact ? 'keyboard--compact' : ''}" data-keyboard data-layout="${layout}" role="group" aria-label="Keyboard">
     ${rows
       .map(
-        (row, ri) =>
-          `<div class="flex gap-1.5 ${ri === 3 ? '' : ''}">${row
-            .map((k) => {
-              const special = SPECIAL.has(k);
-              const grow =
-                k === '␣'
-                  ? 'flex-[4]'
-                  : k === '↵'
-                    ? 'flex-[2]'
-                    : k === '123' || k === 'abc'
-                      ? 'flex-[1.6]'
-                      : special
-                        ? 'flex-[1.4]'
-                        : 'flex-1';
-              const label =
-                k === '␣'
-                  ? ''
-                  : k === '⌫'
-                    ? icon('back', { size: 24 })
-                    : k === '↵'
-                      ? enterIcon
-                        ? icon(enterIcon, { size: 24 })
-                        : esc(enterLabel)
-                      : k === '⇧'
-                        ? '⇧'
-                        : esc(k);
-              // enter gets the brand fill on its own: two bg-* utilities on one element would
-              // leave the winner to the stylesheet order (seen as a grey key with a dark icon)
-              const tone =
-                k === '↵'
-                  ? 'key--special bg-brand text-on-brand text-body-sm'
-                  : special
-                    ? 'key--special bg-surface-2 text-body-sm'
-                    : 'bg-key text-body-lg';
-              return `<button type="button" class="${cx('key pressable rounded-sm font-semibold grid place-items-center', grow, tone, k === '⇧' && layout === 'upper' && 'ring-2 ring-brand')}" data-action="key" data-key="${esc(k)}" aria-label="${esc(k === '␣' ? 'space' : k === '⌫' ? 'backspace' : k === '↵' ? 'enter' : k)}">${label}</button>`;
-            })
+        (row) =>
+          `<div class="flex gap-1.5">${row
+            .map((k) => renderKey(k, { layout, enterLabel, enterIcon }))
             .join('')}</div>`,
       )
       .join('')}
@@ -145,6 +150,34 @@ export function mountKeyboard(
   };
 }
 
+const NUMPAD_NAMES = {
+  '⌫': 'backspace',
+  C: 'clear',
+  '↵': 'enter',
+  MIN: 'minimum',
+  MAX: 'maximum',
+  '-': 'minus',
+  '.': 'decimal point',
+};
+
+/**
+ * One numpad key (Figma NumpadKey · Kind=digit|action|enter × Content=text|icon). The invisible
+ * fillers of the 4 × 4 grid carry no marker.
+ */
+export function renderNumpadKey(k, extra = '', content = null) {
+  const kind = /bg-brand/.test(extra)
+    ? 'enter'
+    : /bg-key/.test(extra)
+      ? 'digit'
+      : /invisible/.test(extra)
+        ? null
+        : 'action';
+  const cmp = kind
+    ? ` data-cmp="NumpadKey" data-cmp-props="Kind=${kind},Content=${content ? 'icon' : 'text'}"`
+    : '';
+  return `<button type="button" class="${cx('key pressable rounded-sm grid place-items-center font-semibold', extra)}" data-action="key" data-key="${esc(k)}" aria-label="${esc(NUMPAD_NAMES[k] ?? k)}"${cmp}>${content ?? esc(k)}</button>`;
+}
+
 /** Numeric keypad: 3×4 digits plus a column of actions. `allowDecimal`/`allowSign` for floats. */
 export function renderNumpad({
   allowDecimal = false,
@@ -152,17 +185,7 @@ export function renderNumpad({
   showMinMax = false,
   enterIcon = 'activate',
 } = {}) {
-  const NAMES = {
-    '⌫': 'backspace',
-    C: 'clear',
-    '↵': 'enter',
-    MIN: 'minimum',
-    MAX: 'maximum',
-    '-': 'minus',
-    '.': 'decimal point',
-  };
-  const key = (k, extra = '', content = null) =>
-    `<button type="button" class="${cx('key pressable rounded-sm grid place-items-center font-semibold', extra)}" data-action="key" data-key="${esc(k)}" aria-label="${esc(NAMES[k] ?? k)}">${content ?? esc(k)}</button>`;
+  const key = renderNumpadKey;
   const dig = (k) => key(k, 'bg-key text-title t-param');
   return `
   <div class="numpad select-none grid grid-cols-4 gap-1.5" data-numpad role="group" aria-label="Numeric keypad">

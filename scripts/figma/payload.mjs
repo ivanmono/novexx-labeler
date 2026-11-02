@@ -25,7 +25,7 @@ const prune = (n) => {
       if (v == null || v === false) continue;
       if (k === 'opacity' && v === 1) continue;
       if (k === 'radius' && v.every((x) => x === 0)) continue;
-      if ((k === 'fills' || k === 'children') && v.length === 0) continue;
+      if (Array.isArray(v) && v.length === 0) continue; // the builder treats a missing list as empty
       if (k === 'lines' && v === 1) continue;
       if (k === 'children' && n.type === 'instance') continue; // the component set holds the subtree
       o[k] = prune(v);

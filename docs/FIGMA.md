@@ -61,7 +61,9 @@ Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::pl
 Components are generated from the same markup as the screens, so a screen frame and its component set never drift:
 
 - A render function marks its root with `data-cmp="<Set>" data-cmp-props="Prop=value,…"` (StatusBar, NavBar,
-  QuicklinkCard, TitleBar, Toast, Modal, Sheet so far). The dev route `#/components` (`src/ui/screens/Components.js`) renders every variant once;
+  QuicklinkCard, TitleBar, Toast, Modal, Sheet, StartButton, StatePill, ProfileRow, ListRow, Button, Key, NumpadKey,
+  ProgressBar). A part inside a component that a screen resizes carries `data-cmp-part="<name>"` (the filled bar of
+  the progress bar): it becomes a named layer and its captured size is applied to the instance. The dev route `#/components` (`src/ui/screens/Components.js`) renders every variant once;
   `npm run figma:capture -- --components` serializes that sheet to `components.json` and
   `npm run figma:payload -- --components <dir> "HMI / 02 Components" [Set] [Prop=value]` builds the sets (the filters
   keep one `figma_execute` call small). Variant names are `Prop=value, Prop=value`; an existing variant is refilled
@@ -78,7 +80,8 @@ Components are generated from the same markup as the screens, so a screen frame 
   override wraps and truncates like the browser (a two-line quicklink title grows the card from 116 to 118 px, as in the
   app).
 - Screen captures stop at a `data-cmp` root and emit an **instance**: variant by props, then overrides in DOM order
-  (texts; icon instances swapped to `icon/24/<name>` and recoloured; layer opacities by name). The instance is sized
+  (texts and their colours — a level-coloured value in a plain list row keeps its `colour/level/n` binding; icon
+  instances swapped to `icon/24/<name>` and recoloured; layer opacities by name; sizes of named parts). The instance is sized
   like the browser box except on axes the component hugs. Everything inside a `data-cmp` root is the component's
   own content: a Modal or Sheet body placed by a screen (an editor, a help text with a different structure) is not
   carried into the instance yet — the body text is an override only while the structure matches the variant.
@@ -100,7 +103,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 
 ### Synced so far (2026-10-30)
 
-`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). 2026-11-02: TitleBar (Back × Subtitle, plus one branch-marked variant per main-menu branch), Toast (ok, reject), Modal (info, error, confirm, confirm destructive, help) and Sheet sets added; the login and user frames rebuilt with TitleBar instances. Toast, Modal and Sheet have no screen frame yet (no captured state shows them). The remaining components (Card, StatePill, StartButton, Key, NumpadKey, ProfileRow, ListRow, Button, LogoMark, ProgressBar) follow the same route.
+`HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). 2026-11-02: TitleBar (Back × Subtitle, plus one branch-marked variant per main-menu branch), Toast (ok, reject), Modal (info, error, confirm, confirm destructive, help) and Sheet sets added; the login and user frames rebuilt with TitleBar instances. Toast, Modal and Sheet have no screen frame yet (no captured state shows them). Same day: StartButton (Machine × Locked), StatePill (State × 8), ProfileRow (Level × Enabled), ListRow (Divider), Button (Tone × Icon), Key (Kind × Content), NumpadKey (Kind × Content) and ProgressBar (Tone, bar width as a size override) — 14 sets, 86 variants — and all 16 portrait frames rebuilt so that every shell part, card, key, row and button on them is an instance. Not components: the logo mark (an inline SVG placeholder for the customer's logo, three sizes) and the generic card wrapper (its content differs per screen; a slot approach comes with P2-16). A frame with ~40 instances takes two to three minutes to build through the bridge, so frames go one or two per `figma_execute` call.
 
 ## Icon export
 

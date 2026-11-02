@@ -13,6 +13,14 @@ import { renderTitleBar } from '../shell/TitleBar.js';
 import { renderToast } from '../shell/Toast.js';
 import { renderModal } from '../shell/ModalHost.js';
 import { renderSheet } from '../shell/SheetHost.js';
+import { renderStartButton, renderStatePill } from './HomeScreen.js';
+import { renderProfileRow } from './LoginScreen.js';
+import { renderListRow } from './UserScreen.js';
+import { renderProgressBar } from './StartupScreen.js';
+import { renderButton } from '../components/Button.js';
+import { renderKey, renderNumpadKey } from '../components/Keyboard.js';
+import { icon } from '../components/Icon.js';
+import { statusOf } from '../shell/StatusBar.js';
 import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
@@ -108,6 +116,61 @@ export function render(ctx) {
   const sheets = [
     `<div class="w-[480px] grid">${renderSheet({ title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
   ];
+  const startButtons = [
+    [STATUS_STATES.ready, 0],
+    [STATUS_STATES.ready, 1],
+    [STATUS_STATES.run, 1],
+    [STATUS_STATES.alarm, 0],
+    [STATUS_STATES.alarm, 1],
+  ].map(([m, level]) => `<div class="flex">${renderStartButton(ctx, m, level)}</div>`);
+  const pills = Object.values(STATUS_STATES).map(
+    (m) => `<div class="flex">${renderStatePill(ctx, statusOf(m))}</div>`,
+  );
+  const users = ctx.store.get('users');
+  const sampleUser = (level, enabled) => ({
+    id: `sample-${level}`,
+    name: USER_BY_LEVEL[level],
+    level,
+    enabled,
+    lastPasswordChange: users[0]?.lastPasswordChange,
+  });
+  const profileRows = [];
+  for (const level of [1, 2, 3, 4])
+    for (const enabled of [true, false])
+      profileRows.push(
+        `<div class="w-[448px] grid">${renderProfileRow(ctx, sampleUser(level, enabled))}</div>`,
+      );
+  const listRows = [
+    renderListRow(
+      ctx.t('user.level'),
+      `<span class="text-level-1">${esc(`L1 · ${ctx.t('level.1')}`)}</span>`,
+    ),
+    renderListRow(ctx.t('user.autoLogoff'), esc(ctx.t('user.minutes', { n: 5 })), { last: true }),
+  ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
+  const buttons = [
+    renderButton({ label: ctx.t('user.logout'), action: 'noop', icon: 'lock' }),
+    renderButton({ label: ctx.t('home.ackWarnings'), action: 'noop' }),
+    renderButton({ label: ctx.t('home.start'), action: 'noop', tone: 'primary' }),
+    renderButton({ label: ctx.t('home.resetAlarm'), action: 'noop', tone: 'danger' }),
+  ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
+  const keys = [
+    renderKey('q'),
+    renderKey('123'),
+    renderKey('⌫'),
+    renderKey('␣'),
+    renderKey('↵', { enterIcon: 'activate' }),
+    renderKey('↵'),
+  ].map((h) => `<div class="w-9 h-[52px] grid">${h}</div>`);
+  const numpadKeys = [
+    renderNumpadKey('7', 'bg-key text-title t-param'),
+    renderNumpadKey('C', 'bg-surface-2 text-body-sm'),
+    renderNumpadKey('⌫', 'bg-surface-2', icon('back', { size: 24 })),
+    renderNumpadKey('↵', 'bg-brand text-on-brand', icon('activate', { size: 28 })),
+  ].map((h) => `<div class="w-[110px] h-[60px] grid">${h}</div>`);
+  const progress = [
+    renderProgressBar({ value: 0.45 }),
+    renderProgressBar({ value: 0.6, tone: 'error' }),
+  ].map((h) => `<div class="w-[320px] grid">${h}</div>`);
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -121,6 +184,14 @@ export function render(ctx) {
         ${section('Toast · Kind', toasts)}
         ${section('Modal · Kind × Destructive', modals)}
         ${section('Sheet', sheets)}
+        ${section('StartButton · Machine × Locked', startButtons)}
+        ${section('StatePill · State', pills)}
+        ${section('ProfileRow · Level × Enabled', profileRows)}
+        ${section('ListRow · Divider', listRows)}
+        ${section('Button · Tone × Icon', buttons)}
+        ${section('Key · Kind × Content', keys)}
+        ${section('NumpadKey · Kind × Content', numpadKeys)}
+        ${section('ProgressBar · Tone', progress)}
       </div>`,
   });
 }
