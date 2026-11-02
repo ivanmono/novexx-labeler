@@ -203,6 +203,108 @@ const STATES = [
     route: 'login',
     level: 0,
   },
+  // Phase 2 (P2-16): menus, parameter lists and editors
+  {
+    screen: 'menu',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'root-L1',
+    route: 'screen/root',
+    level: 1,
+  },
+  {
+    screen: 'menu',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'options-L3',
+    route: 'screen/options',
+    level: 3,
+  },
+  {
+    screen: 'menu',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'digitalio-L3',
+    route: 'screen/digitalio',
+    level: 3,
+  },
+  {
+    screen: 'list',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'speed-L2',
+    route: 'screen/speed',
+    level: 2,
+  },
+  {
+    screen: 'list',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'hmi-L3',
+    route: 'screen/hmi',
+    level: 3,
+  },
+  {
+    screen: 'list',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'usersettings-L3',
+    route: 'screen/usersettings',
+    level: 3,
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'select',
+    route: 'screen/speed',
+    level: 3,
+    steps: async (page) => {
+      await page.click('[data-row="118"]');
+      await page.waitForSelector('[data-sheet] .option-row');
+    },
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'numeric-error',
+    route: 'screen/label',
+    level: 2,
+    steps: async (page) => {
+      await page.click('[data-row="117"]');
+      await page.waitForSelector('[data-sheet] [data-numpad]');
+      for (const k of ['3', '0', '0', '0']) await page.click(`[data-sheet] [data-key="${k}"]`);
+      await page.click('[data-sheet] [data-key="↵"]');
+      await page.waitForFunction(
+        () => document.querySelector('[data-sheet] [data-error]')?.textContent.length > 0,
+      );
+    },
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'slider',
+    route: 'screen/speed',
+    level: 2,
+    steps: async (page) => {
+      await page.click('[data-row="122"]');
+      await page.waitForSelector('[data-sheet] [data-slider]');
+    },
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'help',
+    route: 'screen/speed',
+    level: 2,
+    steps: async (page) => {
+      await page.click('[data-help-for="122"]');
+      await page.waitForSelector('.modal [data-help-body]');
+    },
+  },
 ].map((s) => ({ ...s, name: `${s.screen} / ${s.theme} / ${s.orientation} / ${s.state}` }));
 
 mkdirSync(outDir, { recursive: true });

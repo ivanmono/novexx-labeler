@@ -460,6 +460,27 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       if (f && (Math.abs(f.width - s.w) > 0.5 || Math.abs(f.height - s.h) > 0.5))
         f.resize(Math.max(0.01, s.w), Math.max(0.01, s.h));
     }
+    // slots: content a screen puts inside the component (sheet / modal body). The instance takes
+    // the captured box, the variant's placeholder grows to the slot height and empties, and the
+    // content is built as a sibling on top of the instance.
+    if (n.slots && n.slots.length) {
+      inst.resize(n.w, n.h);
+      for (const s of n.slots) {
+        const ph = inst.findOne((x) => x.name === s.name);
+        if (ph) {
+          for (const c of ph.children || []) c.visible = false;
+          // a hugging placeholder would collapse once its children are hidden and pull the footer
+          // (the modal's OK button) up into the slot content. A resize does not stick inside an
+          // instance, so the placeholder fills the parent's axis instead: header and footer hug,
+          // the body takes the rest, which is the captured slot height by construction.
+          if (ph.parent?.layoutMode === 'VERTICAL') ph.layoutSizingVertical = 'FILL';
+          else if (ph.parent?.layoutMode === 'HORIZONTAL') ph.layoutSizingHorizontal = 'FILL';
+          else if (Math.abs(ph.height - s.node.h) > 0.5) ph.resize(ph.width, s.node.h);
+        }
+        const built = await build(s.node, parent, ox, oy);
+        if (built) built.name = `${n.set} / slot ${s.name}`;
+      }
+    }
     return inst;
   }
 
@@ -499,8 +520,11 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       const truncated = n.truncate && n.w > n.boxW + 0.5; // only where the browser itself cut the text
       if (n.lines > 1 || truncated) {
         t.textAutoResize = 'HEIGHT';
-        t.x = (n.lines > 1 ? n.x : n.boxX) - ox;
-        t.resize(n.lines > 1 ? Math.max(n.w, n.boxW || 0) : n.boxW, n.h); // multi-line: full column, Figma's Figtree is wider
+        // multi-line: the full column (Figma's Figtree is wider), anchored at the box when the box is
+        // the wider one — a right-aligned wrapped message keeps its right edge instead of overflowing
+        const wide = n.lines > 1 && (n.boxW || 0) >= n.w;
+        t.x = (n.lines > 1 && !wide ? n.x : n.boxX) - ox;
+        t.resize(n.lines > 1 ? Math.max(n.w, n.boxW || 0) : n.boxW, n.h);
         t.textAutoResize = 'HEIGHT'; // resize() resets auto-resize to NONE; multi-line must keep growing
         t.y = n.y - oy;
         if (truncated) {

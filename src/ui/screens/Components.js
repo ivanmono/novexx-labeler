@@ -179,9 +179,10 @@ export function render(ctx) {
     renderProgressBar({ value: 0.6, tone: 'error' }),
   ].map((h) => `<div class="w-[320px] grid">${h}</div>`);
   const menuTiles = [
-    tileFor(ctx, ctx.node('speed')),
+    { ...tileFor(ctx, ctx.node('speed')), disabled: false },
     { ...tileFor(ctx, ctx.node('buscard')), disabled: true, subtitle: ctx.t('menu.optionMissing') },
-    tileFor(ctx, ctx.node('ref-mio')),
+    { ...tileFor(ctx, ctx.node('ref-mio')), disabled: false },
+    { ...tileFor(ctx, ctx.node('ref-mio')), disabled: true, subtitle: ctx.t('menu.optionMissing') },
   ].map((tile) => `<div class="w-[218px] grid">${renderMenuTile(tile)}</div>`);
   const pagers = [0, 1, 2].map(
     (page) => `<div class="w-[448px] grid">${renderPager({ page, pages: 3 })}</div>`,
@@ -192,19 +193,42 @@ export function render(ctx) {
     value: '30 m/min',
     ...over,
   });
-  const paramRows = [
-    row({}),
-    row({ locked: true, needLevel: 2 }),
-    row({ readOnly: true, live: true, pid: 710, label: 'Labels dispensed', value: '1,284,563' }),
-    row({ action: true, pid: 7, label: 'Manual Feed', value: '' }),
-    row({ changed: true, value: '45 m/min' }),
-    row({ indent: 1 }),
-    row({ indent: 2 }),
-  ].map((r) => `<div class="w-[448px] grid">${renderParamRow({ ...r, last: true })}</div>`);
+  // every State × Indent × Changed with the help mark, plus one row without it (screens use Help=yes)
+  const paramRows = [];
+  for (const state of ['default', 'locked', 'readonly', 'action'])
+    for (const indent of [0, 1, 2])
+      for (const changed of [false, true])
+        paramRows.push(
+          row({
+            indent,
+            changed,
+            help: true,
+            locked: state === 'locked',
+            needLevel: state === 'locked' ? 2 : null,
+            readOnly: state === 'readonly',
+            live: state === 'readonly',
+            action: state === 'action',
+            value: state === 'action' ? '' : changed ? '45 m/min' : '30 m/min',
+          }),
+        );
+  paramRows.push(row({ help: false }));
+  const paramRowHtml = paramRows.map(
+    (r) => `<div class="w-[448px] grid">${renderParamRow({ ...r, last: true })}</div>`,
+  );
   const groupHeaders = [`<div class="w-[448px] grid">${renderGroupHeader('Information')}</div>`];
   const optionRows = [
-    renderOptionRow({ id: 119, label: ctx.t(ctx.option(119).labelKey), selected: true, last: true }),
-    renderOptionRow({ id: 120, label: ctx.t(ctx.option(120).labelKey), selected: false, last: true }),
+    renderOptionRow({
+      id: 119,
+      label: ctx.t(ctx.option(119).labelKey),
+      selected: true,
+      last: true,
+    }),
+    renderOptionRow({
+      id: 120,
+      label: ctx.t(ctx.option(120).labelKey),
+      selected: false,
+      last: true,
+    }),
   ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
   const sliderParam = ctx.param(122);
   const sliders = [30, 1, 60].map(
@@ -233,7 +257,7 @@ export function render(ctx) {
         ${section('ProgressBar · Tone', progress)}
         ${section('MenuTile · State × Link', menuTiles)}
         ${section('Pager · Position', pagers)}
-        ${section('ParamRow · State × Indent', paramRows)}
+        ${section('ParamRow · State × Indent × Changed', paramRowHtml)}
         ${section('GroupHeader', groupHeaders)}
         ${section('OptionRow · Selected', optionRows)}
         ${section('Slider · State', sliders)}

@@ -6,8 +6,7 @@
  * A value that differs from its default carries a marker. Indent 0–2 nests conditional rows
  * under their switch.
  *
- * Figma component set `ParamRow · State=default|locked|readonly|action × Indent=0|1|2`
- * (the changed-from-default marker is an overlay on any state).
+ * Figma component set `ParamRow · State=default|locked|readonly|action × Indent=0|1|2 × Help × Changed`.
  */
 import { icon } from './Icon.js';
 import { esc, cx } from '../html.js';
@@ -61,5 +60,5 @@ export function renderParamRow(row) {
   const helpBtn = help
     ? `<button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-faint shrink-0" data-action="help" data-help-for="${pid}" aria-label="Help">${icon('help', { size: 20 })}</button>`
     : '';
-  return `<div class="${cx('param-row-wrap flex items-stretch pr-1', !last && 'border-b border-line-soft')}" data-cmp="ParamRow" data-cmp-props="State=${state},Indent=${Math.min(indent, 2)},Help=${help ? 'yes' : 'no'}">${main}${helpBtn}</div>`;
+  return `<div class="${cx('param-row-wrap flex items-stretch pr-1', !last && 'border-b border-line-soft')}" data-cmp="ParamRow" data-cmp-props="State=${state},Indent=${Math.min(indent, 2)},Help=${help ? 'yes' : 'no'},Changed=${changed ? 'yes' : 'no'}">${main}${helpBtn}</div>`;
 }

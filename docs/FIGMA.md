@@ -83,9 +83,13 @@ Components are generated from the same markup as the screens, so a screen frame 
   (texts and their colours — a level-coloured value in a plain list row keeps its `colour/level/n` binding; icon
   instances swapped to `icon/24/<name>` and recoloured; layer opacities by name; sizes of named parts). The instance is sized
   like the browser box except on axes the component hugs. Everything inside a `data-cmp` root is the component's
-  own content: a Modal or Sheet body placed by a screen (an editor, a help text with a different structure) is not
-  carried into the instance yet — the body text is an override only while the structure matches the variant.
-  Editors in sheets get a slot/overlay treatment with P2-16.
+  own content, except a **slot**: an element marked `data-cmp-slot="<name>"` (the Modal and Sheet bodies) holds
+  what the screen puts there — an editor, a help text — so the serializer leaves it out of the instance and
+  captures it separately (`slots: [{ name, node }]`). The builder sizes the instance to the captured box, hides
+  the placeholder's own children and fixes its height to the slot's (a hugging placeholder would collapse and
+  pull the footer up), then builds the slot content as a sibling named `<Set> / slot <name>` on top of the
+  instance. So a sheet with a selection list is one Sheet instance plus OptionRow instances, and the main
+  component stays generic.
 - The builder finds a component only as a variant inside a **component set named after the `data-cmp` value**
   (`QuicklinkCard` → `State=filled`). Variants pulled out of their set (loose `QuicklinkCard/filled` components)
   are not found and the frame build stops with an error; recombine them (Figma: select both → Combine as variants,
@@ -104,6 +108,17 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 ### Synced so far (2026-10-30)
 
 `HMI / 03 Screens – Portrait`: home (ready-L0, running-L1, alarm-L1, alarm-overlay-L1) and login (profiles, password-numpad, password-keyboard, password-wrong) in dark; home ready-L0 and login profiles in light; all rebuilt with bound tokens on 2026-10-30 (P1-17) and again after the G1-2 tweaks DT-03 … DT-06 (48 px status bar, compact header, 116 px quicklink cards, badge on the nav line). The designer's frame `home / dark / portrait / ready-L0 - tweak` stays on the page as the reference for that review. Added the same day for the rest of G1-2: start-up (booting, still-starting, failed; booting also in light), user (L1) and stand-by (dimmed). Non-sprite inline SVGs such as the logo mark are now carried over as vectors with `var(--token)` colours resolved. `HMI / 02 Components` (2026-10-30, P1-15): StatusBar, NavBar and QuicklinkCard component sets with auto layout and bound tokens; the home, login, user and stand-by frames were rebuilt with instances of them (start-up has no shell components). 2026-11-02: TitleBar (Back × Subtitle, plus one branch-marked variant per main-menu branch), Toast (ok, reject), Modal (info, error, confirm, confirm destructive, help) and Sheet sets added; the login and user frames rebuilt with TitleBar instances. Toast, Modal and Sheet have no screen frame yet (no captured state shows them). Same day: StartButton (Machine × Locked), StatePill (State × 8), ProfileRow (Level × Enabled), ListRow (Divider), Button (Tone × Icon), Key (Kind × Content), NumpadKey (Kind × Content) and ProgressBar (Tone, bar width as a size override) — 14 sets, 86 variants — and all 16 portrait frames rebuilt so that every shell part, card, key, row and button on them is an instance. Not components: the logo mark (an inline SVG placeholder for the customer's logo, three sizes) and the generic card wrapper (its content differs per screen; a slot approach comes with P2-16). A frame with ~40 instances takes two to three minutes to build through the bridge, so frames go one or two per `figma_execute` call.
+
+2026-11-02 (P2-16): GroupHeader (State), OptionRow (Selected), Pager (Position × 3), MenuTile (State × Link, 4),
+Slider (State × 3) and ParamRow (State default · locked · readonly · action × Indent 0–2 × Changed, plus
+Indent=0 Help=no — 25 variants) added: 20 sets, 124 variants in all. Portrait dark frames: menu root-L1,
+options-L3 (disabled option tiles), digitalio-L3 (linked tiles with the cross-link sub-line); list speed-L2,
+hmi-L3, usersettings-L3 (group header, locked W4 rows); editor select (Sheet slot with OptionRow instances),
+numeric-error (Sheet slot with the field, the inline range message and 16 NumpadKey instances), slider (Sheet
+slot with a Slider instance) and help (Modal Kind=help with the help text and a Button instance in its slot).
+The slider thumb is a CSS pseudo-element and is not captured; the track and the fill are. A list frame with
+13 rows (~40 instances) runs past the 300 s bridge timeout but finishes in Figma — check `hmi.generated` and
+the instance count instead of retrying.
 
 ## Icon export
 

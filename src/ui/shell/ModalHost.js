@@ -19,7 +19,7 @@ export function renderModal({ kind = 'info', title, body = '', destructive = fal
           <span class="${tone}">${icon(iconName, { size: 32 })}</span>
           <h2 id="modal-title" class="text-title font-bold leading-tight flex-1 min-w-0 truncate">${esc(title ?? t(kind === 'error' ? 'dialog.errorTitle' : isConfirm ? 'dialog.confirmTitle' : 'dialog.infoTitle'))}</h2>
         </div>
-        <div class="modal__body px-5 pb-4 text-body text-text ${scroll ? 'scroll-y' : ''} min-h-0">${body}
+        <div class="modal__body px-5 pb-4 text-body text-text ${scroll ? 'scroll-y' : ''} min-h-0" data-cmp-slot="body">${body}
           ${destructive ? `<p class="mt-3 text-label text-status-error-ink font-semibold">${esc(t('dialog.destructiveHint'))}</p>` : ''}
         </div>
         <div class="flex gap-3 px-5 pb-5">

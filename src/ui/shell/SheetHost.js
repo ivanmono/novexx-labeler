@@ -19,7 +19,7 @@ export function renderSheet({ title, body = '', closeLabel }) {
           <h2 class="text-body-lg font-semibold truncate flex-1 min-w-0">${esc(title ?? '')}</h2>
           <button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-chrome -mr-2" data-action="close" aria-label="${esc(closeLabel ?? t('action.close'))}">${icon('plus', { size: 28, class: 'rotate-45' })}</button>
         </div>
-        <div class="sheet__body px-4 pb-4 min-h-0 scroll-y" data-sheet-body>${body}</div>
+        <div class="sheet__body px-4 pb-4 min-h-0 scroll-y" data-sheet-body data-cmp-slot="body">${body}</div>
       </div>
     </section>
   </div>`;

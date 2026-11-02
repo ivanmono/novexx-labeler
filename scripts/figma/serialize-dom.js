@@ -554,10 +554,21 @@
 
     // a component root on a screen → an instance of the Figma variant, with text / icon / opacity
     // overrides in DOM order; the full subtree stays attached as fallback when the set is missing
+    // inside a component on a screen, a slot (`data-cmp-slot`) is the screen's content, not the
+    // component's: it is left out of the variant walk and captured separately below
+    if (o.mode === 'screen' && o.inCmp && el.hasAttribute('data-cmp-slot')) return;
     if (o.mode === 'screen' && el.dataset.cmp && !o.inCmp) {
       const sub = [];
       walk(el, base, sub, { ...o, full: true, inCmp: true });
       const root = sub[0];
+      const slots = [...el.querySelectorAll('[data-cmp-slot]')]
+        .filter((s) => s.parentElement.closest('[data-cmp]') === el)
+        .map((s) => {
+          const got = [];
+          walk(s, base, got, { ...o, inCmp: false, slotRoot: s });
+          return got[0] ? { name: nameOf(s), node: got[0] } : null;
+        })
+        .filter(Boolean);
       if (root) {
         out.push({
           ...root,
@@ -583,6 +594,7 @@
           sizes: collect(root, 'frame')
             .filter((f) => f.part)
             .map((f) => ({ name: f.name, w: f.w, h: f.h })),
+          slots,
         });
       }
       return;
@@ -633,6 +645,7 @@
       /hidden|auto|scroll|clip/.test(cs.overflow) || /hidden|auto|scroll/.test(cs.overflowY);
     const emit =
       o.full ||
+      el === o.slotRoot ||
       paint.fills.length ||
       paint.border ||
       paint.shadow ||
