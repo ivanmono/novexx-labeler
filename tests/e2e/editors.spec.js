@@ -57,7 +57,7 @@ test.describe('parameter editors (P2-05 … P2-10)', () => {
     await open(page, 'screen/hmi', { level: 3 });
     await page.locator('[data-row="613"]').click(); // stand-by timer → slider
     await expect(page.locator('[data-sheet] [data-slider]')).toBeVisible();
-    await page.locator('[data-sheet] [data-action="close"]').first().click();
+    await page.locator('[data-sheet] button[data-action="close"]').click();
     await open(page, 'screen/start', { level: 3 });
     await page.locator('[data-row="145"]').click(); // start delay time, integer 0–10000
     const sheet = page.locator('[data-sheet]');
