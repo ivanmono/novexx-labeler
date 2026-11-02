@@ -10,7 +10,7 @@ Sources: docx = Frontend_Design_Requirements_Labeller_HMI_v1.6; Excel = Paramete
 |---|---|---|---|---|---|
 | 1 | Type of IPAddress (108), SubnetMask (109), Gateway_Address (110) is "?" | Excel rows 23-25; CD checks | String with a dotted-decimal IPv4 control (`ip`), numeric keypad | P0-03, P2-13 | open |
 | 2 | SubnetMask default "AA:AA:AA:AA" with alphabetical keyboard | Excel row 24 | Copy error; default 255.255.255.0, same control as 108/110 | P0-03 | open |
-| 3 | Info_Time (700) and Info_Date (701) are Strings with a numeric keypad; §7.2 has no date/time control | Excel rows 303-304; docx §7.2 | Dedicated time and date picker sheets | P2-13 | open |
+| 3 | Info_Time (700) and Info_Date (701) are Strings with a numeric keypad; §7.2 has no date/time control | Excel rows 303-304; docx §7.2 | Dedicated time and date picker sheets: stepper columns hh : mm and dd . mm . yyyy, wrap except the year, impossible dates explained inline, "Now" from the device clock, seconds not edited (built in P2-13) | P2-13 | open |
 | 4 | AppAlarm (323) colour "#fffff" is a 5-digit hex | Excel; CD checks | Dropped; colours come from tokens | P0-03 | open |
 | 5 | HMI_Logo_Selection (608) Val = 502 (a language option) | Excel | Copy error; current value 609 (NOVEXX logo) | P0-03 | open |
 | 6 | Conditions of 273/274 use AND between two values of one selection ({269=271}&{269=272}) | Excel | Meant as OR: {269=271};{269=272} | P0-03 | open |

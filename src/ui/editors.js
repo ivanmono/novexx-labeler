@@ -9,6 +9,7 @@ import { openNumericKeypad } from './components/NumericKeypad.js';
 import { openAlphaKeyboard } from './components/AlphaKeyboard.js';
 import { openSlider } from './components/Slider.js';
 import { openQuicklinkPicker } from './components/QuicklinkPicker.js';
+import { openDateTimePicker } from './components/DateTimePicker.js';
 
 /** Height left under a row for the sheet, in portrait; null when the sheet docks sideways. */
 export function sheetHeightBelow(rowEl, mainEl, isLandscape, { gap = 8, min = 320 } = {}) {
@@ -44,6 +45,9 @@ export function openEditor(ctx, param, rowEl = null) {
       return withHeight(() => openNumericKeypad(ctx, param, { onConfirm: set }));
     case 'slider':
       return withHeight(() => openSlider(ctx, param, { onChange: set }));
+    case 'time':
+    case 'date':
+      return withHeight(() => openDateTimePicker(ctx, param, { onConfirm: set }));
     case 'text':
     case 'ip':
       return withHeight(() => openAlphaKeyboard(ctx, param, { onConfirm: set }));

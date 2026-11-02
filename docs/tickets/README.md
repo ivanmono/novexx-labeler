@@ -72,7 +72,7 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 | [P2-10](P2-10.md) | Action buttons with confirmation                         | S    | partly   |
 | [P2-11](P2-11.md) | Help modal                                               | S    | done     |
 | [P2-12](P2-12.md) | Favourites                                               | M    | done     |
-| [P2-13](P2-13.md) | HMI screen specifics                                     | M    | todo   |
+| [P2-13](P2-13.md) | HMI screen specifics                                     | M    | done     |
 | [P2-14](P2-14.md) | Edit-behaviour checklist (§7.3)                          | S    | todo   |
 | [P2-15](P2-15.md) | Phase 2 tests                                            | M    | todo   |
 | [P2-16](P2-16.md) | Figma: parameter components and screens                  | L    | done     |

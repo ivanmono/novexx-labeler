@@ -25,6 +25,8 @@ export function formatParamValue(ctx, param, value = ctx.store.getParam(param.id
       const decimals = param.type === 'Float' ? (Number.isInteger(Number(value)) ? 0 : 1) : 0;
       return `${fmtNumber(value, decimals)}${param.unit ? ` ${param.unit}` : ''}`;
     }
+    case 'time':
+      return String(value).slice(0, 5); // stored hh:mm:00, edited and shown as hh:mm
     case 'display':
     case 'state': {
       if (typeof value === 'number')

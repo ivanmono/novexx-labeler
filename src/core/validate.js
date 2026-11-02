@@ -52,3 +52,42 @@ export function validateText(param, raw) {
   if (s.length > max) return { ok: false, error: 'max' };
   return { ok: true, value: s };
 }
+
+/** "16:20:00" or "16:20" → { h, m }; null when it does not parse. */
+export function parseTime(raw) {
+  const m = /^(\d{1,2}):(\d{2})(?::\d{2})?$/.exec(String(raw ?? '').trim());
+  return m ? { h: Number(m[1]), m: Number(m[2]) } : null;
+}
+
+/** Info_Time is stored with seconds; the picker edits hours and minutes only. */
+export function formatTime({ h, m }) {
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
+}
+
+/** "01.01.2027" or "1.1.2027" → { d, m, y }; null when it does not parse. */
+export function parseDate(raw) {
+  const m = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(String(raw ?? '').trim());
+  return m ? { d: Number(m[1]), m: Number(m[2]), y: Number(m[3]) } : null;
+}
+
+export function formatDate({ d, m, y }) {
+  return `${String(d).padStart(2, '0')}.${String(m).padStart(2, '0')}.${y}`;
+}
+
+export function daysInMonth(m, y) {
+  return new Date(y, m, 0).getDate();
+}
+
+/**
+ * Date against the calendar and the parameter range (Info_Date 701: 1.1.2027 – 31.12.2099).
+ * @returns {{ ok: boolean, value?: string, error?: 'day'|'min'|'max' }}
+ */
+export function validateDate(param, { d, m, y }) {
+  if (m < 1 || m > 12 || d < 1 || d > daysInMonth(m, y)) return { ok: false, error: 'day' };
+  const key = (x) => x.y * 10000 + x.m * 100 + x.d;
+  const min = parseDate(param.min);
+  const max = parseDate(param.max);
+  if (min && key({ d, m, y }) < key(min)) return { ok: false, error: 'min' };
+  if (max && key({ d, m, y }) > key(max)) return { ok: false, error: 'max' };
+  return { ok: true, value: formatDate({ d, m, y }) };
+}

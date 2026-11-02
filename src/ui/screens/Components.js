@@ -28,6 +28,7 @@ import { renderParamRow } from '../components/ParamRow.js';
 import { renderGroupHeader } from '../components/GroupHeader.js';
 import { renderOptionRow } from '../components/SelectionList.js';
 import { renderSlider } from '../components/Slider.js';
+import { renderDateTimePicker, pickerError } from '../components/DateTimePicker.js';
 import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
@@ -234,6 +235,16 @@ export function render(ctx) {
   const sliders = [30, 1, 60].map(
     (v) => `<div class="w-[448px] grid">${renderSlider(sliderParam, v)}</div>`,
   );
+  const timeParam = ctx.param(700);
+  const dateParam = ctx.param(701);
+  const pickers = [
+    [timeParam, { h: 16, m: 20 }],
+    [dateParam, { d: 1, m: 1, y: 2027 }],
+    [dateParam, { d: 31, m: 2, y: 2027 }],
+  ].map(
+    ([p, v]) =>
+      `<div class="w-[448px] grid">${renderDateTimePicker(p, v, { error: pickerError(p, v) })}</div>`,
+  );
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -261,6 +272,7 @@ export function render(ctx) {
         ${section('GroupHeader', groupHeaders)}
         ${section('OptionRow · Selected', optionRows)}
         ${section('Slider · State', sliders)}
+        ${section('DateTimePicker · Kind × State', pickers)}
       </div>`,
   });
 }

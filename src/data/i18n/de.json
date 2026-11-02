@@ -138,5 +138,15 @@
   "help.range": "Bereich {min} – {max} {unit}",
   "help.default": "Standard {v}",
   "help.access": "Lesen ab Stufe {r}, ändern ab Stufe {w}",
-  "help.placeholder": "Platzhalter, bis PID die Hilfetexte liefert (bis 600 Zeichen)."
+  "help.placeholder": "Platzhalter, bis PID die Hilfetexte liefert (bis 600 Zeichen).",
+  "picker.hour": "Stunde",
+  "picker.minute": "Minute",
+  "picker.day": "Tag",
+  "picker.month": "Monat",
+  "picker.year": "Jahr",
+  "picker.clock24": "24-Stunden-Format",
+  "picker.now": "Jetzt",
+  "picker.set": "Übernehmen",
+  "picker.noSuchDay": "Den {date} gibt es in diesem Monat nicht",
+  "picker.outOfRange": "Datum zwischen {min} und {max} wählen"
 }

@@ -138,5 +138,15 @@
   "severity.mid": "Medium",
   "severity.low": "Low",
   "time.justNow": "just now",
-  "time.minAgo": "{n} min ago"
+  "time.minAgo": "{n} min ago",
+  "picker.hour": "Hour",
+  "picker.minute": "Minute",
+  "picker.day": "Day",
+  "picker.month": "Month",
+  "picker.year": "Year",
+  "picker.clock24": "24-hour clock",
+  "picker.now": "Now",
+  "picker.set": "Set",
+  "picker.noSuchDay": "{date} does not exist in this month",
+  "picker.outOfRange": "Pick a date between {min} and {max}"
 }

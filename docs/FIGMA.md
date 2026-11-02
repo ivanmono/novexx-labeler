@@ -120,6 +120,10 @@ The slider thumb is a CSS pseudo-element and is not captured; the track and the 
 13 rows (~40 instances) runs past the 300 s bridge timeout but finishes in Figma — check `hmi.generated` and
 the instance count instead of retrying.
 
+2026-11-02 (P2-13): DateTimePicker (Kind time · date × State default · error, 3 variants, node `2073:12576`):
+22 sets, 127 variants. The builder has no `align-self` and no margins, so the `:` / `.` separators carry
+their offset to the value line as top padding (`pt-[90px]`) in the markup.
+
 ## Icon export
 
 Agent step (plan P0-04, re-done for DT-01 on 2026-10-30): export every `icon/24/*` component on `Icons v1 – 24 px` as SVG and save it to `src/assets/icons/<name>.svg`, then `npm run icons:sprite` normalises (background rects removed, stroke → `currentColor`, stroke width kept at 1.5, caps/joins as exported) and builds `sprite.svg` with `viewBox="0 0 24 24"`. Re-run when Mono adds or changes icons: regenerate the 24 px page from Icons v1 first.
