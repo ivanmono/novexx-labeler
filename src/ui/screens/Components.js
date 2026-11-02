@@ -24,6 +24,8 @@ import { statusOf } from '../shell/StatusBar.js';
 import { renderMenuTile } from '../components/MenuTile.js';
 import { renderPager } from '../components/Pager.js';
 import { tileFor } from './MenuScreen.js';
+import { renderParamRow } from '../components/ParamRow.js';
+import { renderGroupHeader } from '../components/GroupHeader.js';
 import menuTree from '../../data/menu-tree.json';
 
 const machine = (state, extra = {}) => ({
@@ -182,6 +184,22 @@ export function render(ctx) {
   const pagers = [0, 1, 2].map(
     (page) => `<div class="w-[448px] grid">${renderPager({ page, pages: 3 })}</div>`,
   );
+  const row = (over) => ({
+    pid: 122,
+    label: ctx.t('tr10'),
+    value: '30 m/min',
+    ...over,
+  });
+  const paramRows = [
+    row({}),
+    row({ locked: true, needLevel: 2 }),
+    row({ readOnly: true, live: true, pid: 710, label: 'Labels dispensed', value: '1,284,563' }),
+    row({ action: true, pid: 7, label: 'Manual Feed', value: '' }),
+    row({ changed: true, value: '45 m/min' }),
+    row({ indent: 1 }),
+    row({ indent: 2 }),
+  ].map((r) => `<div class="w-[448px] grid">${renderParamRow({ ...r, last: true })}</div>`);
+  const groupHeaders = [`<div class="w-[448px] grid">${renderGroupHeader('Information')}</div>`];
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -205,6 +223,8 @@ export function render(ctx) {
         ${section('ProgressBar · Tone', progress)}
         ${section('MenuTile · State × Link', menuTiles)}
         ${section('Pager · Position', pagers)}
+        ${section('ParamRow · State × Indent', paramRows)}
+        ${section('GroupHeader', groupHeaders)}
       </div>`,
   });
 }

@@ -117,5 +117,8 @@
   "menu.linkTo": "auch unter {path}",
   "pager.prev": "Vorherige Seite",
   "pager.next": "Nächste Seite",
-  "pager.label": "Seite {n} von {m}"
+  "pager.label": "Seite {n} von {m}",
+  "list.planned": "geplant",
+  "list.seeAlso": "Siehe auch",
+  "toast.editorPending": "Editor noch nicht verfügbar"
 }

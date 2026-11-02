@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { open, shot, hideDev } from './helpers.js';
-import tree from '../../src/data/menu-tree.json' with { type: 'json' };
+import { createRequire } from 'node:module';
+
+const tree = createRequire(import.meta.url)('../../src/data/menu-tree.json');
 
 const menus = [];
 (function walk(n) {
