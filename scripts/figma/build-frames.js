@@ -343,13 +343,15 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       } else {
         // per-side borders → thin rectangles (Figma has per-side weights only on frames with
         // uniform colour, and CSS mixes colours), keep it simple and visible
+        // each side stretches along its edge, so an instance wider than its master (a 640 px
+        // landscape title bar from a 480 px component) keeps its divider full width
         const sides = [
-          [t, 0, 0, n.w, t, n.border.colors[0], tokens[0]],
-          [r, n.w - r, 0, r, n.h, n.border.colors[1], tokens[1]],
-          [b, 0, n.h - b, n.w, b, n.border.colors[2], tokens[2]],
-          [l, 0, 0, l, n.h, n.border.colors[3], tokens[3]],
+          [t, 0, 0, n.w, t, n.border.colors[0], tokens[0], { horizontal: 'STRETCH', vertical: 'MIN' }],
+          [r, n.w - r, 0, r, n.h, n.border.colors[1], tokens[1], { horizontal: 'MAX', vertical: 'STRETCH' }],
+          [b, 0, n.h - b, n.w, b, n.border.colors[2], tokens[2], { horizontal: 'STRETCH', vertical: 'MAX' }],
+          [l, 0, 0, l, n.h, n.border.colors[3], tokens[3], { horizontal: 'MIN', vertical: 'STRETCH' }],
         ];
-        for (const [wgt, x, y, w, h, col, token] of sides) {
+        for (const [wgt, x, y, w, h, col, token, constraints] of sides) {
           if (!wgt) continue;
           const c = parseColor(col);
           if (!c || c.a === 0) continue;
@@ -361,6 +363,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
           rct.y = y;
           rct.resize(Math.max(0.01, w), Math.max(0.01, h));
           rct.fills = [boundSolid(c, token)];
+          rct.constraints = constraints;
         }
       }
     }
@@ -388,6 +391,23 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     inst.name = `${n.set} / ${variantName(n.props)}`;
     inst.x = n.x - ox;
     inst.y = n.y - oy;
+    // a component placed narrower or wider than its master (the portrait-sized Sheet and Slider in
+    // a 384 px landscape sheet): the layers that span the master's full inner width are collected
+    // now, at master size, and set to fill once the instance has the captured width
+    const reflow = [];
+    if (Math.abs(inst.width - n.w) > 1) {
+      const walk = (p) => {
+        if (!('children' in p) || !p.layoutMode || p.layoutMode === 'NONE') return;
+        const inner = p.width - p.paddingLeft - p.paddingRight;
+        for (const c of p.children) {
+          if (c.layoutPositioning === 'ABSOLUTE') continue;
+          if (Math.abs(c.width - inner) < 0.5 && !(c.type === 'TEXT' && c.textAutoResize === 'WIDTH_AND_HEIGHT'))
+            reflow.push(c);
+          if (c.type !== 'INSTANCE') walk(c);
+        }
+      };
+      walk(inst);
+    }
     // size like the browser box, but keep the component's hug axes (they follow the overrides)
     const sizing = (horizontal) =>
       inst.layoutMode === 'NONE'
@@ -403,6 +423,13 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       inst.resize(dw ? n.w : inst.width, dh ? n.h : inst.height);
       if (hugW) inst.layoutSizingHorizontal = 'HUG';
       if (hugH) inst.layoutSizingVertical = 'HUG';
+    }
+    if (reflow.length) {
+      if (hugW) {
+        inst.layoutSizingHorizontal = 'FIXED';
+        inst.resize(n.w, inst.height);
+      }
+      for (const c of reflow) c.layoutSizingHorizontal = 'FILL';
     }
     // overrides, matched in DOM order (the variant was built from the same markup);
     // one Promise.all per kind: sequential awaits of loadFontAsync / getMainComponentAsync hang the bridge
@@ -450,10 +477,14 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         }
       }
     }
+    // layer opacities by name: several layers can share a name (the steppers of the date picker),
+    // so an override is applied only when no layer of that name has the opacity already
     for (const o of n.opacities || []) {
-      const t = inst.findOne((x) => x.name === o.name);
-      if (t) t.opacity = o.opacity;
+      const all = inst.findAll((x) => x.name === o.name);
+      if (all.length && !all.some((x) => Math.abs(x.opacity - o.opacity) < 0.01)) all[0].opacity = o.opacity;
     }
+    // the instance's own opacity (a disabled Set button, a dimmed start button)
+    inst.opacity = n.opacity ?? 1;
     // size overrides for named parts (`data-cmp-part`, e.g. the filled bar of a progress bar)
     for (const s of n.sizes || []) {
       const f = inst.findOne((x) => x.name === s.name);
@@ -504,6 +535,15 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
           n.font.align
         ] || 'LEFT';
       t.textAlignHorizontal = align;
+      if (n.vertical) {
+        // writing-mode text: one line, rotated into the captured box (Figma rotates counter-clockwise)
+        t.textAutoResize = 'WIDTH_AND_HEIGHT';
+        t.rotation = n.vertical === 'up' ? 90 : -90;
+        t.x = (n.vertical === 'up' ? n.x : n.x + n.w) - ox;
+        t.y = (n.vertical === 'up' ? n.y + t.width : n.y) - oy;
+        t.opacity = n.opacity ?? 1;
+        return t;
+      }
       if (n.maxLines && !(L && L.hugW)) {
         // clamped text (line-clamp-n, or a truncating line in a component): fixed box width, auto
         // height up to n lines, ellipsis — overrides wrap and truncate like the browser

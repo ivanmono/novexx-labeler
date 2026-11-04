@@ -230,6 +230,23 @@
   [data-orientation^='landscape'] .nav-bar__line {
     background-image: none;
   }
+  /* user name under the badge: one line with an ellipsis in portrait; two lines in the 80 px
+     landscape rail, broken after the dot of "m.mustermann" (a zero-width space, so the name stays one text node for
+     Figma) before anywhere else */
+  .nav-bar__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [data-orientation^='landscape'] .nav-bar__name {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 11px;
+    letter-spacing: 0;
+  }
 
   /* ---- slider (P2-09): brand track up to the thumb, 32 px thumb for gloves --------- */
   .slider__input {

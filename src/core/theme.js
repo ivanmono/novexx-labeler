@@ -44,6 +44,10 @@ export function setOrientation(o) {
   root().dataset.orientation = v;
   emit('orientation', v);
 }
+/** The layout an orientation uses: the 180° variants share their base layout (docx §3.1). */
+export function layoutOf(o = getOrientation()) {
+  return o.replace(/-flipped$/, '');
+}
 export function isLandscape(o = getOrientation()) {
   return o.startsWith('landscape');
 }

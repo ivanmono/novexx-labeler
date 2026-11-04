@@ -10,6 +10,10 @@
 @import './tokens.css';
 @import './components.css';
 
+/* layout by the HMI orientation (data-orientation on <html>), not by the viewport: the dev panel and
+   HMI_Orientation (601) switch it independently of the window */
+@custom-variant land (&:where([data-orientation^='landscape'] *));
+
 /* Tailwind v4 scans source files automatically; the dev panel and styleguide build
    class names dynamically from these lists, so register them explicitly. */
 @source inline('{bg,text,border}-{bg,surface,surface-2,line,line-soft,overlay,text,muted,faint,chrome,brand,brand-hi,brand-deep,on-brand,key,key-pressed}');

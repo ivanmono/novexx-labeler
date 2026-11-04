@@ -26,9 +26,9 @@ export function renderNumericField(param, { entry = '', current, error = null } 
         <span class="flex-1 t-param text-title truncate ${entry === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
         ${unit}
       </div></div>
-      <div class="flex items-center justify-between gap-3 px-1 min-h-5">
+      <div class="flex flex-col gap-1 px-1 min-h-10">
         <span class="t-caption text-muted truncate">${esc(hint)}</span>
-        <span class="text-label text-status-error-ink font-semibold text-right" data-error aria-live="polite">${esc(error ?? '')}</span>
+        <span class="text-label text-status-error-ink font-semibold" data-error aria-live="polite">${esc(error ?? '')}</span>
       </div>
     </div>`;
 }

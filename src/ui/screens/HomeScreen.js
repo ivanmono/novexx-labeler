@@ -75,21 +75,21 @@ export function render(ctx) {
     const nErr = m.errors.length;
     const nWarn = m.warnings.length;
     return `
-      <div class="home flex-1 min-h-0 flex flex-col select-none" data-home data-state="${st.key}">
-        <div class="home__top flex items-center justify-between px-6 py-2">
+      <div class="home flex-1 min-h-0 flex flex-col land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:grid-rows-[auto_minmax(0,1fr)_auto] select-none" data-home data-state="${st.key}">
+        <div class="home__top flex items-center justify-between px-6 py-2 land:col-span-2">
           ${renderLogo(ctx, { size: 110, variant: 'word' })}
           <div class="text-right min-w-0 flex flex-col gap-1"><div class="text-body font-semibold truncate">${esc(name)}</div><div class="text-label text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
         </div>
-        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-8 py-2">
+        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-8 land:gap-5 py-2">
           ${renderStartButton(ctx, m, ctx.level)}
           ${renderStatePill(ctx, st)}
           ${ctx.level < 1 ? `<div class="text-label text-muted flex items-center gap-1">${icon('lock', { size: 18 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
         </div>
-        <div class="home__quick grid grid-cols-2 gap-3 px-4 pb-8" data-quicklinks>${quickLinks()}</div>
+        <div class="home__quick grid grid-cols-2 gap-3 px-4 pb-8 land:pl-0 land:pb-4 land:content-center" data-quicklinks>${quickLinks()}</div>
         ${
           nErr || nWarn
             ? `
-        <button type="button" class="${cx('home__banner pressable flex items-center gap-3 px-4 min-h-touch-row border-t text-body-sm font-semibold', nErr ? 'bg-status-error/15 border-status-error/40 text-status-error-ink' : 'bg-status-warning/15 border-status-warning/40 text-status-warning-ink')}" data-action="errors">
+        <button type="button" class="${cx('home__banner land:col-span-2 pressable flex items-center gap-3 px-4 min-h-touch-row border-t text-body-sm font-semibold', nErr ? 'bg-status-error/15 border-status-error/40 text-status-error-ink' : 'bg-status-warning/15 border-status-warning/40 text-status-warning-ink')}" data-action="errors">
           ${icon('alarm', { size: 24 })}<span class="flex-1 text-left">${esc([nErr ? ctx.t('home.errors', { n: nErr }) : '', nWarn ? ctx.t('home.warnings', { n: nWarn }) : ''].filter(Boolean).join(' · '))}</span><span class="t-caption">${esc(ctx.t('home.showErrors'))}</span>
         </button>`
             : ''

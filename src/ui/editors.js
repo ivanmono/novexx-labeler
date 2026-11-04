@@ -17,6 +17,9 @@ export function sheetHeightBelow(rowEl, mainEl, isLandscape, { gap = 8, min = 32
   const main = mainEl.getBoundingClientRect();
   let row = rowEl.getBoundingClientRect();
   if (main.bottom - row.bottom - gap < min) {
+    // a short list cannot scroll its last rows up: pad it while the sheet is open (the caller resets)
+    const scroller = rowEl.closest('.scroll-y');
+    if (scroller) scroller.style.paddingBottom = `${min}px`;
     rowEl.scrollIntoView({ block: 'start' });
     row = rowEl.getBoundingClientRect();
   }
@@ -26,12 +29,20 @@ export function sheetHeightBelow(rowEl, mainEl, isLandscape, { gap = 8, min = 32
 export function openEditor(ctx, param, rowEl = null) {
   const set = (v) => ctx.setParam(param.id, v);
   const landscape = (document.documentElement.dataset.orientation ?? '').startsWith('landscape');
-  const maxHeight = sheetHeightBelow(rowEl, ctx.shell.main, landscape);
   const withHeight = (open) => {
-    // the editors open the sheet themselves; the cap is applied right after
+    // the editors open the sheet themselves; the cap is applied right after, from the content's
+    // own height (a keyboard needs ~420 px, a short list less), so nothing ends under the nav bar
     const p = open();
-    if (maxHeight && ctx.sheet.el)
-      ctx.sheet.el.querySelector('.sheet__panel').style.maxHeight = maxHeight;
+    const panel = ctx.sheet.el?.querySelector('.sheet__panel');
+    if (panel && !landscape) {
+      const body = panel.querySelector('[data-sheet-body]');
+      const natural = body.offsetTop + body.scrollHeight;
+      const min = Math.min(480, Math.max(320, Math.ceil(natural)));
+      const maxHeight = sheetHeightBelow(rowEl, ctx.shell.main, landscape, { min });
+      if (maxHeight) panel.style.maxHeight = maxHeight;
+      const scroller = rowEl?.closest('.scroll-y');
+      if (scroller?.style.paddingBottom) p.finally(() => (scroller.style.paddingBottom = ''));
+    }
     return p;
   };
   if (param.unit === 'ParamID')

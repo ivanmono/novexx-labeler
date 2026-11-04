@@ -68,14 +68,36 @@ export function render(ctx) {
   const getParam = ctx.store.getParam;
   const statusBars = Object.values(STATUS_STATES).map(
     (m) =>
-      `<div class="w-[480px] h-status grid [grid-template-areas:'status']">${renderStatusBar({ machine: m, getParam, session: {} })}</div>`,
+      `<div class="w-[480px] h-status grid [grid-template-areas:'status']">${renderStatusBar({ machine: m, getParam, session: {}, orientation: 'portrait' })}</div>`,
   );
+  // landscape rails: the wrapper carries data-orientation, so the landscape CSS applies to it alone
+  const rails = (o, area, html) =>
+    `<div data-orientation="${o}" class="w-bar h-[480px] grid [grid-template-areas:'${area}']">${html}</div>`;
+  const railRow = (items) => `<div class="flex flex-wrap gap-4">${items.join('')}</div>`;
+  for (const o of ['landscape-lh', 'landscape-rh'])
+    statusBars.push(
+      railRow(
+        Object.values(STATUS_STATES).map((m) =>
+          rails(o, 'status', renderStatusBar({ machine: m, getParam, session: {}, orientation: o })),
+        ),
+      ),
+    );
   const navBars = [];
   for (const level of [0, 1, 2, 3, 4])
     for (const line of Object.keys(LINE_MACHINE))
       navBars.push(
-        `<div class="w-[480px] h-bar grid [grid-template-areas:'nav'] mt-5">${renderNavBar({ level, userName: USER_BY_LEVEL[level], canBack: true, machine: LINE_MACHINE[line] })}</div>`,
+        `<div class="w-[480px] h-bar grid [grid-template-areas:'nav'] mt-5">${renderNavBar({ level, userName: USER_BY_LEVEL[level], canBack: true, machine: LINE_MACHINE[line], orientation: 'portrait' })}</div>`,
       );
+  for (const o of ['landscape-lh', 'landscape-rh'])
+    navBars.push(
+      railRow(
+        [0, 1, 2, 3, 4].flatMap((level) =>
+          Object.keys(LINE_MACHINE).map((line) =>
+            rails(o, 'nav', renderNavBar({ level, userName: USER_BY_LEVEL[level], canBack: true, machine: LINE_MACHINE[line], orientation: o })),
+          ),
+        ),
+      ),
+    );
   const quickParam = ctx.param(Number(getParam(614)) || 122);
   const quickCards = [
     `<div class="w-[218px] grid">${renderQuickCard(ctx, quickParam)}</div>`,
@@ -159,6 +181,7 @@ export function render(ctx) {
     renderButton({ label: ctx.t('user.logout'), action: 'noop', icon: 'lock' }),
     renderButton({ label: ctx.t('home.ackWarnings'), action: 'noop' }),
     renderButton({ label: ctx.t('home.start'), action: 'noop', tone: 'primary' }),
+    renderButton({ label: ctx.t('picker.set'), action: 'noop', tone: 'primary', icon: 'activate' }),
     renderButton({ label: ctx.t('home.resetAlarm'), action: 'noop', tone: 'danger' }),
   ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
   const keys = [

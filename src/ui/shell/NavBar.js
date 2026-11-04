@@ -4,6 +4,7 @@
  * A thin gradient line on the inner edge carries the machine state colour (first draft).
  */
 import { icon } from '../components/Icon.js';
+import { layoutOf, onDisplayChange } from '../../core/theme.js';
 import { t } from '../../core/i18n.js';
 import { esc, el, onAction } from '../html.js';
 import { statusOf } from './StatusBar.js';
@@ -19,18 +20,18 @@ const LINE = {
   booting: 'standby',
 };
 
-export function renderNavBar({ level = 0, userName = null, canBack = true, machine }) {
+export function renderNavBar({ level = 0, userName = null, canBack = true, machine, orientation = layoutOf() }) {
   const st = statusOf(machine);
   const lvl = Math.max(0, Math.min(4, Number(level) || 0));
   return `
-  <nav class="hmi__nav nav-bar relative flex items-stretch justify-between select-none" data-level="${lvl}" data-cmp="NavBar" data-cmp-props="Level=${lvl},Line=${LINE[st.key] ?? 'standby'}" aria-label="Navigation">
+  <nav class="hmi__nav nav-bar relative flex items-stretch justify-between select-none" data-level="${lvl}" data-cmp="NavBar" data-cmp-props="Level=${lvl},Line=${LINE[st.key] ?? 'standby'},Orientation=${orientation}" aria-label="Navigation">
     <span class="nav-bar__line absolute" style="background:var(--hmi-gradient-${LINE[st.key] ?? 'standby'})" aria-hidden="true"></span>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1" data-action="back" ${canBack ? '' : 'aria-disabled="true"'}>
       ${icon('back', { size: 32 })}<span class="t-caption">${esc(t('nav.back'))}</span>
     </button>
     <button type="button" class="nav-bar__user pressable flex flex-col items-center justify-center gap-0.5 flex-1" data-action="user" aria-label="${esc(t(`level.${lvl}`))}">
       <span class="nav-bar__badge grid place-items-center size-11 rounded-pill text-body-sm font-bold text-black bg-level-${lvl}" data-badge>${esc(t(`level.short.${lvl}`))}</span>
-      <span class="nav-bar__name t-caption text-level-${lvl} truncate max-w-full px-1 text-center">${esc(userName ?? t(`level.${lvl}`))}</span>
+      <span class="nav-bar__name t-caption text-level-${lvl} max-w-full px-1 land:px-0 text-center">${esc(userName ?? t(`level.${lvl}`)).replace('.', '.\u200b')}</span>
     </button>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1 ${lvl === 0 ? 'opacity-60' : ''}" data-action="menu">
       ${icon('menu', { size: 32 })}<span class="t-caption">${esc(t('nav.menu'))}</span>
@@ -61,6 +62,7 @@ export function mountNavBar(host, ctx) {
     ctx.store.subscribe((s) => statusOf(s.machine).key, rerender),
     ctx.onRoute(rerender),
     ctx.onLanguage(rerender),
+    onDisplayChange((key) => key === 'orientation' && rerender()),
   ];
   return {
     get el() {

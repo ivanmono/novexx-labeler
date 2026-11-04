@@ -68,3 +68,35 @@ Change: in portrait the level badge sits 17 px above the nav bar's top edge, on 
 Where: `src/styles/components.css` (.nav-bar__badge, .nav-bar__name), `src/ui/shell/NavBar.js`, `src/ui/screens/HomeScreen.js`, `src/ui/screens/LoginScreen.js`
 Before → after: home and login frames before/after
 Status: both
+
+## DT-07 · Landscape home in two columns (2026-11-04, presentation pass)
+
+Source: chat — polish the 12 presentation screens in all three layouts
+Change: at 480 px height the stacked home (header, start button, pill, login hint, 2 × 2 quicklinks) needed ~510 px and the cards covered the "Log in to operate the machine" hint. Landscape now uses a grid: header across both columns, start button + pill + hint on the left (2 fr, gap 20 px), the quicklink cards on the right (3 fr, vertically centred, 16 px bottom padding), the error banner across both. Portrait unchanged. New Tailwind variant `land:` keyed on `data-orientation`, not the viewport.
+Where: `src/styles/app.css` (`@custom-variant land`), `src/ui/screens/HomeScreen.js`
+Before → after: `test-results/presentation/home-dark-landscape-lh-ready-l0.png` before/after
+Status: code (Figma landscape frames built from it)
+
+## DT-08 · User name on two lines in the landscape rail (2026-11-04, presentation pass)
+
+Source: chat — presentation pass
+Change: in the 80 px landscape nav rail the user name under the level badge was cut to "M.MUST…", "NOT LO…". It now wraps onto two lines, breaking after the dot (a zero-width space) and anywhere only as a last resort, at 11 px with no tracking and no side padding; every seed name fits whole. Portrait keeps one line with an ellipsis.
+Where: `src/ui/shell/NavBar.js`, `src/styles/components.css` (.nav-bar__name)
+Before → after: landscape presentation captures before/after
+Status: code (Figma landscape frames built from it; the NavBar component set itself is portrait)
+
+## DT-09 · Editor sheet sized by its content in portrait (2026-11-04, presentation pass)
+
+Source: chat — presentation pass
+Change: the portrait sheet was capped at a flat 320 px below the edited row, which put the bottom two rows of the text keyboard under the nav bar. The cap now follows the sheet's own content height (320–480 px); the list scrolls the edited row up to make room and, when the list is too short to scroll (Device Name near the end of HMI), gets temporary bottom padding while the sheet is open, so the row stays visible above the sheet (docx §7.2).
+Where: `src/ui/editors.js`
+Before → after: `editor-dark-portrait-text.png` before/after
+Status: code
+
+## DT-10 · Range hint and error on separate lines in the numeric field; shorter date hint (2026-11-04, presentation pass)
+
+Source: chat — presentation pass
+Change: numeric keypad: "Min · Max · Default" and the out-of-range message shared one line, so the hint truncated to "DEFAU…" and the message wrapped; the error now has its own line under the hint. Date picker: the hint reads "1.1.2027 – 31.12.2099 · Default 01.01.2027" (was "Min … · Max … · Default …") and is centred, so it no longer wraps left-aligned in the 60 % landscape sheet.
+Where: `src/ui/components/NumericKeypad.js`, `src/ui/components/DateTimePicker.js`
+Before → after: `editor-*-numeric-error.png`, `editor-*-date-error.png` before/after
+Status: code (NumericKeypad has no own component set; DateTimePicker set refreshed)

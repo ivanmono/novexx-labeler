@@ -305,7 +305,76 @@ const STATES = [
       await page.waitForSelector('.modal [data-help-body]');
     },
   },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'language',
+    route: 'screen/hmi',
+    level: 1,
+    steps: async (page) => {
+      await page.click('[data-row="500"]');
+      await page.waitForSelector('[data-sheet] .option-row');
+    },
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'text',
+    route: 'screen/hmi',
+    level: 3,
+    steps: async (page) => {
+      await page.click('[data-row="600"]');
+      await page.waitForSelector('[data-sheet] [data-keyboard]');
+    },
+  },
+  {
+    screen: 'editor',
+    theme: 'dark',
+    orientation: 'portrait',
+    state: 'date-error',
+    route: 'screen/hmi',
+    level: 2,
+    steps: async (page) => {
+      await page.click('[data-row="701"]');
+      await page.waitForSelector('[data-sheet] [data-picker]');
+      await page.click('[data-sheet] [data-field="d"] [data-dir="-1"]');
+      await page.click('[data-sheet] [data-field="m"] [data-dir="1"]');
+      await page.waitForFunction(
+        () => document.querySelector('[data-sheet] [data-error]')?.textContent.length > 0,
+      );
+    },
+  },
 ].map((s) => ({ ...s, name: `${s.screen} / ${s.theme} / ${s.orientation} / ${s.state}` }));
+
+// --presentation: the 12 screens picked for the client presentation (2026-11-06), dark, in the
+// three layouts (the 180° variants are the same layouts rotated, docx §3.1)
+const PRESENTATION = [
+  'startup/booting',
+  'home/ready-L0',
+  'home/alarm-overlay-L1',
+  'login/password-numpad',
+  'menu/root-L1',
+  'menu/options-L3',
+  'list/hmi-L3',
+  'editor/language',
+  'editor/numeric-error',
+  'editor/text',
+  'editor/slider',
+  'editor/date-error',
+];
+if (args.includes('--presentation')) {
+  const picked = PRESENTATION.map((k) => {
+    const st = STATES.find((x) => `${x.screen}/${x.state}` === k && x.theme === 'dark');
+    if (!st) throw new Error(`no state ${k}`);
+    return st;
+  });
+  STATES.length = 0;
+  for (const orientation of ['portrait', 'landscape-lh', 'landscape-rh'])
+    for (const st of picked)
+      STATES.push({ ...st, orientation, name: `${st.screen} / dark / ${orientation} / ${st.state}` });
+}
 
 mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch();

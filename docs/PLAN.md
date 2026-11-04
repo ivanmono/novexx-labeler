@@ -1,23 +1,27 @@
 # Plan — Labeller HMI functional app with dummy data
 
-## Where we are (2026-11-02)
+## Where we are (2026-11-04)
 
 Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
 - **Phase 2 in progress.** Done: P2-01 … P2-09, P2-11 … P2-13, P2-16. Partly: P2-10 (confirmation in the
   rows works; a dedicated pressed action-button variant is open). Open: **P2-14** (§7.3 checklist),
   P2-15 (Phase 2 tests; most flows already have e2e specs under `tests/e2e/`).
+- **Presentation 2026-11-06:** 12 screens polished in portrait, landscape LH and RH (start-up, home ready and
+  alarm overlay, login keypad, main and options menu, HMI list, language list, numeric keypad, text keyboard,
+  slider, date picker); fixes logged as DT-07 … DT-10. `node scripts/figma/capture.mjs <dir> --presentation`
+  captures exactly those 36 states. Figma has all 36 (see FIGMA.md, 2026-11-04).
 - **Gates:** G2-1 and G2-2 have not been held as reviews yet (no DT entries since DT-06 at G1-2); G2-3 is
   the next planned gate. The three go together once P2-14 is in.
 - **App state:** menus, parameter lists, all editors (toggle, selection list, numeric keypad, text keyboard,
   slider, time/date picker, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
   badge or the dev panel (level 0–4). Tests: 75 unit (`npx vitest run`), 84 e2e (`npx playwright test`).
-- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 127 variants;
-  `HMI / 03 Screens – Portrait` 26 dark frames + 3 light. Light and landscape frames come in P4-09. The
-  builder is stored in the file (`hmi.builder`, len 29370, checksum 2929863182, see FIGMA.md for the
-  checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
+- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 142 variants;
+  `HMI / 03 Screens – Portrait` 30 dark frames + 3 light; `… – Landscape LH` and `… – Landscape RH` 12 each (the
+  presentation set). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the
+  file (`hmi.builder`, len 31635, checksum 3135273424, see FIGMA.md for the checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
   section of `docs/FIGMA.md` before touching it — every quirk listed there cost a failed run.
-- **Last commit:** P2-13 (time/date picker, DateTimePicker Figma set). Working tree clean. Repo is local only (no remote yet,
+- **Last commit:** presentation pass (12 screens × 3 layouts, DT-07 … DT-10, Figma LH/RH frames). Working tree clean. Repo is local only (no remote yet,
   P5-05).
 - **Open questions for PID** live in `docs/OPEN-POINTS.md` (slider parameter list, L4 semantics, date/time
   widget, browser engine, 180° rotation); assumptions taken meanwhile are recorded there.

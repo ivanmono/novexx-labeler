@@ -54,6 +54,8 @@ Rules the builder follows:
   serializer matches a gradient layer only when all its opaque stops belong to one family in order, so a grey that two
   families share never cross-binds; `transparent` stops stay unbound.
 
+Text set with `writing-mode: vertical-rl` (the landscape status label) is emitted with `vertical: up|down` and the builder rotates the layer ±90° into the captured box.
+
 Not carried over (yet): CSS transforms other than `rotate`, inset shadows, `::placeholder`, mix-blend modes. SVGs that are not sprite icons (the logo mark) are inlined as vectors with `var(--token)` colours resolved to the computed value.
 
 ### Components (page `HMI / 02 Components`)
@@ -123,6 +125,39 @@ the instance count instead of retrying.
 2026-11-02 (P2-13): DateTimePicker (Kind time · date × State default · error, 3 variants, node `2073:12576`):
 22 sets, 127 variants. The builder has no `align-self` and no margins, so the `:` / `.` separators carry
 their offset to the value line as top padding (`pt-[90px]`) in the markup.
+
+2026-11-04 (presentation pass, 12 screens × portrait / landscape LH / landscape RH): `npm run figma:capture -- --presentation`
+(`node scripts/figma/capture.mjs test-results/presentation --presentation`) captures exactly those 36 states. StatusBar
+and NavBar got an `Orientation` property (portrait · landscape-lh · landscape-rh): the existing variants were renamed
+in place to `…, Orientation=portrait` (same node ids, instances unchanged), and the landscape rails were added only
+for the combinations the 12 screens use (StatusBar ready · alarm, NavBar L0–L3 on the run line and L1 on the error
+line); the rest follow with P4-09b. The components sheet renders the rails inside a wrapper carrying its own
+`data-orientation`, so the landscape CSS applies there without rotating the page. The RH rails and RH frames differ
+from LH only in the bar sides, the sheet side and the "Landscape LH/RH" value text, so the RH NavBar variants and RH
+frames were derived from LH in Figma (clone, swap the rail instances, mirror the sheet); a later builder run with
+RH captures refills them by name. Frames: 12 on `HMI / 03 Screens – Landscape LH`, 12 on `… – Landscape RH`, and on
+the portrait page the four new or changed ones (editor language, numeric-error, text, date-error). In those frames
+only what is visible inside 800 × 480 / 480 × 800 was built (rows behind or below a sheet are left out), and the
+keyboard / keypad keys of the portrait text and numeric frames were cloned from the finished LH frames and resized
+to the captured boxes — building 38 keys through the builder took ~40 min, cloning takes seconds.
+
+Builder changes the same day (len 31635, checksum 3135273424):
+- **Reflow:** an instance whose captured width differs from its master (the 480 px Sheet / Slider / TitleBar in a
+  384 / 640 px landscape box) gets FIXED width and the layers that spanned the master's full inner width set to
+  FILL, collected at master size before any resize.
+- **Opacity:** the instance's own opacity is applied (a disabled Set button, a dimmed start button); layer opacity
+  overrides by name are skipped when a layer of that name already has the value (several `action/step` layers).
+- **Borders:** per-side border rectangles get constraints that stretch along their edge, so a wider instance keeps a
+  full-width divider; the masters on `HMI / 02 Components` were patched the same way.
+- **Vertical text** (see Rules above).
+New variant: Button `Tone=primary, Icon=yes` (the picker's Set). Totals: 22 sets / 142 variants.
+
+Lessons: plugin code yields at every `await`, so a second `figma_execute` runs *interleaved* with a build that has
+outlived its 300 s bridge timeout — check `hmi.generated` and child counts, never send a test build alongside. A
+missing variant makes a timed-out build die silently half-way (no console error): check every `set / props` of the
+captures against the file first. `npx playwright test` empties `test-results/`, so captures meant for a long sync
+go to a directory outside it. Repeated sub-objects make up most of a payload: hoisting them into constants
+(`node scripts/figma/minify.mjs <payload.js>`, ~55 % smaller) and generating rows and keys in a loop keeps a frame call under 15 kB.
 
 ## Icon export
 

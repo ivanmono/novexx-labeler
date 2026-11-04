@@ -14,6 +14,12 @@
  *  - ::before / ::after with a background are emitted from their computed inset box.
  */
 (function () {
+  const verticalOf = (cs) => {
+    if (!cs.writingMode?.startsWith('vertical')) return undefined;
+    const m = cs.transform && cs.transform !== 'none' ? cs.transform.match(/matrix\(([^)]+)\)/) : null;
+    const turned = m ? parseFloat(m[1].split(',')[0]) < 0 : px(cs.rotate) === 180;
+    return turned ? 'up' : 'down';
+  };
   const px = (v) => Math.round((parseFloat(v) || 0) * 100) / 100;
   const isTransparent = (c) =>
     !c || c === 'transparent' || /rgba\(\s*\d+,\s*\d+,\s*\d+,\s*0\)/.test(c) || /\/\s*0\)$/.test(c);
@@ -693,6 +699,9 @@
             ...withToken(cs.color, classCandidates(el, ['text'], true)),
             italic: cs.fontStyle === 'italic',
           },
+          // writing-mode text (the landscape status label): 'down' reads top to bottom, 'up' (with the
+          // 180° turn the rail uses) bottom to top; the builder rotates the layer into the box
+          vertical: verticalOf(cs),
           truncate: cs.textOverflow === 'ellipsis',
           // line-clamp-n → n lines then an ellipsis; in full mode a truncating single line too
           maxLines:

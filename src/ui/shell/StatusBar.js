@@ -4,6 +4,7 @@
  * Portrait: horizontal strip at the top. Landscape: vertical strip on the outer edge.
  */
 import { icon } from '../components/Icon.js';
+import { layoutOf, onDisplayChange } from '../../core/theme.js';
 import { t } from '../../core/i18n.js';
 import { esc, cx, el, hhmm } from '../html.js';
 
@@ -42,12 +43,12 @@ export function statusIcons({ getParam, machine }) {
   return out;
 }
 
-export function renderStatusBar({ machine, getParam, session }) {
+export function renderStatusBar({ machine, getParam, session, orientation = layoutOf() }) {
   const st = statusOf(machine);
   const icons = statusIcons({ getParam, machine });
   const secure = session?.level === 4 && session.elevatedUntil ? hhmm(session.elevatedUntil) : null;
   return `
-  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-6 text-chrome select-none" data-status="${st.key}" data-cmp="StatusBar" data-cmp-props="State=${st.key}" role="status" aria-live="polite">
+  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-6 text-chrome select-none" data-status="${st.key}" data-cmp="StatusBar" data-cmp-props="State=${st.key},Orientation=${orientation}" role="status" aria-live="polite">
     <div class="status-bar__state flex items-center gap-2 min-w-0">
       <span class="status-bar__dot size-3 rounded-pill bg-${st.color} shrink-0" aria-hidden="true"></span>
       <span class="status-bar__label text-body-sm font-semibold text-text truncate">${esc(t(st.label))}</span>
@@ -75,6 +76,7 @@ export function mountStatusBar(host, ctx) {
       if (['105', '108', '112', '113', '146', '238', '900'].includes(id)) rerender();
     }),
     ctx.onLanguage(rerender),
+    onDisplayChange((key) => key === 'orientation' && rerender()),
   ];
   return {
     get el() {

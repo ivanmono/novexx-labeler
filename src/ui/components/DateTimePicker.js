@@ -81,14 +81,14 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
     .map(col)
     .join(`<span class="t-param text-hero text-faint leading-none pt-[90px] pb-2" aria-hidden="true">${sep}</span>`);
   const hint = [
-    kind === 'time' ? t('picker.clock24') : `${t('common.min')} ${param.min} · ${t('common.max')} ${param.max}`,
+    kind === 'time' ? t('picker.clock24') : `${param.min} – ${param.max}`,
     `${t('common.default')} ${kind === 'time' ? String(param.default).slice(0, 5) : param.default}`,
   ].join(' · ');
   return `
     <div class="flex flex-col gap-2" data-picker="${kind}" data-state="${state}" data-cmp="DateTimePicker" data-cmp-props="Kind=${kind},State=${state}">
       <div class="flex items-start justify-center gap-2">${cols}</div>
       <div class="flex flex-col items-center gap-1 min-h-11">
-        <span class="t-caption text-muted">${esc(hint)}</span>
+        <span class="t-caption text-muted text-center">${esc(hint)}</span>
         <span class="text-label text-status-error-ink font-semibold text-center" data-error aria-live="polite">${esc(error ?? '')}</span>
       </div>
     </div>`;
