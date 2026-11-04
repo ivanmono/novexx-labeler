@@ -17,7 +17,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
   slider, time/date picker, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
   badge or the dev panel (level 0–4). Tests: 75 unit (`npx vitest run`), 84 e2e (`npx playwright test`).
 - **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 142 variants;
-  `HMI / 03 Screens – Portrait` 30 dark frames + 3 light; `… – Landscape LH` and `… – Landscape RH` 12 each (the
+  `HMI / 03 Screens – Portrait` 27 dark frames (incl. the designer's tweak frame) + 3 light; `… – Landscape LH` and `… – Landscape RH` 12 each (the
   presentation set). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the
   file (`hmi.builder`, len 31635, checksum 3135273424, see FIGMA.md for the checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
   section of `docs/FIGMA.md` before touching it — every quirk listed there cost a failed run.
