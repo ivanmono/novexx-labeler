@@ -100,8 +100,11 @@ export function render(ctx) {
     );
   const quickParam = ctx.param(Number(getParam(614)) || 122);
   const quickCards = [
-    `<div class="w-[218px] grid">${renderQuickCard(ctx, quickParam)}</div>`,
-    `<div class="w-[218px] grid">${renderQuickEmpty(ctx)}</div>`,
+    `<div class="w-[218px] grid">${renderQuickCard(ctx, quickParam, { landscape: false })}</div>`,
+    `<div class="w-[218px] grid">${renderQuickEmpty(ctx, { landscape: false })}</div>`,
+    // landscape home (DT-11): one wide row per card; row-tight while the error banner shows
+    `<div data-orientation="landscape-lh" class="w-[368px] grid">${renderQuickCard(ctx, quickParam, { landscape: true })}</div>`,
+    `<div data-orientation="landscape-lh" class="w-[368px] grid">${renderQuickCard(ctx, quickParam, { landscape: true, tight: true })}</div>`,
   ];
   // TitleBar · Back × Subtitle, plus one branch-marked variant per main-menu branch
   const titleBars = [

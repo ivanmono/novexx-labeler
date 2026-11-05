@@ -198,10 +198,10 @@
     flex-direction: column;
     gap: 6px;
   }
+  /* state label reads horizontally under the dot (DT-12); long labels wrap inside the 80 px rail */
   [data-orientation^='landscape'] .status-bar__label {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    max-height: 140px;
+    max-width: 72px;
+    overflow-wrap: break-word;
   }
   [data-orientation^='landscape'] .status-bar__secure {
     writing-mode: vertical-rl;

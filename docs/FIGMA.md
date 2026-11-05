@@ -159,6 +159,15 @@ captures against the file first. `npx playwright test` empties `test-results/`, 
 go to a directory outside it. Repeated sub-objects make up most of a payload: hoisting them into constants
 (`node scripts/figma/minify.mjs <payload.js>`, ~55 % smaller) and generating rows and keys in a loop keeps a frame call under 15 kB.
 
+2026-11-05 (designer tweaks DT-11, DT-12): QuicklinkCard got a `Layout` property — `tile` (the portrait card, existing
+variants renamed in place), `row` and `row-tight` (368 px landscape rows, 93 / 85 px; `State=empty, Layout=row` too);
+the cards emit `State=…,Layout=…`. The four landscape home frames were switched to the row variants by
+`swapComponent` (an instance cannot override its master's `minHeight`, so a separate variant was the only way to
+lose the 114 px minimum). The four landscape StatusBar variants: label unrotated and centred, 4 px side padding,
+6 px dot gap. The landscape NavBar variants were reset to badge-then-name, and two layers the trial left
+absolutely positioned went back into the auto layout. The designer's tweak frame `ready-L0-1` was left in place.
+Totals: 22 sets / 145 variants.
+
 ## Icon export
 
 Agent step (plan P0-04, re-done for DT-01 on 2026-10-30): export every `icon/24/*` component on `Icons v1 – 24 px` as SVG and save it to `src/assets/icons/<name>.svg`, then `npm run icons:sprite` normalises (background rects removed, stroke → `currentColor`, stroke width kept at 1.5, caps/joins as exported) and builds `sprite.svg` with `viewBox="0 0 24 24"`. Re-run when Mono adds or changes icons: regenerate the 24 px page from Icons v1 first.

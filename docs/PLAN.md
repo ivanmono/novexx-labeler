@@ -16,9 +16,9 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 - **App state:** menus, parameter lists, all editors (toggle, selection list, numeric keypad, text keyboard,
   slider, time/date picker, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
   badge or the dev panel (level 0–4). Tests: 75 unit (`npx vitest run`), 84 e2e (`npx playwright test`).
-- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 142 variants;
-  `HMI / 03 Screens – Portrait` 27 dark frames (incl. the designer's tweak frame) + 3 light; `… – Landscape LH` and `… – Landscape RH` 12 each (the
-  presentation set). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the
+- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 145 variants;
+  `HMI / 03 Screens – Portrait` 27 dark frames (incl. the designer's tweak frame) + 3 light; `… – Landscape LH` 12 (+ the
+  designer's tweak frame `ready-L0-1`) and `… – Landscape RH` 12 (the presentation set; DT-11/DT-12 applied 2026-11-05). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the
   file (`hmi.builder`, len 31635, checksum 3135273424, see FIGMA.md for the checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
   section of `docs/FIGMA.md` before touching it — every quirk listed there cost a failed run.
 - **Last commit:** presentation pass (12 screens × 3 layouts, DT-07 … DT-10, Figma LH/RH frames). Working tree clean. Repo is local only (no remote yet,

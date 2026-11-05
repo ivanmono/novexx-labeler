@@ -100,3 +100,19 @@ Change: numeric keypad: "Min · Max · Default" and the out-of-range message sha
 Where: `src/ui/components/NumericKeypad.js`, `src/ui/components/DateTimePicker.js`
 Before → after: `editor-*-numeric-error.png`, `editor-*-date-error.png` before/after
 Status: code (NumericKeypad has no own component set; DateTimePicker set refreshed)
+
+## DT-11 · Landscape home: quicklinks in one column of wide cards (2026-11-05, designer tweak)
+
+Source: Figma — designer's tweak frame `home / dark / landscape-lh / ready-L0-1` (node 2087:8692)
+Change: the four quicklinks stack in one column (368 px wide, 8 px gap) instead of a 2 × 2 grid; each card is a row (icon, category, title, value) with no 114 px minimum, so it is 93 px tall and the title fits on one line. While the error/warning banner shows, the column would overlap the device name, so the gap drops to 4 px and the cards to 8 px vertical padding (85 px). The tweak frame used the speed icon on every card (a duplication leftover); each card keeps its menu-branch icon.
+Where: `src/ui/screens/HomeScreen.js` (`renderQuickCard` `tight`, `Layout` prop), `src/ui/screens/Components.js`
+Before → after: `home-*-landscape-*-ready-l0.png`, `home-*-landscape-*-alarm-overlay-l1.png`
+Status: code + Figma (QuicklinkCard gained `Layout=tile|row|row-tight`; LH/RH home frames swapped to the row variants)
+
+## DT-12 · Landscape status bar: state label horizontal under the dot (2026-11-05, designer tweak)
+
+Source: Figma — StatusBar landscape variants edited by the designer
+Change: the state label ("Ready", "Alarm") reads horizontally, centred under the dot, instead of running vertically up the rail. The rail's side padding drops to 4 px so the longest labels ("Warnung", "Stand-by", 67 px) fit on one line; anything longer wraps between words. The "secure until" note stays vertical.
+Where: `src/ui/shell/StatusBar.js`, `src/styles/components.css`
+Before → after: any landscape frame, top of the status rail
+Status: code + Figma (four landscape StatusBar variants updated; landscape NavBar variants reset to badge-above-name after the trial reorder)

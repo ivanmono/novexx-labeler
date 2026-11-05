@@ -9,6 +9,7 @@ import { icon } from '../components/Icon.js';
 import { renderLogo } from '../components/Logo.js';
 import { renderButton } from '../components/Button.js';
 import { statusOf } from '../shell/StatusBar.js';
+import { isLandscape, onDisplayChange } from '../../core/theme.js';
 import { formatParamValue, paramLabel, relTime } from '../format.js';
 import { esc, onAction, cx } from '../html.js';
 
@@ -17,14 +18,16 @@ const QUICKLINK_IDS = [614, 615, 616, 617];
 /**
  * Quicklink card (Figma component set QuicklinkCard · State=filled|empty). Geometry per DT-05:
  * 116 px tall (114 inner + ring), 12 px padding, 4 px line gap, 20 px title on up to two lines,
- * 14 px bold value.
+ * 14 px bold value. Landscape (DT-11): one column of wide cards, no minimum height; `tight` (error
+ * banner showing) trims the vertical padding so the column still fits.
  */
-export function renderQuickCard(ctx, p) {
+export function renderQuickCard(ctx, p, { tight = false, landscape = isLandscape() } = {}) {
+  const layout = landscape ? (tight ? 'row-tight' : 'row') : 'tile';
   const screen = p.screens[0];
   const node = screen ? ctx.node(screen) : null;
   return `
-        <button type="button" class="card-border card-border--surface pressable text-left" data-action="quick" data-pid="${p.id}" data-screen="${esc(screen ?? '')}" data-cmp="QuicklinkCard" data-cmp-props="State=filled">
-          <div class="p-3 min-h-[114px] flex items-center gap-3">
+        <button type="button" class="card-border card-border--surface pressable text-left" data-action="quick" data-pid="${p.id}" data-screen="${esc(screen ?? '')}" data-cmp="QuicklinkCard" data-cmp-props="State=filled,Layout=${layout}">
+          <div class="${cx('p-3 min-h-[114px] land:min-h-0 flex items-center gap-3', tight && 'land:py-2')}">
             ${node ? icon(node.icon, { size: 32, class: `text-branch-${node.branch ?? 'settings'} shrink-0` }) : ''}
             <span class="min-w-0 flex-1 flex flex-col gap-1">
               <span class="block text-label text-muted truncate">${esc(node ? ctx.t(`screen.${node.id}`) : '')}</span>
@@ -35,8 +38,8 @@ export function renderQuickCard(ctx, p) {
         </button>`;
 }
 
-export function renderQuickEmpty(ctx) {
-  return `<div class="card-border opacity-50" data-cmp="QuicklinkCard" data-cmp-props="State=empty"><div class="p-3 min-h-[114px] flex flex-col justify-center gap-1"><div class="text-label text-muted">${esc(ctx.t('home.quicklinkEmpty'))}</div><div class="text-caption text-faint">${esc(ctx.t('home.quicklinkHint'))}</div></div></div>`;
+export function renderQuickEmpty(ctx, { landscape = isLandscape() } = {}) {
+  return `<div class="card-border opacity-50" data-cmp="QuicklinkCard" data-cmp-props="State=empty,Layout=${landscape ? 'row' : 'tile'}"><div class="p-3 min-h-[114px] land:min-h-0 flex flex-col justify-center gap-1"><div class="text-label text-muted">${esc(ctx.t('home.quicklinkEmpty'))}</div><div class="text-caption text-faint">${esc(ctx.t('home.quicklinkHint'))}</div></div></div>`;
 }
 
 /** Start / pause control (Figma StartButton · Machine=ready|run|alarm × Locked=yes|no). */
@@ -61,11 +64,11 @@ export function renderStatePill(ctx, st) {
 }
 
 export function render(ctx) {
-  const quickLinks = () =>
+  const quickLinks = (tight) =>
     QUICKLINK_IDS.map((qid) => {
       const pid = Number(ctx.store.getParam(qid));
       const p = pid ? ctx.param(pid) : null;
-      return p ? renderQuickCard(ctx, p) : renderQuickEmpty(ctx);
+      return p ? renderQuickCard(ctx, p, { tight }) : renderQuickEmpty(ctx);
     }).join('');
 
   const draw = () => {
@@ -85,7 +88,7 @@ export function render(ctx) {
           ${renderStatePill(ctx, st)}
           ${ctx.level < 1 ? `<div class="text-label text-muted flex items-center gap-1">${icon('lock', { size: 18 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
         </div>
-        <div class="home__quick grid grid-cols-2 gap-3 px-4 pb-8 land:pl-0 land:pb-4 land:content-center" data-quicklinks>${quickLinks()}</div>
+        <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-8 land:grid-cols-1 land:pl-0 land:content-center', nErr || nWarn ? 'land:gap-1 land:pb-2' : 'land:gap-2 land:pb-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
         ${
           nErr || nWarn
             ? `
@@ -208,6 +211,7 @@ export function render(ctx) {
           if (QUICKLINK_IDS.includes(Number(id)) || Number(id) === 600 || Number(id) === 608)
             refresh();
         }),
+        onDisplayChange((key) => key === 'orientation' && refresh()),
       ];
       return () => {
         dispose();
