@@ -15,7 +15,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
   the next planned gate. The three go together once P2-14 is in.
 - **App state:** menus, parameter lists, all editors (toggle, selection list, numeric keypad, text keyboard,
   slider, time/date picker, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
-  badge or the dev panel (level 0–4). Tests: 75 unit (`npx vitest run`), 84 e2e (`npx playwright test`).
+  badge or the dev panel (level 0–4). Tests: 83 unit (`npx vitest run`), 86 e2e (`npx playwright test`). Dev route `#/touchtest` (dev panel → touch test) measures the touch panel on the device (open point #51).
 - **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 145 variants;
   `HMI / 03 Screens – Portrait` 27 dark frames (incl. the designer's tweak frame) + 3 light; `… – Landscape LH` 12 (+ the
   designer's tweak frame `ready-L0-1`) and `… – Landscape RH` 12 (the presentation set; DT-11/DT-12 applied 2026-11-05). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the

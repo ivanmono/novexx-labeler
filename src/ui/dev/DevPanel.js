@@ -36,6 +36,7 @@ export function mountDevPanel(api) {
         <button type="button" data-dev-go="startup" style="${B}">startup</button>
         <button type="button" data-dev-go="screen/root" style="${B}">menu</button>
         <button type="button" data-dev-go="styleguide" style="${B}">styleguide</button>
+        <button type="button" data-dev-go="touchtest" style="${B}">touch test</button>
         <button type="button" data-dev-skip style="${B}">skip boot</button>
         <button type="button" data-dev-reset style="${B};color:#ff6479">factory reset</button>
       </div>

@@ -11,6 +11,7 @@ import * as Node from './NodeScreen.js';
 import * as Login from './LoginScreen.js';
 import * as User from './UserScreen.js';
 import * as Components from './Components.js';
+import * as TouchTest from './TouchTestScreen.js';
 
 export const screens = {
   components: Components, // dev route: every component in every state, source of the Figma component sets
@@ -20,5 +21,6 @@ export const screens = {
   screen: Node, // menu nodes → MenuScreen; lists and masks → placeholder until Phase 2–3
   login: Login,
   user: User,
+  touchtest: TouchTest, // dev route: touch accuracy and target-size test for the real panel
   notFound: Placeholder,
 };
