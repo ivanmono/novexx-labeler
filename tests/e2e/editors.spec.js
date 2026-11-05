@@ -19,10 +19,7 @@ test.describe('parameter editors (P2-05 … P2-10)', () => {
     await expect(page.locator('[data-row="124"]')).toBeVisible(); // condition rows followed
   });
 
-  test('portrait: the editor is a page; both back buttons close it and stay on the screen', async ({
-    page,
-  }, testInfo) => {
-    test.skip(testInfo.project.name !== 'portrait', 'landscape keeps the side sheet (DT-28)');
+  test('the editor is a page; both back buttons close it and stay on the screen', async ({ page }) => {
     await open(page, 'screen/settings', { level: 2 });
     await page.locator('.menu-tile[data-id="label"]').click(); // history, so nav back is enabled
     await page.locator('[data-row="117"]').click();

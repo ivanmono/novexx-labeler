@@ -21,7 +21,7 @@ export function renderNumericField(param, { entry = '', current, error = null } 
     .filter(Boolean)
     .join(' · ');
   return `
-    <div class="numeric-field flex flex-col gap-1" data-numeric-field>
+    <div class="numeric-field flex flex-col gap-3" data-numeric-field>
       <div class="card-border card-border--strong"><div class="flex items-center gap-2 pl-4 pr-4 h-16">
         <span class="flex-1 t-param text-title truncate ${entry === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
         ${unit}
@@ -60,8 +60,8 @@ export function openNumericKeypad(ctx, param, { onConfirm } = {}) {
   return ctx.sheet.open({
     title: t(param.labelKey),
     wide: true,
-    // landscape: field and hint beside the keypad, so the keys get the full sheet height
-    body: `<div class="land:grid land:grid-cols-[2fr_3fr] land:gap-4 land:items-start">${renderNumericField(param, { current })}<div class="mt-2 land:mt-0" data-keys>${renderNumpad({
+    // field on top, keypad at the bottom in both orientations (DT-35)
+    body: `<div>${renderNumericField(param, { current })}<div class="mt-2" data-keys>${renderNumpad({
       allowDecimal: param.type === 'Float',
       allowSign: param.min != null && param.min < 0,
       showMinMax: param.min != null && param.max != null,

@@ -70,16 +70,16 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
     return `
       <div class="flex flex-col items-center gap-1 ${f.digits === 4 ? 'w-[120px]' : 'w-[84px]'}" data-field="${f.key}">
         <span class="t-caption text-muted">${esc(t(f.label))}</span>
-        <button type="button" class="pressable h-touch w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="1" ${atMax ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} +1">${icon('chevron', { size: 24, class: '-rotate-90' })}</button>
+        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="1" ${atMax ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} +1">${icon('chevron', { size: 24, class: '-rotate-90' })}</button>
         <span class="t-param text-hero font-semibold leading-none py-2 ${cx(error && f.key !== 'y' && kind === 'date' && 'text-status-error-ink')}" data-value="${f.key}">${esc(text)}</span>
-        <button type="button" class="pressable h-touch w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="-1" ${atMin ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} -1">${icon('chevron', { size: 24, class: 'rotate-90' })}</button>
+        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="-1" ${atMin ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} -1">${icon('chevron', { size: 24, class: 'rotate-90' })}</button>
       </div>`;
   };
   // separators sit on the value line (label + gap + stepper + gap + value padding above it);
   // padding, not align-self or a margin, so the Figma auto layout keeps the position
   const cols = fields
     .map(col)
-    .join(`<span class="t-param text-hero text-faint leading-none pt-[118px] pb-2" aria-hidden="true">${sep}</span>`);
+    .join(`<span class="t-param text-hero text-faint leading-none pt-[118px] land:pt-[90px] pb-2" aria-hidden="true">${sep}</span>`);
   const hint = [
     kind === 'time' ? t('picker.clock24') : `${param.min} – ${param.max}`,
     `${t('common.default')} ${kind === 'time' ? String(param.default).slice(0, 5) : param.default}`,
@@ -97,15 +97,15 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
 /** Open the sheet; resolves with the stored string or undefined. */
 export function openDateTimePicker(ctx, param, { onConfirm, now = () => new Date() } = {}) {
   let value = pickerValue(param, ctx.store.getParam(param.id));
-  const footer = `<div class="grid grid-cols-2 gap-3 mt-3 land:grid-cols-1 land:mt-0" data-picker-actions>
+  const footer = `<div class="grid grid-cols-2 gap-3 mt-3" data-picker-actions>
       ${renderButton({ label: t('picker.now'), action: 'now', icon: 'history' })}
       ${renderButton({ label: t('picker.set'), action: 'set', tone: 'primary', icon: 'activate' })}
     </div>`;
   return ctx.sheet.open({
     title: t(param.labelKey),
     wide: true,
-    // landscape: Now / Set beside the steppers, so the 88 px steppers fit the sheet height (DT-13)
-    body: `<div class="land:grid land:grid-cols-[3fr_2fr] land:gap-6 land:items-center"><div data-picker-host>${renderDateTimePicker(param, value, { error: pickerError(param, value) })}</div>${footer}</div>`,
+    // steppers on top, Now / Set at the bottom in both orientations (DT-36)
+    body: `<div><div data-picker-host>${renderDateTimePicker(param, value, { error: pickerError(param, value) })}</div>${footer}</div>`,
     mount(body, close) {
       const host = body.querySelector('[data-picker-host]');
       const setBtn = body.querySelector('[data-action="set"]');

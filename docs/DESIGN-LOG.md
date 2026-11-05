@@ -291,3 +291,100 @@ Change: in every parameter row the ParamID sits on its own line under the name (
 Where: `src/ui/components/ParamRow.js`
 Before → after: every parameter list
 Status: code only
+
+## DT-32 · Landscape pass, first fixes: nesting, status label, menu tiles (2026-11-05, landscape review)
+
+Source: landscape review of every screen
+Change:
+- Nesting: rows directly under a group header ("INFORMATION") line up with the header; in the source data they are one level in, which drew a corner mark (DT-30) on every Information row. Only nesting under another row counts as indent now, conditional or not (Inhibit and Cycle-Signal sit under PConnector Function Selection without a condition and keep their mark). Applies to both orientations.
+- Status rail (landscape): the state label is 18 px (was 22 px, which broke "Running" into "Runnin / g"); the rail's side padding is 2 px, so the longest state, "Stand-by" (76 px), fits on one line, and nothing breaks inside a word.
+- Menu tiles (landscape, three per row): title 24 px (was 28 px, which broke "Authentication" inside the word).
+Where: `src/ui/screens/ParamListScreen.js`, `src/ui/components/ParamRow.js`, `src/ui/shell/StatusBar.js`, `src/styles/components.css`, `src/ui/components/MenuTile.js`
+Before → after: `info-*`, `pconnector-*`, landscape status rail, `menu-landscape-*`
+Status: code only
+
+## DT-33 · Landscape editors open as pages too (2026-11-05, landscape review)
+
+Source: chat — landscape editors as pages, like portrait (DT-28)
+Change: in landscape every editor opens as a page over the main area (title bar with back and the parameter name, branch edge) instead of the docked side sheet with grip and close. Lists start at the top; the numeric keypad keeps the field beside the keys (keys 84 px); the time / date picker keeps Now / Set beside the steppers; the text keyboard sits under the field with 48 px keys (five rows under the title bar). Both back buttons close the editor. The docked sheet stays in the code (`page: false`) but no editor uses it.
+Where: `src/ui/shell/SheetHost.js`, `src/styles/components.css`, `tests/e2e/editors.spec.js`
+Before → after: `editor-*-landscape`
+Status: code only — same §7.2 deviation as DT-28 (open point #52)
+
+## DT-34 · Landscape home and rails: badge only, vertical state, machine data under the start column (2026-11-05, landscape review)
+
+Source: chat — landscape home review
+Change:
+- Nav rail (landscape): the user name / "Not logged in" under the level badge is hidden; the badge (always visible, docx §4.1) stays and still opens login / user. Portrait keeps the name.
+- Status rail (landscape): the state label runs vertically under the dot, read bottom to top like the "secure until" note, at full size (22 px); it is never wrapped (replaces the horizontal label of DT-12 / DT-32). Status text stays on every screen so the state is never colour-only.
+- Home (landscape): device name and type · serial move from under the logo to the bottom of the left column, below the state pill and the log-in hint; the logo sits alone at the top. Portrait keeps them top right.
+- Home: "Log in to operate the machine" is centred (it wraps in the landscape column).
+Where: `src/ui/shell/NavBar.js`, `src/ui/shell/StatusBar.js`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
+Before → after: `home-*-landscape` (L0, L1 run, alarm)
+Status: code only — Figma StatusBar / NavBar landscape variants and home frames not updated
+
+## DT-35 · Landscape numeric keypad under the field, not beside it (2026-11-05, landscape review)
+
+Source: chat — in landscape the keypad sat on the right and the field on the left; the keypad belongs at the bottom
+Change: the numeric editor has the same layout in both orientations: field and range hint on top, keypad below across the full width, at the bottom of the page. In landscape the keys are 148 × 60 px (were 66 × 84 px beside the field): shorter, but more than twice as wide.
+Where: `src/ui/components/NumericKeypad.js`, `src/styles/components.css`
+Before → after: `editor-numeric-landscape`
+Status: code only
+
+## DT-36 · Landscape time / date picker stacked: Now / Set at the bottom (2026-11-05, landscape review)
+
+Source: chat — stack the landscape picker like the keypad (DT-35)
+Change: the time / date picker has one layout in both orientations: steppers and hint on top, Now / Set side by side at the bottom. In landscape the up / down steppers are 60 px tall (88 px in portrait) so everything fits under the title bar; the separator between the fields moves up to match.
+Where: `src/ui/components/DateTimePicker.js`
+Before → after: `editor-time-landscape`, `editor-date-landscape`
+Status: code only
+
+## DT-37 · More space between the number field and its range hint (2026-11-05, chat)
+
+Source: chat — the info text sat too close to the input field
+Change: the gap between the numeric field and the "Min · Max · Default" hint is 12 px (was 4 px), in both orientations. To keep the landscape page free of scrolling, its keypad keys are 58 px tall (were 60 px).
+Where: `src/ui/components/NumericKeypad.js`, `src/styles/components.css`
+Before → after: `editor-numeric-*`
+Status: code only
+
+## DT-38 · Landscape status rail transparent (2026-11-05, chat)
+
+Source: chat — make the right-hand bar (state and icons) transparent to see how it looks
+Change: the landscape status rail has no fill (was the background at 70 %); the page gradient shows through. The 1 px divider to the content stays. Portrait status bar unchanged.
+Where: `src/styles/components.css`
+Before → after: any landscape screen, right rail
+Status: code only — kept after the trial, with the divider line
+
+## DT-39 · Landscape home: left column centred vertically (2026-11-05, chat)
+
+Source: chat — align logo, start button, state pill and the rest in the vertical centre (landscape)
+Change: in landscape the logo moves into the start column, and the whole group (logo, start button, state pill, log-in hint at L0, device name and serial) is centred vertically in the left column, which now spans the full height beside the quicklinks (the separate top row is gone in landscape). With the error banner the group centres in the space above it. Portrait unchanged.
+Where: `src/ui/screens/HomeScreen.js`
+Before → after: `home-*-landscape`
+Status: code only
+
+## DT-40 · Strong glow for warning and alarm too (2026-11-05, chat)
+
+Source: chat — do the big running shadow (DT-16) for warning and alarm as well
+Change: the start button's glow has the same three layers in every machine state that matters from a distance: solid 4 px ring, dense 40 px inner glow, wide 140 px halo — run green, warning orange (new `--hmi-glow-warning`, `shadow-glow-warning`), alarm red (`--hmi-glow-error`, was one soft 60 px shadow). Light theme: same layers, toned down. The start button is disabled during an alarm; it no longer fades as a whole (that dimmed the glow to 40 %) — only its play icon dims.
+Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
+Before → after: `home-*-warning`, `home-*-alarm`
+Status: code only — Figma effect styles not updated
+
+## DT-41 · Start icon in the state colour (2026-11-05, chat)
+
+Source: chat — on running, warning and alarm, colour the icon too
+Change: the start button's icon takes the state colour along with its glow: run green (pause icon, as before), warning orange, alarm red. Otherwise brand teal, or muted when locked (L0). The alarm icon is no longer dimmed (DT-40); the button stays disabled during an alarm.
+Where: `src/ui/screens/HomeScreen.js`
+Before → after: `home-*-warning`, `home-*-alarm`
+Status: code only
+
+## DT-42 · Warning in amber; state pill keeps its height (2026-11-05, chat)
+
+Source: chat — warning orange was too close to alarm red; the state pill under the start button changed height on alarm / warning
+Change:
+- Warning colour is amber #ff9f0a (light-theme text #b86b00), was orange #ff601c. It is a colour of its own (`--raw-amber-*`): status dot and label, home pill, banner, nav line, start-button glow and icon. The level-2 badge and the Production branch stay orange.
+- The state pill is 36 px in every state: with the error / warning banner the start column ran short of height and the pill shrank. It no longer shrinks; the landscape column spacing is 12 px (was 16 px) so the whole group still fits above the banner at L0.
+Where: `src/styles/tokens.css`, `src/ui/screens/HomeScreen.js`
+Before → after: `home-*-warning`, `home-*-alarm`
+Status: code only — Figma status colour not updated

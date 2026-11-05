@@ -23,7 +23,7 @@ export function renderMenuTile(tile) {
           ${link ? icon('chevron', { size: 18, class: 'text-faint -rotate-90' }) : ''}
         </span>
         <span class="flex flex-col gap-0.5 min-w-0">
-          <span class="block text-body-lg font-semibold leading-tight line-clamp-2 break-words">${esc(title).replace(/\//g, '/\u200B')}</span>
+          <span class="block text-body-lg land:text-body font-semibold leading-tight line-clamp-2 break-words">${esc(title).replace(/\//g, '/\u200B')}</span>
           ${subtitle ? `<span class="block text-label text-muted line-clamp-2">${esc(subtitle)}</span>` : ''}
         </span>
       </div>

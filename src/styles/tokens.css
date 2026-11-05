@@ -37,8 +37,10 @@
   --raw-red-500: #e8413f; /* error / alarm */
   --raw-red-400: #ff6479;
   --raw-red-700: #c22f2d;
-  --raw-orange-500: #ff601c; /* level badge / warning */
+  --raw-orange-500: #ff601c; /* level badge, Production branch */
   --raw-orange-700: #c94a12;
+  --raw-amber-500: #ff9f0a; /* warning: clearly apart from alarm red and stand-by yellow (DT-42) */
+  --raw-amber-700: #b86b00;
   --raw-blue-400: #79a3ff; /* level 1 */
   --raw-purple-500: #b34aff; /* level 3 */
   --raw-purple-700: #8a2fd0;
@@ -68,14 +70,14 @@
   --hmi-status-run: var(--raw-green-500);
   --hmi-status-standby: var(--raw-yellow-500);
   --hmi-status-error: var(--raw-red-500);
-  --hmi-status-warning: var(--raw-orange-500);
+  --hmi-status-warning: var(--raw-amber-500);
   --hmi-status-ready: var(--raw-brand-300);
   --hmi-status-pause: var(--raw-navy-300);
   /* same meaning as text on the current background (contrast-safe) */
   --hmi-status-run-ink: var(--raw-green-500);
   --hmi-status-standby-ink: var(--raw-yellow-500);
   --hmi-status-error-ink: var(--raw-red-400);
-  --hmi-status-warning-ink: var(--raw-orange-500);
+  --hmi-status-warning-ink: var(--raw-amber-500);
 
   /* access levels 0–4 (nav badge, user tiles) */
   --hmi-level-0: var(--raw-navy-400);
@@ -107,7 +109,7 @@
   --hmi-gradient-run-mid: var(--raw-brand-300);
   --hmi-gradient-standby-mid: var(--raw-yellow-500);
   --hmi-gradient-error-mid: var(--raw-red-400);
-  --hmi-gradient-warning-mid: var(--raw-orange-500);
+  --hmi-gradient-warning-mid: var(--raw-amber-500);
   --hmi-gradient-stroke: linear-gradient(
     99deg,
     var(--hmi-gradient-stroke-0) 0%,
@@ -157,8 +159,12 @@
 
   --hmi-shadow-card: 0 8px 18px 0 rgb(0 0 0 / 0.25);
   --hmi-glow-brand: 0 0 25px 0 rgb(136 230 198 / 0.5);
-  --hmi-glow-error: 0 0 60px 0 rgb(255 25 74 / 0.5);
-  /* running must read from across the hall (DT-16): bright ring + wide, dense halo in the run green */
+  /* the start button's state must read from across the hall (DT-16, DT-40): bright ring + wide,
+     dense halo in the state colour — run green, warning amber, alarm red */
+  --hmi-glow-error:
+    0 0 0 4px rgb(232 65 63), 0 0 40px 14px rgb(232 65 63 / 0.85), 0 0 140px 56px rgb(232 65 63 / 0.55);
+  --hmi-glow-warning:
+    0 0 0 4px rgb(255 159 10), 0 0 40px 14px rgb(255 159 10 / 0.85), 0 0 140px 56px rgb(255 159 10 / 0.55);
   --hmi-glow-run:
     0 0 0 4px rgb(34 212 100), 0 0 40px 14px rgb(34 212 100 / 0.85), 0 0 140px 56px rgb(34 212 100 / 0.55);
 
@@ -191,7 +197,7 @@
   --hmi-status-run-ink: var(--raw-green-700);
   --hmi-status-standby-ink: var(--raw-yellow-700);
   --hmi-status-error-ink: var(--raw-red-700);
-  --hmi-status-warning-ink: var(--raw-orange-700);
+  --hmi-status-warning-ink: var(--raw-amber-700);
 
   --hmi-level-0: var(--raw-light-600);
   --hmi-level-1: #2f6fe4;
@@ -220,7 +226,10 @@
 
   --hmi-shadow-card: 0 8px 18px 0 rgb(32 60 83 / 0.12);
   --hmi-glow-brand: 0 0 25px 0 rgb(32 164 152 / 0.35);
-  --hmi-glow-error: 0 0 60px 0 rgb(232 65 63 / 0.35);
+  --hmi-glow-error:
+    0 0 0 3px rgb(194 47 45 / 0.9), 0 0 36px 8px rgb(232 65 63 / 0.6), 0 0 120px 36px rgb(232 65 63 / 0.3);
+  --hmi-glow-warning:
+    0 0 0 3px rgb(184 107 0 / 0.9), 0 0 36px 8px rgb(255 159 10 / 0.6), 0 0 120px 36px rgb(255 159 10 / 0.3);
   --hmi-glow-run:
     0 0 0 3px rgb(23 143 69 / 0.9), 0 0 36px 8px rgb(34 212 100 / 0.6), 0 0 120px 36px rgb(34 212 100 / 0.3);
 
@@ -316,6 +325,7 @@
   --shadow-card: var(--hmi-shadow-card);
   --shadow-glow-brand: var(--hmi-glow-brand);
   --shadow-glow-error: var(--hmi-glow-error);
+  --shadow-glow-warning: var(--hmi-glow-warning);
   --shadow-glow-run: var(--hmi-glow-run);
 
   /* touch targets in mm on the 4.3" 800 × 480 panel (8.54 px/mm): docx §3.2 asks ≥10 mm primary and

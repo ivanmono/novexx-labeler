@@ -30,9 +30,13 @@ export function listRows(node, env) {
   const value = env.value ?? ((p) => String(getParam(p.id) ?? ''));
   const favourites = new Set(env.favourites ?? []);
   const out = [];
+  // rows under a group header are indented one level in the source data; the header already groups
+  // them, so they line up with it and only nesting under another row counts as indent (DT-32)
+  let underHeader = false;
   for (const item of node.items ?? []) {
     if (item.status === 'header') {
       out.push({ kind: 'header', label: item.label });
+      underHeader = true;
       continue;
     }
     if (item.pid == null) {
@@ -55,7 +59,7 @@ export function listRows(node, env) {
       pid: p.id,
       label: label(p),
       value: action ? '' : value(p),
-      indent: item.indent ?? 0,
+      indent: Math.max(0, (item.indent ?? 0) - (underHeader ? 1 : 0)),
       locked,
       readOnly,
       action,

@@ -47,18 +47,35 @@ export function renderStartButton(ctx, machine, level) {
   const st = statusOf(machine);
   const running = machine.state === 'run';
   const glow =
-    st.key === 'alarm' ? 'shadow-glow-error' : running ? 'shadow-glow-run' : 'shadow-glow-brand';
+    st.key === 'alarm'
+      ? 'shadow-glow-error'
+      : st.key === 'warning'
+        ? 'shadow-glow-warning'
+        : running
+          ? 'shadow-glow-run'
+          : 'shadow-glow-brand';
   const disabled = st.key === 'alarm' || st.key === 'booting';
   const locked = level < 1 && !running;
   const machineKey = running ? 'run' : st.key === 'alarm' ? 'alarm' : 'ready';
+  // the icon takes the state colour with the glow (DT-41); otherwise brand, or muted when locked
+  const tone =
+    st.key === 'alarm'
+      ? 'text-status-error'
+      : st.key === 'warning'
+        ? 'text-status-warning'
+        : running
+          ? 'text-status-run'
+          : locked
+            ? 'text-muted'
+            : 'text-brand-hi';
   return `<button type="button" class="${cx('home__run pressable shrink-0 grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
-            <span class="grid place-items-center rounded-pill size-full ${running ? 'text-status-run' : locked ? 'text-muted' : 'text-brand-hi'}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
+            <span class="grid place-items-center rounded-pill size-full ${tone}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
           </button>`;
 }
 
 /** Machine-state pill under the start control (Figma StatePill · State). */
 export function renderStatePill(ctx, st) {
-  return `<div class="home__pill inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
+  return `<div class="home__pill shrink-0 inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
             <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
           </div>`;
 }
@@ -77,16 +94,22 @@ export function render(ctx) {
     const name = ctx.store.getParam(600) ?? '';
     const nErr = m.errors.length;
     const nWarn = m.warnings.length;
+    // device name and type · serial: top right in portrait, under the start column in landscape (DT-34);
+    // in landscape the logo joins that column and the whole group is centred vertically (DT-39)
+    const machineData = (cls) =>
+      `<div class="${cx('min-w-0 max-w-full flex flex-col gap-1', cls)}"><div class="text-body-sm font-semibold truncate max-w-full">${esc(name)}</div><div class="text-label text-muted truncate max-w-full">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>`;
     return `
       <div class="home flex-1 min-h-0 flex flex-col land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:grid-rows-[auto_minmax(0,1fr)_auto] select-none" data-home data-state="${st.key}">
-        <div class="home__top flex items-center justify-between px-6 py-2 land:flex-col land:items-start land:gap-2 land:pt-4">
+        <div class="home__top flex items-center justify-between px-6 py-2 land:hidden">
           ${renderLogo(ctx, { size: 140, variant: 'word' })}
-          <div class="text-right land:text-left min-w-0 max-w-full flex flex-col gap-1"><div class="text-body-sm font-semibold truncate">${esc(name)}</div><div class="text-label text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
+          ${machineData('text-right land:hidden')}
         </div>
-        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-4 py-2">
+        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-3 py-2 land:col-start-1 land:row-start-1 land:row-span-2">
+          <div class="hidden land:block">${renderLogo(ctx, { size: 140, variant: 'word' })}</div>
           ${renderStartButton(ctx, m, ctx.level)}
           ${renderStatePill(ctx, st)}
-          ${ctx.level < 1 ? `<div class="text-body-sm text-muted flex items-center gap-1">${icon('lock', { size: 20 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
+          ${ctx.level < 1 ? `<div class="text-body-sm text-muted text-center px-4">${icon('lock', { size: 20, class: 'inline-block align-[-3px] mr-1' })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
+          ${machineData('hidden land:flex items-center text-center')}
         </div>
         <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-6 land:grid-cols-1 land:pl-0 land:pt-4 land:content-center land:col-start-2 land:row-start-1 land:row-span-2', nErr || nWarn ? 'land:gap-1 land:pb-2' : 'land:gap-2 land:pb-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
         ${

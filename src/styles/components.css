@@ -127,6 +127,10 @@
     opacity: 0.4;
     pointer-events: none;
   }
+  /* the disabled start button (alarm) keeps its state glow at full strength; only the icon dims (DT-40) */
+  .home__run[aria-disabled='true'] {
+    opacity: 1;
+  }
 
   /* ---- logo (DT-18): the NOVEXX PNG is white; the light theme renders it dark ---------- */
   [data-theme='light'] .logo__img {
@@ -194,6 +198,7 @@
     padding: 16px 0;
     gap: 16px;
     border-bottom: 0;
+    background: transparent; /* the page shows through the status rail; the divider stays (DT-38) */
   }
   [data-orientation='landscape-lh'] .status-bar,
   [data-orientation='landscape-lh-flipped'] .status-bar {
@@ -207,10 +212,12 @@
     flex-direction: column;
     gap: 6px;
   }
-  /* state label reads horizontally under the dot (DT-12); long labels wrap inside the 80 px rail */
+  /* state label runs vertically under the dot, read bottom to top like the secure note (DT-34);
+     full size and never wrapped, since the rail's height, not its 80 px width, limits it */
   [data-orientation^='landscape'] .status-bar__label {
-    max-width: 72px;
-    overflow-wrap: break-word;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    max-height: 200px;
   }
   [data-orientation^='landscape'] .status-bar__secure {
     writing-mode: vertical-rl;
@@ -247,14 +254,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  [data-orientation^='landscape'] .nav-bar__name {
-    white-space: normal;
-    overflow-wrap: anywhere;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    letter-spacing: 0; /* size: land:text-[15px] on the element (DT-15) */
-  }
+  /* landscape: the name is hidden (land:hidden, DT-34); the level badge alone stays in the rail */
 
   /* ---- slider (P2-09): brand track up to the thumb, 40 px thumb for gloves ---------
      The input is a full row tall (the touch area, DT-13); the 8 px track is only its background. */
@@ -325,6 +325,24 @@
   }
   .sheet--page .keyboard .key {
     height: var(--spacing-touch-row);
+  }
+
+  /* landscape editor page (DT-33): the docked-sheet rules below must not reshape it */
+  [data-orientation^='landscape'] .sheet--page {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  [data-orientation^='landscape'] .sheet--page .sheet__panel {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+  [data-orientation^='landscape'] .sheet--page .sheet__panel[data-wide] .numpad .key {
+    height: 58px; /* four rows under the field and its hint (DT-35, DT-37) */
+  }
+  [data-orientation^='landscape'] .sheet--page .sheet__panel[data-wide] .keyboard .key {
+    height: 48px; /* five rows under the 72 px title bar */
   }
 
   /* keypad / keyboard sheets take the whole main area in landscape (DT-13) */

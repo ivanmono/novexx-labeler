@@ -48,10 +48,10 @@ export function renderStatusBar({ machine, getParam, session, orientation = layo
   const icons = statusIcons({ getParam, machine });
   const secure = session?.level === 4 && session.elevatedUntil ? hhmm(session.elevatedUntil) : null;
   return `
-  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-6 land:px-1 text-chrome select-none" data-status="${st.key}" data-cmp="StatusBar" data-cmp-props="State=${st.key},Orientation=${orientation}" role="status" aria-live="polite">
+  <div class="hmi__status status-bar flex items-center justify-between gap-2 px-6 land:px-0.5 text-chrome select-none" data-status="${st.key}" data-cmp="StatusBar" data-cmp-props="State=${st.key},Orientation=${orientation}" role="status" aria-live="polite">
     <div class="status-bar__state flex items-center gap-2 min-w-0">
       <span class="status-bar__dot size-3 rounded-pill bg-${st.color} shrink-0" aria-hidden="true"></span>
-      <span class="status-bar__label text-body-sm font-semibold text-text truncate land:whitespace-normal land:text-center">${esc(t(st.label))}</span>
+      <span class="status-bar__label text-body-sm font-semibold text-text truncate">${esc(t(st.label))}</span>
     </div>
     ${secure ? `<span class="status-bar__secure text-label text-level-4 font-semibold truncate" data-secure>${esc(t('status.secureUntil', { time: secure }))}</span>` : ''}
     <div class="status-bar__icons flex items-center gap-3" data-icons>

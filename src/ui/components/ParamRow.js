@@ -4,8 +4,9 @@
  * affordance that tells the state before touching: chevron (editable), lock (needs a higher
  * level; tapping toasts "needs level n"), nothing (read-only / live value), play (action).
  * Label and value wrap to two lines instead of truncating at the XL type scale (DT-15); both are label
- * size (20 px, DT-30); the ParamID always has its own line under the name (DT-31). Dependent rows
- * carry a corner mark (└) before the name (DT-30).
+ * size (20 px, DT-30); the ParamID always has its own line under the name (DT-31). Rows nested
+ * under another row carry a corner mark (└) before the name (DT-30); rows under a group header are
+ * not nested (the list passes indent 0 for them, DT-32).
  * A value that differs from its default carries a marker. Indent 0–2 nests conditional rows
  * under their switch.
  *
@@ -14,7 +15,7 @@
 import { icon } from './Icon.js';
 import { esc, cx } from '../html.js';
 
-// dependent rows: one step in per level, minus the corner mark's width, so names line up as before
+// nested rows: one step in per level, minus the corner mark's width (DT-30)
 const INDENT = ['pl-4', 'pl-4', 'pl-9'];
 
 /**
@@ -42,6 +43,7 @@ export function renderParamRow(row) {
     last = false,
     context = null,
   } = row;
+  const marked = indent > 0;
   const state = locked ? 'locked' : action ? 'action' : readOnly ? 'readonly' : 'default';
   const interactive = !readOnly || locked;
   const tag = interactive ? 'button' : 'div';
@@ -72,7 +74,7 @@ export function renderParamRow(row) {
     card ||
     `<${tag} ${interactive ? 'type="button"' : ''} class="${cx('param-row flex-1 min-w-0 text-left flex items-center gap-3 pr-0 min-h-touch-row', INDENT[Math.min(indent, 2)], interactive && 'pressable')}" ${attrs}>
       <span class="flex-1 min-w-0 py-2 flex items-start gap-2">
-        ${indent > 0 ? '<span class="size-3 shrink-0 mt-[3px] border-l-2 border-b-2 border-faint rounded-bl-[3px]" aria-hidden="true" data-indent-mark></span>' : ''}
+        ${marked ? '<span class="size-3 shrink-0 mt-[3px] border-l-2 border-b-2 border-faint rounded-bl-[3px]" aria-hidden="true" data-indent-mark></span>' : ''}
         <span class="min-w-0 flex flex-col">
           <span class="flex items-baseline gap-2">
             <span class="${cx('text-label line-clamp-2 break-words min-w-0', locked ? 'text-muted' : 'text-text')}">${esc(label)}</span>

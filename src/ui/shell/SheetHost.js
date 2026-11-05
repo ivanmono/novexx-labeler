@@ -1,16 +1,14 @@
 /**
- * Sheet: the surface for editors (selection list, keypad, keyboard, pickers).
- * Portrait: slides up from the bottom of the main area and must not cover the field being
- * edited (docx §7.2) — callers pass `anchor` so the sheet height stays below it.
- * Portrait (DT-28): the editor opens as a page of its own over the screen: a title bar with back
- * (closes the editor) and the parameter name, keypads and keyboards anchored at the bottom.
- * Landscape: docks to the inner edge next to the nav bar; `wide` sheets (keypad, keyboard) take the
- * whole main area so their keys reach touch size (DT-13).
+ * Sheet host: the surface for editors (selection list, keypad, keyboard, pickers).
+ * Editors open as a page of their own over the screen area (portrait DT-28, landscape DT-33): a title
+ * bar with back (closes the editor) and the parameter name; keypads, keyboards and pickers sit at the
+ * bottom, lists start at the top. `page: false` keeps the older docked sheet (portrait: slides up
+ * below the edited row, docx §7.2; landscape: docks to the inner edge, `wide` takes the whole main
+ * area, DT-13); no editor uses it any more.
  */
 import { icon } from '../components/Icon.js';
 import { t } from '../../core/i18n.js';
 import { esc, el, onAction } from '../html.js';
-import { isLandscape } from '../../core/theme.js';
 
 export function renderSheet({
   title,
@@ -28,7 +26,7 @@ export function renderSheet({
       <h2 class="title-bar__title text-title font-bold truncate leading-tight min-w-0 flex-1">${esc(title ?? '')}</h2>
     </header>
     <section class="sheet__panel flex-1 min-h-0" role="dialog" aria-modal="true" aria-label="${esc(title ?? '')}" data-cmp="Sheet" data-cmp-props="State=page"${wide ? ' data-wide' : ''}>
-      <div class="sheet__body flex-1 min-h-0 scroll-y p-4 pb-7 flex flex-col" data-sheet-body data-cmp-slot="body">
+      <div class="sheet__body flex-1 min-h-0 scroll-y p-4 pb-7 land:pb-4 flex flex-col" data-sheet-body data-cmp-slot="body">
         <div class="${wide ? 'mt-auto' : ''}">${body}</div>
       </div>
     </section>
@@ -67,7 +65,7 @@ export function createSheetHost(host) {
    */
   function open(opts) {
     close(undefined);
-    const page = !isLandscape();
+    const page = opts.page ?? true;
     const branch = host.querySelector('.title-bar')?.dataset.branch ?? '';
     node = el(renderSheet({ ...opts, page, branch }));
     if (opts.maxHeight && !page)

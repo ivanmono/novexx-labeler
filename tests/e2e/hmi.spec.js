@@ -74,7 +74,7 @@ test.describe('HMI screen specifics (P2-13)', () => {
     await sheet.locator('.option-row[data-id="117"]').click();
     await expect(page.locator('[data-row="614"] [data-value]')).toHaveText('Label Length');
     await page.evaluate(() => window.__hmi.go('home'));
-    await expect(page.locator('.logo')).toHaveAttribute('aria-label', 'ETIPACK');
+    await expect(page.locator('.logo:visible')).toHaveAttribute('aria-label', 'ETIPACK'); // one per orientation (DT-39)
     await expect(page.locator('[data-quicklinks] [data-pid="117"]')).toBeVisible();
   });
 });
