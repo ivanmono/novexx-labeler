@@ -34,7 +34,7 @@ export function openEditor(ctx, param, rowEl = null) {
     // own height (a keyboard needs ~420 px, a short list less), so nothing ends under the nav bar
     const p = open();
     const panel = ctx.sheet.el?.querySelector('.sheet__panel');
-    if (panel && !landscape) {
+    if (panel && !landscape && !ctx.sheet.el?.hasAttribute('data-page')) {
       const body = panel.querySelector('[data-sheet-body]');
       const natural = body.offsetTop + body.scrollHeight;
       const min = Math.min(480, Math.max(320, Math.ceil(natural)));

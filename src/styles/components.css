@@ -87,6 +87,9 @@
   }
   .hmi__nav {
     grid-area: nav;
+    /* above editor pages / sheets (z-30) so the level badge that rises over the bar's edge stays
+       visible; below modals (z-40) */
+    z-index: 35;
   }
 
   /* ---- gradient-border card (the signature surface of the first draft) --- */
@@ -308,6 +311,22 @@
     width: 60%;
     border-radius: var(--radius-card) 0 0 var(--radius-card);
   }
+  /* portrait editor page (DT-28): full main area, keys at their touch sizes */
+  .sheet--page {
+    /* the shell's page gradient, sized and offset to the whole display so the page lines up with it */
+    background: var(--hmi-gradient-page) 0 calc(-1 * var(--spacing-status)) /
+      100% calc(100% + var(--spacing-status) + var(--spacing-bar)) no-repeat;
+  }
+  .sheet--page .sheet__panel {
+    max-height: none;
+  }
+  .sheet--page .numpad .key {
+    height: var(--spacing-touch);
+  }
+  .sheet--page .keyboard .key {
+    height: var(--spacing-touch-row);
+  }
+
   /* keypad / keyboard sheets take the whole main area in landscape (DT-13) */
   [data-orientation^='landscape'] .sheet__panel[data-wide] {
     width: 100%;

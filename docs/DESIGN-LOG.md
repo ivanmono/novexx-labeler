@@ -230,3 +230,64 @@ Change: the 6 × 32 px pill between the back arrow and the title is removed; the
 Where: `src/ui/shell/TitleBar.js`, `tests/e2e/menu.spec.js`
 Before → after: every drill-down screen, title bar
 Status: code only — Figma TitleBar `Branch` variants still show the pill (landscape not reviewed yet)
+
+## DT-25 · Favourites as separate cards with their screen (2026-11-05, chat)
+
+Source: chat — restyle the Favourites list card
+Change: instead of one card with divided rows, each favourite is its own card (12 px apart). Above the name, the screen(s) the parameter lives on in the menu-branch colour ("Speed", "Stop · Label" when it appears on two screens), so a favourite says where it comes from. The name is semibold; the star is dropped on this screen (every row is a favourite). Value, changed marker, chevron and help button stay; un-starring still works from the help pop-up.
+Where: `src/ui/screens/ParamListScreen.js` (favourites branch), `src/ui/components/ParamRow.js` (`context`)
+Before → after: `favourites-portrait-*`
+Status: code only (landscape not reviewed yet)
+
+## DT-26 · Favourite card: help top right, chevron at the edge, smaller one-line value (2026-11-05, chat)
+
+Source: chat — favourite card tweaks (screen name, name and ParamID unchanged)
+Change: the help icon is bigger (28 px, was 20) and sits in the card's top-right corner (absolute, 68 px touch area); the chevron takes the right edge, with the value, at the bottom of the card. The value is body-sm (22 px, was 24) on one line, up to 60 % of the card wide, so an IP address no longer breaks between digits. Cards are at least 100 px tall so the value row stays clear of the help corner. The ParamID has its own line under the name (it no longer runs inline after it).
+Where: `src/ui/components/ParamRow.js` (`context` variant)
+Before → after: `favourites-portrait-*`
+Status: code only
+
+## DT-27 · Favourite card: value on the name's line (2026-11-05, chat)
+
+Source: chat — move the value (IP address) inline with the title
+Change: the card is a small grid: screen name, parameter name and ParamID stacked on the left; value and chevron sit on the name's line at the right edge (they were at the bottom of the card). The help icon stays in the top-right corner; its touch area is 68 × 44 px so it ends above the value line. Supersedes the bottom placement of DT-26.
+Where: `src/ui/components/ParamRow.js` (`context` card; value markup shared with the list row)
+Before → after: `favourites-portrait-*`
+Status: code only
+
+## DT-28 · Portrait editors open as a page with back (2026-11-05, chat)
+
+Source: chat — editing opened "some kind of drawer"; move it to a new page with a back button
+Change: in portrait every parameter editor (selection list, numeric keypad, slider, text keyboard, time / date picker, quicklink picker) covers the screen area as a page: title bar with back arrow and the parameter name (with the branch-colour edge), body below. Keypads, keyboards and pickers sit at the bottom (field directly above, as on the password screen, DT-21), with numpad keys at 88 px and keyboard keys at 68 px; lists start at the top. The title-bar back and the nav-bar BACK both close the editor and stay on the parameter screen. The page uses the shell's background gradient. The nav bar stacks above editor pages (z 35, modals stay above at 40) so the level badge rising over its edge is never covered, and the page body has 28 px bottom padding so the keys clear the badge. Landscape keeps the side sheet for now.
+Deviation: docx §7.2 asks that the editor not cover the edited field; on a page the field's name is the page title instead, and the list is back as soon as the editor closes. Toggles still flip in place.
+Where: `src/ui/shell/SheetHost.js` (page mode), `src/app.js` (`back` closes an open editor first), `src/ui/editors.js`, `src/styles/components.css`, `tests/e2e/editors.spec.js`
+Before → after: `editor-*-portrait`
+Status: code only — needs designer / PID confirmation of the §7.2 deviation (open point)
+
+## DT-29 · Favourite card: help icon back in its right-hand column (2026-11-05, chat)
+
+Source: chat — move the help icon back to the right (no absolute position), at its earlier size
+Change: the help icon returns to its own 68 px column at the right of the card, 20 px like in the parameter lists, centred vertically (it was a 28 px icon pinned to the top-right corner, DT-26). Value and chevron stay on the name's line (DT-27). The help column is 48 px wide on these cards (68 px tall), so chevron and help icon sit about 20 px apart instead of about 40 px; list rows keep the 68 × 68 help target. The icon is right-aligned in that column with the same 17 px inset from the card edge as the text on the left, and sits on the value line (centres level).
+Where: `src/ui/components/ParamRow.js`
+Before → after: `favourites-portrait-*`
+Status: code only
+
+## DT-30 · Parameter rows: 20 px text, chevron next to help, corner mark on dependent rows (2026-11-05, chat)
+
+Source: chat — PConnector screen looked off (indented rows read as misalignment); global change to the parameter cards
+Change (every parameter row and favourite card in the app):
+- Parameter name and value 24 → 20 px (label size); the ParamID stays 18 px.
+- The help column is 48 px wide with the icon right-aligned 17 px from the card edge, and the row has no right padding, so the chevron sits about 20 px from the help icon (was about 40 px). Help stays 68 px tall.
+- Dependent (conditional) rows show a corner mark (└, 12 px, faint) before the name; the indent per level is unchanged in total (the mark takes part of it), so names line up as before.
+- Values wrap between words only ("PConnector PLC Signals" no longer breaks inside "PConnector").
+Where: `src/ui/components/ParamRow.js`
+Before → after: every parameter list (e.g. `pconnector`, `label`, `speed`), `favourites-*`
+Status: code only — Figma ParamRow not updated
+
+## DT-31 · ParamID always on its own line under the name (2026-11-05, chat)
+
+Source: chat — the number should always appear in the next row
+Change: in every parameter row the ParamID sits on its own line under the name (it ran inline after the name, and dropped to the next line only when the name was long). Same as on the favourite cards (DT-26). Rows keep 68 px; the favourite star stays after the name; the corner mark of dependent rows (DT-30) aligns with the name line.
+Where: `src/ui/components/ParamRow.js`
+Before → after: every parameter list
+Status: code only

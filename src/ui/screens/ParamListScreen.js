@@ -111,6 +111,18 @@ export function render(ctx, { arg }, nodeOverride = null) {
       : r.kind === 'planned'
         ? `<div class="flex items-center gap-3 px-4 min-h-touch-row text-muted"><span class="text-body truncate">${esc(r.label)}</span><span class="t-caption text-faint">${esc(ctx.t('list.planned'))}</span></div>`
         : renderParamRow(r);
+  // Favourites (DT-25): one card per parameter, with the screen it lives on; no star (all are)
+  const favRow = (r) => {
+    // every screen the parameter appears on (Label Length: "Stop · Label"), coloured by the first
+    const homes = (r.param.screens ?? []).map((id) => ctx.node(id)).filter(Boolean);
+    const context = homes.length
+      ? {
+          label: homes.map((n) => ctx.t(`screen.${n.id}`)).join(' · '),
+          branch: homes[0].branch ?? 'settings',
+        }
+      : null;
+    return `<div class="card-border"><div class="py-1">${renderParamRow({ ...r, favourite: false, last: true, context })}</div></div>`;
+  };
 
   const draw = () => {
     const rows = listRows(node, env());
@@ -129,9 +141,14 @@ export function render(ctx, { arg }, nodeOverride = null) {
     return `
       <div class="param-list flex-1 min-h-0 scroll-y p-4 flex flex-col gap-4" data-list="${esc(node.id)}" data-rows="${rows.filter((r) => r.kind === 'row').length}">
         ${
-          rows.length
-            ? `<div class="card-border"><div class="py-1" data-rows-host>${rows.map(rowHtml).join('')}</div></div>`
-            : `<div class="flex-1 grid place-items-center text-center text-muted text-body p-6" data-list-empty>${esc(ctx.t(node.emptyKey ?? 'list.empty'))}</div>`
+          rows.length && node.kind === 'favourites'
+            ? `<div class="flex flex-col gap-3" data-rows-host>${rows
+                .filter((r) => r.kind === 'row')
+                .map(favRow)
+                .join('')}</div>`
+            : rows.length
+              ? `<div class="card-border"><div class="py-1" data-rows-host>${rows.map(rowHtml).join('')}</div></div>`
+              : `<div class="flex-1 grid place-items-center text-center text-muted text-body p-6" data-list-empty>${esc(ctx.t(node.emptyKey ?? 'list.empty'))}</div>`
         }
         ${links ? `<div class="card-border"><div class="py-1">${links}</div></div>` : ''}
       </div>`;

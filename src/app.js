@@ -107,7 +107,8 @@ export async function boot(root, { skipBoot = false } = {}) {
     onLanguage: onLanguageChange,
     go: (route) => router.go(route),
     goScreen: (id) => router.go(toScreenRoute(id)),
-    back: () => router.back('home'),
+    // an open editor page / sheet is closed first (DT-28): nav back leaves the editor, not the screen
+    back: () => (ctx.shell.sheet.isOpen ? ctx.shell.sheet.close() : router.back('home')),
     openMenu() {
       if (ctx.level < 1) {
         ctx.shell.toast.reject(t('toast.needsLevel', { n: 1 }));
