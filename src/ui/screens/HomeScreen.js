@@ -17,9 +17,10 @@ const QUICKLINK_IDS = [614, 615, 616, 617];
 
 /**
  * Quicklink card (Figma component set QuicklinkCard · State=filled|empty). Geometry per DT-05:
- * 116 px tall (114 inner + ring), 12 px padding, 4 px line gap, 20 px title on up to two lines,
- * 14 px bold value. Landscape (DT-11): one column of wide cards, no minimum height; `tight` (error
- * banner showing) trims the vertical padding so the column still fits.
+ * 116 px tall (114 inner + ring), 12 px padding, 4 px line gap, title on up to two lines, bold value
+ * (sizes from the type tokens, DT-13). No category line: the branch icon names the menu branch, and
+ * the larger type needs the room (DT-14). Landscape (DT-11): one column of wide cards beside the
+ * logo / start column, no minimum height; `tight` (error banner showing) trims the vertical padding.
  */
 export function renderQuickCard(ctx, p, { tight = false, landscape = isLandscape() } = {}) {
   const layout = landscape ? (tight ? 'row-tight' : 'row') : 'tile';
@@ -27,12 +28,11 @@ export function renderQuickCard(ctx, p, { tight = false, landscape = isLandscape
   const node = screen ? ctx.node(screen) : null;
   return `
         <button type="button" class="card-border card-border--surface pressable text-left" data-action="quick" data-pid="${p.id}" data-screen="${esc(screen ?? '')}" data-cmp="QuicklinkCard" data-cmp-props="State=filled,Layout=${layout}">
-          <div class="${cx('p-3 min-h-[114px] land:min-h-0 flex items-center gap-3', tight && 'land:py-2')}">
+          <div class="${cx('h-full p-3 min-h-[114px] land:min-h-0 flex items-center gap-3', tight && 'land:py-2.5')}">
             ${node ? icon(node.icon, { size: 32, class: `text-branch-${node.branch ?? 'settings'} shrink-0` }) : ''}
-            <span class="min-w-0 flex-1 flex flex-col gap-1">
-              <span class="block text-label text-muted truncate">${esc(node ? ctx.t(`screen.${node.id}`) : '')}</span>
-              <span class="block text-body-lg font-semibold line-clamp-2">${esc(paramLabel(ctx, p))}</span>
-              <span class="block t-param font-bold text-label text-brand-hi truncate" data-quick-value="${p.id}">${esc(formatParamValue(ctx, p))}</span>
+            <span class="min-w-0 flex-1 flex flex-col gap-1 land:gap-0.5">
+              <span class="text-body-lg font-semibold line-clamp-2">${esc(paramLabel(ctx, p))}</span>
+              <span class="block t-param font-bold text-body text-brand-hi truncate" data-quick-value="${p.id}">${esc(formatParamValue(ctx, p))}</span>
             </span>
           </div>
         </button>`;
@@ -51,14 +51,14 @@ export function renderStartButton(ctx, machine, level) {
   const disabled = st.key === 'alarm' || st.key === 'booting';
   const locked = level < 1 && !running;
   const machineKey = running ? 'run' : st.key === 'alarm' ? 'alarm' : 'ready';
-  return `<button type="button" class="${cx('home__run pressable grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
+  return `<button type="button" class="${cx('home__run pressable shrink-0 grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
             <span class="grid place-items-center rounded-pill size-full ${running ? 'text-status-run' : locked ? 'text-muted' : 'text-brand-hi'}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
           </button>`;
 }
 
 /** Machine-state pill under the start control (Figma StatePill · State). */
 export function renderStatePill(ctx, st) {
-  return `<div class="home__pill inline-flex items-center gap-2 px-2 h-7 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
+  return `<div class="home__pill inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
             <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
           </div>`;
 }
@@ -79,16 +79,16 @@ export function render(ctx) {
     const nWarn = m.warnings.length;
     return `
       <div class="home flex-1 min-h-0 flex flex-col land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:grid-rows-[auto_minmax(0,1fr)_auto] select-none" data-home data-state="${st.key}">
-        <div class="home__top flex items-center justify-between px-6 py-2 land:col-span-2">
+        <div class="home__top flex items-center justify-between px-6 py-2 land:flex-col land:items-start land:gap-2 land:pt-4">
           ${renderLogo(ctx, { size: 110, variant: 'word' })}
-          <div class="text-right min-w-0 flex flex-col gap-1"><div class="text-body font-semibold truncate">${esc(name)}</div><div class="text-label text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
+          <div class="text-right land:text-left min-w-0 max-w-full flex flex-col gap-1"><div class="text-body font-semibold truncate">${esc(name)}</div><div class="text-body-sm text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
         </div>
-        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-8 land:gap-5 py-2">
+        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-4 py-2">
           ${renderStartButton(ctx, m, ctx.level)}
           ${renderStatePill(ctx, st)}
-          ${ctx.level < 1 ? `<div class="text-label text-muted flex items-center gap-1">${icon('lock', { size: 18 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
+          ${ctx.level < 1 ? `<div class="text-body-sm text-muted flex items-center gap-1">${icon('lock', { size: 20 })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
         </div>
-        <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-8 land:grid-cols-1 land:pl-0 land:content-center', nErr || nWarn ? 'land:gap-1 land:pb-2' : 'land:gap-2 land:pb-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
+        <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-6 land:grid-cols-1 land:pl-0 land:pt-4 land:content-center land:col-start-2 land:row-start-1 land:row-span-2', nErr || nWarn ? 'land:gap-1 land:pb-2' : 'land:gap-2 land:pb-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
         ${
           nErr || nWarn
             ? `

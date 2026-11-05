@@ -116,3 +116,28 @@ Change: the state label ("Ready", "Alarm") reads horizontally, centred under the
 Where: `src/ui/shell/StatusBar.js`, `src/styles/components.css`
 Before → after: any landscape frame, top of the status rail
 Status: code + Figma (four landscape StatusBar variants updated; landscape NavBar variants reset to badge-above-name after the trial reorder)
+
+## DT-13 · Touch targets and type re-based in mm for the 4.3" panel (2026-11-05, device test)
+
+Source: touch test on the NXP i.MX93 board (`#/touchtest`, bare finger): accuracy 2.8 mm mean / 4.3 mm max error, no offset (−0.8 / +0.6 mm), corners 3.2 vs centre 2.3 mm, i.e. the panel is mapped correctly and the misses are finger scatter. Hit rate per size: 5 mm 3/6, 6 mm 2/6, 7 mm 1/6, 8 mm 5/6, 10 mm 6/6, 12 mm 6/6. Today's 60 px primary (7 mm) and 48 px rows (5.6 mm) are below what is hit reliably; the docx mm rule (§3.2: 10 / 8 mm) holds, its px figures do not (#51).
+Change:
+- Tokens: `--spacing-touch` 60 → 88 px (10.3 mm), `--spacing-touch-row` 48 → 68 px (8.0 mm), title bar 64 → 72 px; the title-bar back button fills the bar (72 × 88).
+- Type one step up: caption 12 → 13, label 14 → 16, body-sm 16 → 18, body 18 → 20, body-lg 20 → 22, title 24 → 28, hero 32 → 36 px (display 48 unchanged). At 217 ppi 16 px text was under 2 mm high.
+- Keypad, keyboard and date/time sheets are `wide` in landscape (whole main area instead of 60 %): the numeric field and the date/time Now / Set buttons sit beside the keys, so the keypad keys are 88 px and the steppers keep 88 px. Numpad keys 68 px in portrait; alpha keys 60 px portrait / 68 px landscape (their width stays limited by 11 keys per row: 35 px portrait, 50 px landscape).
+- Slider: the input is a full row tall (68 px touch area, 8 px track drawn as background), thumb 32 → 40 px.
+- Landscape home quicklinks drop the category line (the branch icon carries it) so four cards fit under the device name, with and without the error banner. Login: the ABC/123 mode button is at least 68 px wide.
+- Nav bar stays 80 px (9.4 mm) so the landscape content width is unchanged.
+Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/shell/SheetHost.js` (`wide`), `src/ui/shell/TitleBar.js`, `src/ui/components/NumericKeypad.js`, `AlphaKeyboard.js`, `DateTimePicker.js`, `src/ui/screens/HomeScreen.js`, `LoginScreen.js`
+Before → after: every screen; most visible on parameter lists (8 rows instead of 11 in portrait) and the landscape editors
+Status: code only — Figma components and the presentation frames still show 60 / 48 px; needs designer and PID sign-off (#51). Glove test on the board still to do.
+
+## DT-14 · Type-size trial on the board; home reworked for larger type (2026-11-05, device feedback)
+
+Source: chat — on the board, every 16 px text is unreadable (16 px is a 1.3 mm cap height at 217 ppi)
+Change:
+- The type tokens are variables with three presets, switched live from the dev panel ("Type size") or with `?type=l|xl` in the URL, kept per device: M 13 / 16 / 18 / 20 / 22 / 28 / 36 px (caption / label / body-sm / body / body-lg / title / hero, the DT-13 scale and still the default), L 16 / 18 / 20 / 22 / 24 / 30 / 40, XL 18 / 20 / 22 / 24 / 28 / 32 / 44. One preset is picked on the board, then becomes the only scale.
+- Home: quicklink value 16 → body (20–24 px), serial number label → body-sm, state pill 28 → 36 px tall, "log in to operate" → body-sm. The quicklink category line is dropped in both orientations (the branch icon names the branch). Landscape: the logo, device name and serial sit in the left column above the start button, and the quicklinks take the full height of the right column, so they no longer collide with the serial at any preset. The start button never shrinks.
+- Landscape nav user name 11 → 13 px.
+Where: `src/styles/tokens.css`, `src/ui/dev/DevPanel.js`, `src/ui/screens/HomeScreen.js`, `src/styles/components.css`
+Before → after: `home-*` at M / L / XL, both orientations, ready and alarm
+Status: code only (trial) — other screens follow once a preset is chosen; Figma not updated

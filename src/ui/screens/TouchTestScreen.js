@@ -9,7 +9,8 @@
  *   to check the px/mm assumption).
  * Runs as a fixed layer over the whole panel in raw panel coordinates (the 180° orientations are
  * not applied), so the bar areas and edges are tested too. Results go to localStorage
- * `hmi.touchtest` and `window.__touchtest`. English only, like the dev panel.
+ * `hmi.touchtest` and `window.__touchtest`; on the dev server each result is also posted to
+ * /__touchtest (saved in touchtest-results/, see vite.config.js). English only, like the dev panel.
  */
 import { esc } from '../html.js';
 import {
@@ -55,6 +56,13 @@ function saveResults(part, data) {
   }
   window.__touchtest = all;
   console.info('[touchtest]', JSON.stringify(all));
+  if (import.meta.env.DEV) {
+    fetch('/__touchtest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ part, at: new Date().toISOString(), device: all.device, ...data }),
+    }).catch(() => {});
+  }
   return all;
 }
 

@@ -9,3 +9,6 @@ Thumbs.db
 
 # local credentials
 .redmine-key
+
+# touch test runs from the real panel (dev server sink)
+touchtest-results/

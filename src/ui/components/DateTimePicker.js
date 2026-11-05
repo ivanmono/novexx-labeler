@@ -79,7 +79,7 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
   // padding, not align-self or a margin, so the Figma auto layout keeps the position
   const cols = fields
     .map(col)
-    .join(`<span class="t-param text-hero text-faint leading-none pt-[90px] pb-2" aria-hidden="true">${sep}</span>`);
+    .join(`<span class="t-param text-hero text-faint leading-none pt-[118px] pb-2" aria-hidden="true">${sep}</span>`);
   const hint = [
     kind === 'time' ? t('picker.clock24') : `${param.min} – ${param.max}`,
     `${t('common.default')} ${kind === 'time' ? String(param.default).slice(0, 5) : param.default}`,
@@ -97,13 +97,15 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
 /** Open the sheet; resolves with the stored string or undefined. */
 export function openDateTimePicker(ctx, param, { onConfirm, now = () => new Date() } = {}) {
   let value = pickerValue(param, ctx.store.getParam(param.id));
-  const footer = `<div class="grid grid-cols-2 gap-3 mt-3" data-picker-actions>
+  const footer = `<div class="grid grid-cols-2 gap-3 mt-3 land:grid-cols-1 land:mt-0" data-picker-actions>
       ${renderButton({ label: t('picker.now'), action: 'now', icon: 'history' })}
       ${renderButton({ label: t('picker.set'), action: 'set', tone: 'primary', icon: 'activate' })}
     </div>`;
   return ctx.sheet.open({
     title: t(param.labelKey),
-    body: `<div data-picker-host>${renderDateTimePicker(param, value, { error: pickerError(param, value) })}</div>${footer}`,
+    wide: true,
+    // landscape: Now / Set beside the steppers, so the 88 px steppers fit the sheet height (DT-13)
+    body: `<div class="land:grid land:grid-cols-[3fr_2fr] land:gap-6 land:items-center"><div data-picker-host>${renderDateTimePicker(param, value, { error: pickerError(param, value) })}</div>${footer}</div>`,
     mount(body, close) {
       const host = body.querySelector('[data-picker-host]');
       const setBtn = body.querySelector('[data-action="set"]');

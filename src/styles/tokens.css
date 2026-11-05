@@ -44,6 +44,37 @@
   --raw-purple-700: #8a2fd0;
 }
 
+/* ---- 1b. Type sizes (DT-13, DT-14) ------------------------------------------
+   Variables so the dev panel can switch the whole scale live on the board
+   (<html data-type="l|xl">) while the sizes are being chosen; M is the default. */
+:root {
+  --hmi-text-caption: 13px;
+  --hmi-text-label: 16px;
+  --hmi-text-body-sm: 18px;
+  --hmi-text-body: 20px;
+  --hmi-text-body-lg: 22px;
+  --hmi-text-title: 28px;
+  --hmi-text-hero: 36px;
+}
+[data-type='l'] {
+  --hmi-text-caption: 16px;
+  --hmi-text-label: 18px;
+  --hmi-text-body-sm: 20px;
+  --hmi-text-body: 22px;
+  --hmi-text-body-lg: 24px;
+  --hmi-text-title: 30px;
+  --hmi-text-hero: 40px;
+}
+[data-type='xl'] {
+  --hmi-text-caption: 18px;
+  --hmi-text-label: 20px;
+  --hmi-text-body-sm: 22px;
+  --hmi-text-body: 24px;
+  --hmi-text-body-lg: 28px;
+  --hmi-text-title: 32px;
+  --hmi-text-hero: 44px;
+}
+
 /* ---- 2. Semantic tokens — dark theme (default) ---------------------------- */
 :root,
 [data-theme='dark'] {
@@ -283,21 +314,22 @@
   --font-sans: 'Figtree', system-ui, sans-serif;
   --font-mono: 'Fira Code', ui-monospace, monospace;
 
-  /* type scale (docx §1 asks to check for larger sizes on the target display) */
-  --text-caption: 12px;
+  /* type scale (docx §1 asks to check for larger sizes on the target display). Raised one step for the
+     real 4.3" panel (217 ppi: 16 px text is under 2 mm high), DT-13 */
+  --text-caption: var(--hmi-text-caption);
   --text-caption--line-height: 1.2;
   --text-caption--letter-spacing: 0.15em;
-  --text-label: 14px;
+  --text-label: var(--hmi-text-label);
   --text-label--line-height: 1.2;
-  --text-body-sm: 16px;
+  --text-body-sm: var(--hmi-text-body-sm);
   --text-body-sm--line-height: 1.25;
-  --text-body: 18px;
+  --text-body: var(--hmi-text-body);
   --text-body--line-height: 1.25;
-  --text-body-lg: 20px;
+  --text-body-lg: var(--hmi-text-body-lg);
   --text-body-lg--line-height: 1.25;
-  --text-title: 24px;
+  --text-title: var(--hmi-text-title);
   --text-title--line-height: 1.2;
-  --text-hero: 32px;
+  --text-hero: var(--hmi-text-hero);
   --text-hero--line-height: 1.15;
   --text-display: 48px;
   --text-display--line-height: 1.1;
@@ -314,12 +346,13 @@
   --shadow-glow-error: var(--hmi-glow-error);
   --shadow-glow-run: var(--hmi-glow-run);
 
-  /* touch targets (docx §3.2: ≥60 px primary, ≥48 px list rows) */
-  --spacing-touch: 60px;
-  --spacing-touch-row: 48px;
+  /* touch targets in mm on the 4.3" 800 × 480 panel (8.54 px/mm): docx §3.2 asks ≥10 mm primary and
+     ≥8 mm rows; its 60 / 48 px are only 7 / 5.6 mm, which the touch test on the board missed (DT-13, #51) */
+  --spacing-touch: 88px;
+  --spacing-touch-row: 68px;
   --spacing-bar: 80px; /* nav bar thickness (and both bars in landscape) */
   --spacing-status: 48px; /* status bar height in portrait (DT-03) */
-  --spacing-title: 64px;
+  --spacing-title: 72px;
 
   --ease-hmi: cubic-bezier(0.2, 0, 0, 1);
 }

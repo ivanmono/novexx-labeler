@@ -63,7 +63,7 @@ export function render(ctx) {
               <div class="flex items-center gap-1 pl-4 pr-1 h-touch">
                 <span class="flex-1 t-param text-title tracking-[0.3em] truncate" data-field aria-label="${esc(ctx.t('login.password'))}">${esc(masked())}</span>
                 <button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-chrome" data-action="toggleShow" aria-label="${esc(ctx.t('login.show'))}" data-show>${icon('lock', { size: 26 })}</button>
-                <button type="button" class="pressable h-touch-row px-3 rounded-md bg-surface-2 text-label font-semibold" data-action="mode" data-mode>ABC</button>
+                <button type="button" class="pressable h-touch-row min-w-touch-row px-3 rounded-md bg-surface-2 text-label font-semibold" data-action="mode" data-mode>ABC</button>
               </div>
             </div>
             <div class="text-label text-status-error-ink font-semibold h-5 mt-1 px-1" data-error aria-live="polite"></div>

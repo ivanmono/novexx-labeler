@@ -244,33 +244,35 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0;
   }
 
-  /* ---- slider (P2-09): brand track up to the thumb, 32 px thumb for gloves --------- */
+  /* ---- slider (P2-09): brand track up to the thumb, 40 px thumb for gloves ---------
+     The input is a full row tall (the touch area, DT-13); the 8 px track is only its background. */
   .slider__input {
     appearance: none;
-    height: 8px;
-    border-radius: var(--radius-pill);
+    height: var(--spacing-touch-row);
     background: linear-gradient(
-      to right,
-      var(--hmi-brand) 0 var(--pct, 0%),
-      var(--hmi-surface-2) var(--pct, 0%) 100%
-    );
+        to right,
+        var(--hmi-brand) 0 var(--pct, 0%),
+        var(--hmi-surface-2) var(--pct, 0%) 100%
+      )
+      center / 100% 8px no-repeat;
+    border-radius: var(--radius-pill);
     outline: none;
   }
   .slider__input::-webkit-slider-thumb {
     appearance: none;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: var(--hmi-text);
     border: 3px solid var(--hmi-brand);
   }
   .slider__input::-moz-range-thumb {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: var(--hmi-text);
     border: 3px solid var(--hmi-brand);
@@ -301,6 +303,10 @@
     width: 60%;
     border-radius: var(--radius-card) 0 0 var(--radius-card);
   }
+  /* keypad / keyboard sheets take the whole main area in landscape (DT-13) */
+  [data-orientation^='landscape'] .sheet__panel[data-wide] {
+    width: 100%;
+  }
   [data-orientation='landscape-rh'] .sheet,
   [data-orientation='landscape-rh-flipped'] .sheet {
     align-items: flex-start;
@@ -312,25 +318,33 @@
 }
 
 @layer components {
-  /* ---- keyboards ---------------------------------------------------------------- */
+  /* ---- keyboards ----------------------------------------------------------------
+     Heights in mm on the panel (DT-13): the alpha keys are as tall as the sheet allows; their
+     width is set by 11 keys per row (portrait 35 px ≈ 4 mm, landscape wide sheet ≈ 49 px). */
   .keyboard .key {
-    height: 52px;
+    height: 60px;
     min-width: 0;
   }
   .keyboard--compact .key {
-    height: 44px;
+    height: 52px;
   }
   .numpad .key {
-    height: var(--spacing-touch);
+    height: var(--spacing-touch-row);
   }
   .key:active {
     background: var(--hmi-keyboard-key-pressed);
   }
   [data-orientation^='landscape'] .keyboard .key {
-    height: 40px;
+    height: 52px;
   }
   [data-orientation^='landscape'] .numpad .key {
-    height: 52px;
+    height: 60px;
+  }
+  [data-orientation^='landscape'] .sheet__panel[data-wide] .keyboard .key {
+    height: var(--spacing-touch-row);
+  }
+  [data-orientation^='landscape'] .sheet__panel[data-wide] .numpad .key {
+    height: var(--spacing-touch);
   }
 
   /* ---- stand-by layer -------------------------------------------------------------- */

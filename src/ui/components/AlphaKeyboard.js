@@ -12,7 +12,7 @@ import { esc } from '../html.js';
 export function renderTextField({ value = '', placeholder = '', error = null, max = null }) {
   return `
     <div class="text-field flex flex-col gap-1" data-text-field>
-      <div class="card-border card-border--strong"><div class="flex items-center gap-2 px-4 h-touch">
+      <div class="card-border card-border--strong"><div class="flex items-center gap-2 px-4 h-16">
         <span class="flex-1 t-param text-body-lg truncate ${value === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(value === '' ? placeholder : value)}</span>
         ${max ? `<span class="t-caption text-faint shrink-0" data-count>${value.length}/${max}</span>` : ''}
       </div></div>
@@ -28,7 +28,8 @@ export function openAlphaKeyboard(ctx, param, { onConfirm } = {}) {
   let value = current;
   return ctx.sheet.open({
     title: t(param.labelKey),
-    body: `${renderTextField({ value, max })}<div class="mt-3" data-keys></div>`,
+    wide: true,
+    body: `${renderTextField({ value, max })}<div class="mt-2" data-keys></div>`,
     mount(body, close) {
       const field = body.querySelector('[data-entry]');
       const count = body.querySelector('[data-count]');

@@ -22,7 +22,7 @@ export function renderNumericField(param, { entry = '', current, error = null } 
     .join(' · ');
   return `
     <div class="numeric-field flex flex-col gap-1" data-numeric-field>
-      <div class="card-border card-border--strong"><div class="flex items-center gap-2 pl-4 pr-4 h-touch">
+      <div class="card-border card-border--strong"><div class="flex items-center gap-2 pl-4 pr-4 h-16">
         <span class="flex-1 t-param text-title truncate ${entry === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
         ${unit}
       </div></div>
@@ -59,12 +59,14 @@ export function openNumericKeypad(ctx, param, { onConfirm } = {}) {
   let entry = '';
   return ctx.sheet.open({
     title: t(param.labelKey),
-    body: `${renderNumericField(param, { current })}<div class="mt-3" data-keys>${renderNumpad({
+    wide: true,
+    // landscape: field and hint beside the keypad, so the keys get the full sheet height
+    body: `<div class="land:grid land:grid-cols-[2fr_3fr] land:gap-4 land:items-start">${renderNumericField(param, { current })}<div class="mt-2 land:mt-0" data-keys>${renderNumpad({
       allowDecimal: param.type === 'Float',
       allowSign: param.min != null && param.min < 0,
       showMinMax: param.min != null && param.max != null,
       enterIcon: 'activate',
-    })}</div>`,
+    })}</div></div>`,
     mount(body, close) {
       const field = body.querySelector('[data-entry]');
       const err = body.querySelector('[data-error]');
