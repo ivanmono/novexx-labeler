@@ -25,4 +25,3 @@
 @source inline('rounded-{xs,sm,md,card,card-inner,pill}');
 @source inline('{bg,border}-status-{error,warning}/{15,40}');
 @source inline('{bg,text}-branch-{settings,production,info,service,help,usermgmt}');
-@source inline('border-l-branch-{settings,production,info,service,help,usermgmt}');

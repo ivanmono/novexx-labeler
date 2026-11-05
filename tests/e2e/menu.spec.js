@@ -25,7 +25,7 @@ test.describe('menu screens (P2-01, P2-02)', () => {
     await tiles.nth(0).click();
     await expect(page).toHaveURL(/#\/screen\/settings$/);
     await expect(page.locator('.title-bar__title')).toHaveText('Settings');
-    await expect(page.locator('.title-bar')).toHaveClass(/border-l-branch-settings/);
+    await expect(page.locator('.title-bar')).toHaveAttribute('data-branch', 'settings');
   });
 
   test('tiles for absent options are disabled, not hidden', async ({ page }, testInfo) => {

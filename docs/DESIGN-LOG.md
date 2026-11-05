@@ -226,7 +226,7 @@ Status: code only
 ## DT-24 · Branch colour as the title bar's left edge (2026-11-05, chat)
 
 Source: chat — drill-down titles showed back arrow, a vertical colour mark and the title; the mark goes
-Change: the 6 × 32 px pill between the back arrow and the title is removed; the title bar gets a 6 px left border in the menu-branch colour instead (Settings blue, Production orange, Information green, Service yellow, Help teal, User management purple). Screens without a branch (main menu, login) have no edge.
-Where: `src/ui/shell/TitleBar.js`, `src/styles/app.css` (`border-l-branch-*` registered), `tests/e2e/menu.spec.js`
+Change: the 6 × 32 px pill between the back arrow and the title is removed; the title bar gets a 6 px left edge in the menu-branch colour instead, drawn as an inset shadow so the back arrow and title sit at the same place as on screens without a branch (a real border shifted them 6 px) (Settings blue, Production orange, Information green, Service yellow, Help teal, User management purple). Screens without a branch (main menu, login) have no edge.
+Where: `src/ui/shell/TitleBar.js`, `tests/e2e/menu.spec.js`
 Before → after: every drill-down screen, title bar
 Status: code only — Figma TitleBar `Branch` variants still show the pill (landscape not reviewed yet)
