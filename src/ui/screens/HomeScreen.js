@@ -31,7 +31,7 @@ export function renderQuickCard(ctx, p, { tight = false, landscape = isLandscape
           <div class="${cx('h-full p-3 min-h-[114px] land:min-h-0 flex items-center gap-3', tight && 'land:py-2.5')}">
             ${node ? icon(node.icon, { size: 32, class: `text-branch-${node.branch ?? 'settings'} shrink-0` }) : ''}
             <span class="min-w-0 flex-1 flex flex-col gap-1 land:gap-0.5">
-              <span class="text-body-lg font-semibold line-clamp-2">${esc(paramLabel(ctx, p))}</span>
+              <span class="text-body land:text-body-lg font-semibold line-clamp-2">${esc(paramLabel(ctx, p))}</span>
               <span class="block t-param font-bold text-body text-brand-hi truncate" data-quick-value="${p.id}">${esc(formatParamValue(ctx, p))}</span>
             </span>
           </div>
@@ -80,8 +80,8 @@ export function render(ctx) {
     return `
       <div class="home flex-1 min-h-0 flex flex-col land:grid land:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] land:grid-rows-[auto_minmax(0,1fr)_auto] select-none" data-home data-state="${st.key}">
         <div class="home__top flex items-center justify-between px-6 py-2 land:flex-col land:items-start land:gap-2 land:pt-4">
-          ${renderLogo(ctx, { size: 110, variant: 'word' })}
-          <div class="text-right land:text-left min-w-0 max-w-full flex flex-col gap-1"><div class="text-body font-semibold truncate">${esc(name)}</div><div class="text-body-sm text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
+          ${renderLogo(ctx, { size: 140, variant: 'word' })}
+          <div class="text-right land:text-left min-w-0 max-w-full flex flex-col gap-1"><div class="text-body-sm font-semibold truncate">${esc(name)}</div><div class="text-label text-muted truncate">${esc(`${m.identity.type} · ${m.identity.serial}`)}</div></div>
         </div>
         <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-4 py-2">
           ${renderStartButton(ctx, m, ctx.level)}

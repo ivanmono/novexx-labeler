@@ -15,14 +15,14 @@ export function renderModal({ kind = 'info', title, body = '', destructive = fal
   <div class="modal absolute inset-0 z-40 grid place-items-center p-4 bg-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" data-kind="${kind}">
     <div class="card-border card-border--strong w-full max-w-[440px] max-h-full flex ${extraClass}" data-cmp="Modal" data-cmp-props="Kind=${kind},Destructive=${destructive ? 'yes' : 'no'}">
       <div class="flex flex-col min-h-0 w-full">
-        <div class="flex items-center gap-3 px-5 pt-5 pb-3">
-          <span class="${tone}">${icon(iconName, { size: 32 })}</span>
-          <h2 id="modal-title" class="text-title font-bold leading-tight flex-1 min-w-0 truncate">${esc(title ?? t(kind === 'error' ? 'dialog.errorTitle' : isConfirm ? 'dialog.confirmTitle' : 'dialog.infoTitle'))}</h2>
+        <div class="flex items-start gap-3 px-6 pt-7 pb-6">
+          <span class="${tone} shrink-0 pt-0.5">${icon(iconName, { size: 32 })}</span>
+          <h2 id="modal-title" class="text-title font-bold leading-tight flex-1 min-w-0 line-clamp-2">${esc(title ?? t(kind === 'error' ? 'dialog.errorTitle' : isConfirm ? 'dialog.confirmTitle' : 'dialog.infoTitle'))}</h2>
         </div>
-        <div class="modal__body px-5 pb-4 text-body text-text ${scroll ? 'scroll-y' : ''} min-h-0" data-cmp-slot="body">${body}
-          ${destructive ? `<p class="mt-3 text-label text-status-error-ink font-semibold">${esc(t('dialog.destructiveHint'))}</p>` : ''}
+        <div class="modal__body px-6 text-body text-text leading-snug ${scroll ? 'scroll-y' : ''} min-h-0" data-cmp-slot="body">${body}
+          ${destructive ? `<p class="mt-4 text-label text-status-error-ink font-semibold">${esc(t('dialog.destructiveHint'))}</p>` : ''}
         </div>
-        <div class="flex gap-3 px-5 pb-5">
+        <div class="flex gap-3 px-6 pt-8 pb-7"> <!-- gap outside the scroll area so it shows when the body scrolls (DT-23) -->
           ${isConfirm ? `<button type="button" class="pressable flex-1 h-touch rounded-md bg-surface-2 text-body font-semibold" data-action="cancel">${esc(cancelLabel ?? t('action.cancel'))}</button>` : ''}
           <button type="button" class="${cx('pressable flex-1 h-touch rounded-md text-body font-semibold', destructive ? 'bg-status-error text-white' : 'bg-brand text-on-brand')}" data-action="ok">${esc(okLabel ?? (isConfirm ? t('action.confirm') : t('action.ok')))}</button>
         </div>

@@ -5,7 +5,6 @@
  */
 import { icon } from '../components/Icon.js';
 import { renderNumpad, mountNumpad, mountKeyboard } from '../components/Keyboard.js';
-import { fmtDate } from '../format.js';
 import { esc, onAction, cx } from '../html.js';
 
 /** Profile row on the login screen (Figma ProfileRow · Level × Enabled). */
@@ -16,7 +15,7 @@ export function renderProfileRow(ctx, u) {
                 <span class="grid place-items-center size-12 rounded-pill bg-level-${u.level} text-black font-bold">${esc(`L${u.level}`)}</span>
                 <span class="flex-1 min-w-0">
                   <span class="block text-body-lg font-semibold truncate">${esc(u.name)}</span>
-                  <span class="block text-label text-muted truncate">${esc(ctx.t(`level.${u.level}`))} · ${esc(ctx.t('login.lastChange', { date: fmtDate(u.lastPasswordChange) }))}</span>
+                  <span class="block text-label text-muted truncate">${esc(ctx.t(`level.${u.level}`))}</span>
                 </span>
                 ${icon('chevron', { size: 24, class: 'text-faint' })}
               </div>
@@ -58,17 +57,18 @@ export function render(ctx) {
       subtitle: `${user.name} · L${user.level} ${ctx.t(`level.${user.level}`)}`,
       html: `
         <div class="flex-1 min-h-0 flex flex-col" data-password data-user="${esc(user.id)}">
-          <div class="px-3 pt-3">
+          <!-- field, error and keys stay together at the bottom; the free space sits above (DT-21) -->
+          <div class="px-3 pt-3 mt-auto">
             <div class="card-border card-border--strong">
-              <div class="flex items-center gap-1 pl-4 pr-1 h-touch">
+              <div class="flex items-center gap-1 pl-4 pr-1 h-touch land:h-[72px]">
                 <span class="flex-1 t-param text-title tracking-[0.3em] truncate" data-field aria-label="${esc(ctx.t('login.password'))}">${esc(masked())}</span>
                 <button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-chrome" data-action="toggleShow" aria-label="${esc(ctx.t('login.show'))}" data-show>${icon('lock', { size: 26 })}</button>
                 <button type="button" class="pressable h-touch-row min-w-touch-row px-3 rounded-md bg-surface-2 text-label font-semibold" data-action="mode" data-mode>ABC</button>
               </div>
             </div>
-            <div class="text-label text-status-error-ink font-semibold h-5 mt-1 px-1" data-error aria-live="polite"></div>
+            <div class="text-label text-status-error-ink font-semibold min-h-6 mt-1 mb-1 px-1" data-error aria-live="polite"></div>
           </div>
-          <div class="px-3 pb-8 mt-auto" data-keys></div>
+          <div class="px-3 pb-8 land:pb-3" data-keys></div>
         </div>`,
       mount(el) {
         const host = el.querySelector('[data-keys]');
@@ -95,7 +95,7 @@ export function render(ctx) {
           host.innerHTML = '';
           el.querySelector('[data-mode]').textContent = mode === 'num' ? 'ABC' : '123';
           if (mode === 'num') {
-            host.innerHTML = renderNumpad({ enterIcon: 'activate' });
+            host.innerHTML = renderNumpad({ enterIcon: 'activate', pin: true });
             keyDispose = mountNumpad(host, {
               onInput: (k) => {
                 password += k;
@@ -103,10 +103,6 @@ export function render(ctx) {
               },
               onBackspace: () => {
                 password = password.slice(0, -1);
-                update();
-              },
-              onClear: () => {
-                password = '';
                 update();
               },
               onEnter: submit,

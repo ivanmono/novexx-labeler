@@ -44,37 +44,6 @@
   --raw-purple-700: #8a2fd0;
 }
 
-/* ---- 1b. Type sizes (DT-13, DT-14) ------------------------------------------
-   Variables so the dev panel can switch the whole scale live on the board
-   (<html data-type="l|xl">) while the sizes are being chosen; M is the default. */
-:root {
-  --hmi-text-caption: 13px;
-  --hmi-text-label: 16px;
-  --hmi-text-body-sm: 18px;
-  --hmi-text-body: 20px;
-  --hmi-text-body-lg: 22px;
-  --hmi-text-title: 28px;
-  --hmi-text-hero: 36px;
-}
-[data-type='l'] {
-  --hmi-text-caption: 16px;
-  --hmi-text-label: 18px;
-  --hmi-text-body-sm: 20px;
-  --hmi-text-body: 22px;
-  --hmi-text-body-lg: 24px;
-  --hmi-text-title: 30px;
-  --hmi-text-hero: 40px;
-}
-[data-type='xl'] {
-  --hmi-text-caption: 18px;
-  --hmi-text-label: 20px;
-  --hmi-text-body-sm: 22px;
-  --hmi-text-body: 24px;
-  --hmi-text-body-lg: 28px;
-  --hmi-text-title: 32px;
-  --hmi-text-hero: 44px;
-}
-
 /* ---- 2. Semantic tokens — dark theme (default) ---------------------------- */
 :root,
 [data-theme='dark'] {
@@ -189,7 +158,9 @@
   --hmi-shadow-card: 0 8px 18px 0 rgb(0 0 0 / 0.25);
   --hmi-glow-brand: 0 0 25px 0 rgb(136 230 198 / 0.5);
   --hmi-glow-error: 0 0 60px 0 rgb(255 25 74 / 0.5);
-  --hmi-glow-run: 0 0 60px 0 rgb(111 203 44 / 0.5);
+  /* running must read from across the hall (DT-16): bright ring + wide, dense halo in the run green */
+  --hmi-glow-run:
+    0 0 0 4px rgb(34 212 100), 0 0 40px 14px rgb(34 212 100 / 0.85), 0 0 140px 56px rgb(34 212 100 / 0.55);
 
   --hmi-keyboard-key: var(--raw-navy-600);
   --hmi-keyboard-key-pressed: var(--raw-navy-400);
@@ -250,7 +221,8 @@
   --hmi-shadow-card: 0 8px 18px 0 rgb(32 60 83 / 0.12);
   --hmi-glow-brand: 0 0 25px 0 rgb(32 164 152 / 0.35);
   --hmi-glow-error: 0 0 60px 0 rgb(232 65 63 / 0.35);
-  --hmi-glow-run: 0 0 60px 0 rgb(23 143 69 / 0.35);
+  --hmi-glow-run:
+    0 0 0 3px rgb(23 143 69 / 0.9), 0 0 36px 8px rgb(34 212 100 / 0.6), 0 0 120px 36px rgb(34 212 100 / 0.3);
 
   --hmi-keyboard-key: #ffffff;
   --hmi-keyboard-key-pressed: #dadee5;
@@ -314,22 +286,22 @@
   --font-sans: 'Figtree', system-ui, sans-serif;
   --font-mono: 'Fira Code', ui-monospace, monospace;
 
-  /* type scale (docx §1 asks to check for larger sizes on the target display). Raised one step for the
-     real 4.3" panel (217 ppi: 16 px text is under 2 mm high), DT-13 */
-  --text-caption: var(--hmi-text-caption);
+  /* type scale (docx §1 asks to check for larger sizes on the target display). Chosen on the real
+     4.3" panel (217 ppi): XL of the DT-14 trial, smallest text 18 px (DT-13, DT-14) */
+  --text-caption: 18px;
   --text-caption--line-height: 1.2;
   --text-caption--letter-spacing: 0.15em;
-  --text-label: var(--hmi-text-label);
+  --text-label: 20px;
   --text-label--line-height: 1.2;
-  --text-body-sm: var(--hmi-text-body-sm);
+  --text-body-sm: 22px;
   --text-body-sm--line-height: 1.25;
-  --text-body: var(--hmi-text-body);
+  --text-body: 24px;
   --text-body--line-height: 1.25;
-  --text-body-lg: var(--hmi-text-body-lg);
+  --text-body-lg: 28px;
   --text-body-lg--line-height: 1.25;
-  --text-title: var(--hmi-text-title);
+  --text-title: 32px;
   --text-title--line-height: 1.2;
-  --text-hero: var(--hmi-text-hero);
+  --text-hero: 44px;
   --text-hero--line-height: 1.15;
   --text-display: 48px;
   --text-display--line-height: 1.1;

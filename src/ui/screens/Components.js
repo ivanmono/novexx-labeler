@@ -159,13 +159,11 @@ export function render(ctx) {
   const pills = Object.values(STATUS_STATES).map(
     (m) => `<div class="flex">${renderStatePill(ctx, statusOf(m))}</div>`,
   );
-  const users = ctx.store.get('users');
   const sampleUser = (level, enabled) => ({
     id: `sample-${level}`,
     name: USER_BY_LEVEL[level],
     level,
     enabled,
-    lastPasswordChange: users[0]?.lastPasswordChange,
   });
   const profileRows = [];
   for (const level of [1, 2, 3, 4])

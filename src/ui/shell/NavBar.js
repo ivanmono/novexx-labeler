@@ -31,7 +31,7 @@ export function renderNavBar({ level = 0, userName = null, canBack = true, machi
     </button>
     <button type="button" class="nav-bar__user pressable flex flex-col items-center justify-center gap-0.5 flex-1" data-action="user" aria-label="${esc(t(`level.${lvl}`))}">
       <span class="nav-bar__badge grid place-items-center size-11 rounded-pill text-body-sm font-bold text-black bg-level-${lvl}" data-badge>${esc(t(`level.short.${lvl}`))}</span>
-      <span class="nav-bar__name t-caption text-level-${lvl} max-w-full px-1 land:px-0 text-center">${esc(userName ?? t(`level.${lvl}`)).replace('.', '.\u200b')}</span>
+      <span class="nav-bar__name text-label land:text-[15px] land:leading-tight font-semibold text-level-${lvl} max-w-full px-1 land:px-0 text-center">${esc(userName ?? t(`level.${lvl}`)).replace('.', '.\u200b')}</span>
     </button>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1 ${lvl === 0 ? 'opacity-60' : ''}" data-action="menu">
       ${icon('menu', { size: 32 })}<span class="t-caption">${esc(t('nav.menu'))}</span>

@@ -8,24 +8,29 @@
 import { icon } from './Icon.js';
 import { esc, cx, onAction } from '../html.js';
 
+// five rows of at most 10 keys (DT-22): umlauts and punctuation get a row of their own, so the
+// letter keys are wider than with 11 per row
 const ROWS = {
   lower: [
-    ['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü'],
-    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä'],
-    ['⇧', 'y', 'x', 'c', 'v', 'b', 'n', 'm', '-', '_', '⌫'],
-    ['123', '.', '␣', '@', '↵'],
+    ['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p'],
+    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+    ['⇧', 'y', 'x', 'c', 'v', 'b', 'n', 'm', '⌫'],
+    ['ü', 'ö', 'ä', '-', '_', '.', '@'],
+    ['123', '␣', '↵'],
   ],
   upper: [
-    ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'Ü'],
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö', 'Ä'],
-    ['⇧', 'Y', 'X', 'C', 'V', 'B', 'N', 'M', '-', '_', '⌫'],
-    ['123', '.', '␣', '@', '↵'],
+    ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['⇧', 'Y', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'],
+    ['Ü', 'Ö', 'Ä', '-', '_', '.', '@'],
+    ['123', '␣', '↵'],
   ],
   symbols: [
-    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '%'],
-    ['!', '?', '#', '$', '&', '*', '(', ')', '+', '=', '/'],
-    ['€', ':', ';', ',', '"', "'", '<', '>', '[', ']', '⌫'],
-    ['abc', '.', '␣', '@', '↵'],
+    ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+    ['!', '?', '#', '$', '&', '*', '(', ')', '+', '='],
+    ['€', ':', ';', ',', '"', "'", '<', '>', '⌫'],
+    ['%', '/', '[', ']', '-', '_', '.', '@'],
+    ['abc', '␣', '↵'],
   ],
 };
 const SPECIAL = new Set(['⇧', '⌫', '123', 'abc', '␣', '↵']);
@@ -178,15 +183,28 @@ export function renderNumpadKey(k, extra = '', content = null) {
   return `<button type="button" class="${cx('key pressable rounded-sm grid place-items-center font-semibold', extra)}" data-action="key" data-key="${esc(k)}" aria-label="${esc(NUMPAD_NAMES[k] ?? k)}"${cmp}>${content ?? esc(k)}</button>`;
 }
 
-/** Numeric keypad: 3×4 digits plus a column of actions. `allowDecimal`/`allowSign` for floats. */
+/**
+ * Numeric keypad: 3×4 digits plus a column of actions. `allowDecimal`/`allowSign` for floats.
+ * `pin` (password entry, DT-20): three columns, no clear key and no empty fillers; backspace and
+ * enter sit either side of the 0.
+ */
 export function renderNumpad({
   allowDecimal = false,
   allowSign = false,
   showMinMax = false,
   enterIcon = 'activate',
+  pin = false,
 } = {}) {
   const key = renderNumpadKey;
   const dig = (k) => key(k, 'bg-key text-title t-param');
+  if (pin)
+    return `
+  <div class="numpad numpad--pin select-none grid grid-cols-3 gap-1.5" data-numpad role="group" aria-label="Numeric keypad">
+    ${dig('7')}${dig('8')}${dig('9')}
+    ${dig('4')}${dig('5')}${dig('6')}
+    ${dig('1')}${dig('2')}${dig('3')}
+    ${key('⌫', 'bg-surface-2', icon('back', { size: 24 }))}${dig('0')}${key('↵', 'bg-brand text-on-brand', icon(enterIcon, { size: 28 }))}
+  </div>`;
   return `
   <div class="numpad select-none grid grid-cols-4 gap-1.5" data-numpad role="group" aria-label="Numeric keypad">
     ${dig('7')}${dig('8')}${dig('9')}${key('⌫', 'bg-surface-2', icon('back', { size: 24 }))}

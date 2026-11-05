@@ -3,6 +3,7 @@
  * for all parameter screens. Label with the small low-contrast ParamID, value with unit, and an
  * affordance that tells the state before touching: chevron (editable), lock (needs a higher
  * level; tapping toasts "needs level n"), nothing (read-only / live value), play (action).
+ * Label and value wrap to two lines instead of truncating at the XL type scale (DT-15).
  * A value that differs from its default carries a marker. Indent 0–2 nests conditional rows
  * under their switch.
  *
@@ -46,13 +47,12 @@ export function renderParamRow(row) {
         : icon('chevron', { size: 22, class: 'text-faint shrink-0' });
   const main = `<${tag} ${interactive ? 'type="button"' : ''} class="${cx('param-row flex-1 min-w-0 text-left flex items-center gap-3 pr-2 min-h-touch-row', INDENT[Math.min(indent, 2)], interactive && 'pressable')}" data-row="${pid}" ${interactive ? `data-action="${locked ? 'locked' : action ? 'run' : 'edit'}" data-pid="${pid}"` : ''} ${locked && needLevel != null ? `data-need-level="${needLevel}"` : ''} ${changed ? 'data-changed="true"' : ''} ${live ? 'data-live="true"' : ''}>
       <span class="flex-1 min-w-0 py-2.5 flex items-baseline gap-2">
-        <span class="${cx('text-body truncate', locked ? 'text-muted' : 'text-text')}">${esc(label)}</span>
-        <span class="t-param text-caption text-faint shrink-0" aria-label="ParamID">${pid}</span>
+        <span class="${cx('text-body line-clamp-2 break-words min-w-0', locked ? 'text-muted' : 'text-text')}">${esc(label)} <span class="t-param text-caption text-faint whitespace-nowrap" aria-label="ParamID">${pid}</span></span>
         ${favourite ? '<span class="text-brand text-label shrink-0" aria-label="favourite">★</span>' : ''}
       </span>
-      <span class="flex items-center gap-2 shrink-0 max-w-[55%]">
+      <span class="flex items-center gap-2 shrink-0 max-w-[45%]">
         ${changed ? '<span class="size-2 rounded-pill bg-brand shrink-0" aria-label="changed from default"></span>' : ''}
-        <span class="${cx('text-body font-semibold text-right truncate', readOnly && !live ? 'text-muted' : 'text-text')}" data-value>${esc(value)}</span>
+        <span class="${cx('text-body font-semibold text-right line-clamp-2 break-words', readOnly && !live ? 'text-muted' : 'text-text')}" data-value>${esc(value)}</span>
         ${affordance}
       </span>
     </${tag}>`;

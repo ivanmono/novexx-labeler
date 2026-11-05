@@ -125,9 +125,15 @@
     pointer-events: none;
   }
 
+  /* ---- logo (DT-18): the NOVEXX PNG is white; the light theme renders it dark ---------- */
+  [data-theme='light'] .logo__img {
+    filter: brightness(0);
+    opacity: 0.85;
+  }
+
   /* ---- type helpers ------------------------------------------------------- */
   .t-caption {
-    @apply text-caption font-semibold uppercase tracking-[0.15em];
+    @apply text-caption font-semibold uppercase tracking-[0.08em]; /* 0.15em at 13 px; tighter at 18 px (DT-15) */
   }
   .t-param {
     @apply font-mono font-semibold;
@@ -244,8 +250,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    font-size: 13px;
-    letter-spacing: 0;
+    letter-spacing: 0; /* size: land:text-[15px] on the element (DT-15) */
   }
 
   /* ---- slider (P2-09): brand track up to the thumb, 40 px thumb for gloves ---------
@@ -320,7 +325,7 @@
 @layer components {
   /* ---- keyboards ----------------------------------------------------------------
      Heights in mm on the panel (DT-13): the alpha keys are as tall as the sheet allows; their
-     width is set by 11 keys per row (portrait 35 px ≈ 4 mm, landscape wide sheet ≈ 49 px). */
+     width is set by 10 keys per row in five rows (DT-22: portrait 40 px ≈ 4.7 mm, landscape ≈ 56 px). */
   .keyboard .key {
     height: 60px;
     min-width: 0;
@@ -341,7 +346,7 @@
     height: 60px;
   }
   [data-orientation^='landscape'] .sheet__panel[data-wide] .keyboard .key {
-    height: var(--spacing-touch-row);
+    height: 52px; /* five rows since DT-22 */
   }
   [data-orientation^='landscape'] .sheet__panel[data-wide] .numpad .key {
     height: var(--spacing-touch);

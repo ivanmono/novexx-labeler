@@ -140,4 +140,93 @@ Change:
 - Landscape nav user name 11 → 13 px.
 Where: `src/styles/tokens.css`, `src/ui/dev/DevPanel.js`, `src/ui/screens/HomeScreen.js`, `src/styles/components.css`
 Before → after: `home-*` at M / L / XL, both orientations, ready and alarm
-Status: code only (trial) — other screens follow once a preset is chosen; Figma not updated
+Status: code only (trial, closed by DT-15: XL chosen, the switch removed); Figma not updated
+
+## DT-15 · XL type scale adopted for every screen (2026-11-05, device feedback)
+
+Source: chat — of the DT-14 presets, XL reads best on the board
+Change:
+- XL is the only type scale (caption 18, label 20, body-sm 22, body 24, body-lg 28, title 32, hero 44 px; display 48 unchanged). The trial switch (dev panel "Type size", `?type=`) is removed.
+- Parameter rows: label and value wrap to two lines instead of truncating; the ParamID runs inline after the label text, so it no longer takes its own column.
+- Menu tiles: subtitle wraps to two lines; the tile surface fills the grid cell when a neighbour is taller. Login profile rows: the role / password-changed line wraps.
+- Home: quicklink title is body (24 px) in portrait so two-word titles fit beside the icon; body-lg in landscape.
+- Captions (`t-caption`) keep uppercase with tracking 0.08em (was 0.15em, too wide at 18 px).
+- Nav user name: the user's own spelling (not uppercase), label size in portrait, 15 px in the 80 px landscape rail (a long name such as "m.mustermann" still ends in "…" there).
+Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/dev/DevPanel.js`, `src/ui/components/ParamRow.js`, `MenuTile.js`, `src/ui/shell/NavBar.js`, `src/ui/screens/HomeScreen.js`, `LoginScreen.js`
+Before → after: every screen; parameter lists show about 7 rows in portrait
+Status: code only — Figma tokens and components still on the old scale; needs designer and PID sign-off (#51)
+
+## DT-16 · Running glow around the start button much stronger (2026-11-05, device feedback)
+
+Source: chat — on the board, "running" must be visible from a distance
+Change: `--hmi-glow-run` was one soft 60 px shadow at 50 % in an olive green. It is now three layers in the status run green (#22d464): a solid 4 px ring, a 40 px / 14 px-spread inner glow at 85 %, and a 140 px / 56 px-spread halo at 55 %. Light theme: same layers, toned down (ring in the darker run green, 60 % / 30 %).
+Where: `src/styles/tokens.css` (only the start button uses the token)
+Before → after: `home-*-run` portrait and landscape
+Status: code only — Figma effect style not updated
+
+## DT-17 · Home device name and serial one step smaller (2026-11-05, device feedback)
+
+Source: chat — on the board, device name and serial read too large at XL
+Change: device name body (24 px) → body-sm (22 px); type · serial body-sm (22 px) → label (20 px).
+Where: `src/ui/screens/HomeScreen.js`
+Before → after: `home-*`, top right (portrait) / top left (landscape)
+Status: code only
+
+## DT-18 · Real NOVEXX logo (2026-11-05, chat)
+
+Source: Figma "Novexx Presentations", frame 0:137, layer `Logo` (0:155, image `Novexx_Solutions_Logo 1`, 300 × 107 PNG, white on transparent)
+Change: the NOVEXX logo selection (608 = 609) shows the real "NOVEXX SOLUTIONS" logo instead of the spaced teal wordmark, on home (140 px wide), start-up (160 px) and stand-by (140 px). The PNG is white; the light theme renders it near-black with a CSS filter. ETIPACK and custom stay dummy wordmarks.
+Where: `src/assets/logos/novexx.png`, `src/ui/components/Logo.js`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
+Before → after: `home-*`, `startup-*`, stand-by
+Status: code only. The logo is a raster PNG at 300 px wide (about 2× the largest use); a vector version from PID would stay sharp at any size.
+
+## DT-19 · Login profile list shows name and role only (2026-11-05, chat)
+
+Source: chat — "do we need 'Password changed' on the login list?"
+Change: the profile rows on the login screen no longer show "Password changed <date>"; the second line is the role only (Administrator, Operator, …). The docx asks for the last password change only in the L3 user-management list (P3-16b), and on the login screen it showed every password's age to anyone at the machine. The `login.lastChange` text stays for P3-16b.
+Where: `src/ui/screens/LoginScreen.js`, `src/ui/screens/Components.js`
+Before → after: `login-*`
+Status: code only — ProfileRow in Figma still has the date line
+
+## DT-20 · Password keypad: three columns, no clear key, backspace bottom left (2026-11-05, chat)
+
+Source: chat — the number layout of the password entry: remove "C", backspace to the bottom left
+Change: the login password numpad (`renderNumpad({ pin: true })`) is a 3 × 4 grid: 7 8 9 / 4 5 6 / 1 2 3 / ⌫ 0 ↵. The clear key and the two empty fillers of the 4-column value keypad are gone, so every key is wider. Backspace sits bottom left, enter bottom right. The value keypad of the parameter editors is unchanged.
+Where: `src/ui/components/Keyboard.js`, `src/ui/screens/LoginScreen.js`
+Before → after: `login-*-password`
+Status: code only
+
+## DT-21 · Password field anchored above the keys (2026-11-05, chat)
+
+Source: chat — the empty band between the password field and the keypad
+Change: on the password screen the field, the error line and the keys form one group at the bottom; the free space sits above, under the title. The field stays directly above the keys in 123 and ABC mode (it moves with the keyboard height), like the field above the keypad in the value editors. Landscape has no free space, so it looks the same. The error line is a full label line tall (was clipped at 20 px with the XL type).
+Where: `src/ui/screens/LoginScreen.js`
+Before → after: `login-*-password`
+Status: code only
+
+## DT-22 · Text keyboard in five rows of at most ten keys (2026-11-05, chat)
+
+Source: chat — the text keyboard looks too dense
+Change: the umlauts and punctuation move to a row of their own, so no row has more than ten keys and every letter key is wider (portrait 35 → 40 px, landscape 50 → 56 px).
+- lower / upper: q–p · a–l · ⇧ y–m ⌫ · ü ö ä - _ . @ · 123, space, enter
+- symbols: 1–0 · ! ? # $ & * ( ) + = · € : ; , " ' < > ⌫ · % / [ ] - _ . @ · abc, space, enter
+Five rows need more height: the keys in the landscape editor sheet are 52 px (were 68 px, four rows), and the login password field is 72 px tall in landscape (was 88 px). Portrait keeps 60 px keys.
+Where: `src/ui/components/Keyboard.js`, `src/styles/components.css`, `src/ui/screens/LoginScreen.js`
+Before → after: `editor-*-text`, `login-*-password` (ABC mode)
+Status: code only — Figma Keyboard component still has four rows
+
+## DT-23 · More vertical space in pop-ups; long titles wrap (2026-11-05, chat)
+
+Source: chat — more vertical spacing between title, text and buttons in the pop-up
+Change: modal (info, error, confirm, help) padding: top 20 → 28 px, title to text 12 → 24 px, text to buttons 16 → 32 px, bottom 20 → 28 px, sides 20 → 24 px. The text-to-buttons gap sits on the button row, outside the scrolling text, so it stays visible when a long help text scrolls. Titles wrap to two lines instead of truncating ("Trigger-Button for Applicator Test Cycle"); the icon aligns with the first line.
+Where: `src/ui/shell/ModalHost.js`
+Before → after: `confirm-*`, `help-*`
+Status: code only
+
+## DT-24 · Branch colour as the title bar's left edge (2026-11-05, chat)
+
+Source: chat — drill-down titles showed back arrow, a vertical colour mark and the title; the mark goes
+Change: the 6 × 32 px pill between the back arrow and the title is removed; the title bar gets a 6 px left border in the menu-branch colour instead (Settings blue, Production orange, Information green, Service yellow, Help teal, User management purple). Screens without a branch (main menu, login) have no edge.
+Where: `src/ui/shell/TitleBar.js`, `src/styles/app.css` (`border-l-branch-*` registered), `tests/e2e/menu.spec.js`
+Before → after: every drill-down screen, title bar
+Status: code only — Figma TitleBar `Branch` variants still show the pill (landscape not reviewed yet)

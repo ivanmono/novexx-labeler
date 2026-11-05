@@ -1,6 +1,6 @@
 /**
  * Dev panel (not part of the product UI). Toggle with Ctrl+Shift+D or the DEV corner tab.
- * Sets theme, type size, orientation, language, access level, machine state; injects errors; resets data.
+ * Sets theme, orientation, language, access level, machine state; injects errors; resets data.
  * Playwright drives the same things through `window.__hmi` (see src/app.js).
  */
 const ORIENTATIONS = [
@@ -25,7 +25,6 @@ export function mountDevPanel(api) {
       <div style="font-weight:700">Dev panel</div>
       <label>Theme <select data-dev="theme" style="${S}"><option value="dark">dark</option><option value="light">light</option></select></label>
       <label>Orientation <select data-dev="orientation" style="${S}">${ORIENTATIONS.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
-      <label>Type size <select data-dev-type style="${S}"><option value="m">M (min 13 / 16 px)</option><option value="l">L (min 16 / 18 px)</option><option value="xl">XL (min 18 / 20 px)</option></select></label>
       <label>Language <select data-dev="lang" style="${S}"><option value="en">English</option><option value="de">Deutsch</option></select></label>
       <label>Access level <select data-dev="level" style="${S}">${[0, 1, 2, 3, 4].map((l) => `<option value="${l}">L${l}</option>`).join('')}</select></label>
       <div>Machine state <span data-dev-state style="color:#88e6c6"></span></div>
@@ -56,26 +55,6 @@ export function mountDevPanel(api) {
     sel.value = String(api.get(key));
     sel.addEventListener('change', () => api.set(key, sel.value));
   }
-  // type scale trial (DT-14): <html data-type>, kept per device; ?type=l|xl in the URL wins
-  const typeSel = root.querySelector('[data-dev-type]');
-  const setType = (v) => {
-    if (v === 'm') delete document.documentElement.dataset.type;
-    else document.documentElement.dataset.type = v;
-    typeSel.value = v;
-    try {
-      localStorage.setItem('hmi.type', v);
-    } catch {
-      /* private mode */
-    }
-  };
-  let savedType = null;
-  try {
-    savedType = localStorage.getItem('hmi.type');
-  } catch {
-    /* private mode */
-  }
-  setType(new URLSearchParams(location.search).get('type') ?? savedType ?? 'm');
-  typeSel.addEventListener('change', () => setType(typeSel.value));
   root.querySelectorAll('[data-dev-cmd]').forEach((b) => b.addEventListener('click', () => api.set('state', b.dataset.devCmd)));
   root.querySelectorAll('[data-dev-go]').forEach((b) => b.addEventListener('click', () => api.go(b.dataset.devGo)));
   root.querySelector('[data-dev-skip]').addEventListener('click', () => { api.skipBoot(); api.go('home'); });
