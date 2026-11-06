@@ -75,7 +75,7 @@ export function renderStartButton(ctx, machine, level) {
 
 /** Machine-state pill under the start control (Figma StatePill · State). */
 export function renderStatePill(ctx, st) {
-  return `<div class="home__pill shrink-0 inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
+  return `<div class="home__pill shrink-0 land:mt-4 inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
             <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
           </div>`;
 }
@@ -104,14 +104,14 @@ export function render(ctx) {
           ${renderLogo(ctx, { size: 140, variant: 'word' })}
           ${machineData('text-right land:hidden')}
         </div>
-        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-3 py-2 land:col-start-1 land:row-start-1 land:row-span-2">
-          <div class="hidden land:block">${renderLogo(ctx, { size: 140, variant: 'word' })}</div>
+        <div class="home__center flex-1 min-h-0 flex flex-col items-center justify-center gap-6 land:gap-2 py-2 land:py-4 land:col-start-1 land:row-start-1 land:row-span-2">
+          <div class="hidden land:block land:mb-auto">${renderLogo(ctx, { size: 140, variant: 'word' })}</div>
           ${renderStartButton(ctx, m, ctx.level)}
           ${renderStatePill(ctx, st)}
           ${ctx.level < 1 ? `<div class="text-body-sm text-muted text-center px-4">${icon('lock', { size: 20, class: 'inline-block align-[-3px] mr-1' })}${esc(ctx.t('home.loginToOperate'))}</div>` : ''}
-          ${machineData('hidden land:flex items-center text-center')}
+          ${machineData('hidden land:flex land:mt-auto items-center text-center')}
         </div>
-        <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-6 land:grid-cols-1 land:pl-0 land:pt-4 land:content-center land:col-start-2 land:row-start-1 land:row-span-2', nErr || nWarn ? 'land:gap-1 land:pb-2' : 'land:gap-2 land:pb-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
+        <div class="${cx('home__quick grid grid-cols-2 gap-3 px-4 pb-6 land:grid-cols-1 land:pl-0 land:py-4 land:content-stretch land:auto-rows-fr land:col-start-2 land:row-start-1 land:row-span-2', nErr || nWarn ? 'land:gap-1' : 'land:gap-4')}" data-quicklinks>${quickLinks(nErr || nWarn)}</div>
         ${
           nErr || nWarn
             ? `

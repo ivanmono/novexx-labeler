@@ -388,3 +388,15 @@ Change:
 Where: `src/styles/tokens.css`, `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-warning`, `home-*-alarm`
 Status: code only — Figma status colour not updated
+
+## DT-43 · Landscape home: logo at the top, machine data at the bottom, cards spread to match (2026-11-06, chat)
+
+Source: chat — "on horizontal home, pull logo to top, and Jakobs XLS... to the bottom"; then space the cards so their top lines up with the logo and their bottom with the machine data
+Change:
+- In the landscape start column the logo sits at the top edge and the machine name / type · serial at the bottom edge; start button, state pill and login hint stay centred between them (auto margins). The column has 16 px top/bottom padding (was 8 px).
+- The quicklink cards spread over the same height: the first card's top lines up with the logo's top, the last card's bottom with the machine data's bottom (16 px padding in both columns). The gap between cards is 16 px (was 8 px) and the cards share the rest of the height equally (about 100 px each, were 93 px); spreading only the gaps (about 25 px) was too much.
+- The state pill sits 24 px below the start button (was 12 px); the other gaps in the column are 8 px (were 12 px), which only shows when the column is full.
+- With the alarm banner at L0 both columns are full: the start group closes up and the logo sits 8 px from the top instead of 16 px; nothing scrolls or is cut off.
+Where: `src/ui/screens/HomeScreen.js`
+Before → after: `home-landscape-*`
+Status: code only
