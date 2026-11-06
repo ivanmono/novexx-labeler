@@ -23,7 +23,7 @@ export function render(ctx) {
   ctx.shell.setScreen({
     title: ctx.t('user.title'),
     html: `
-      <div class="flex-1 scroll-y p-4 flex flex-col gap-4">
+      <div class="flex-1 scroll-y p-4 pb-8 land:pb-4 flex flex-col gap-4">
         <div class="card-border"><div class="flex items-center gap-4 p-4">
           <span class="grid place-items-center size-14 rounded-pill bg-level-${s.level} text-black font-bold text-body-lg">${esc(`L${s.level}`)}</span>
           <div class="min-w-0"><div class="t-caption text-muted">${esc(ctx.t('user.loggedInAs'))}</div><div class="text-title font-bold truncate">${esc(u.name)}</div></div>
@@ -33,10 +33,13 @@ export function render(ctx) {
           ${row(ctx.t('user.autoLogoff'), esc(u.autoLogoffMin ? ctx.t('user.minutes', { n: u.autoLogoffMin }) : ctx.t('user.never')), !elevated)}
           ${elevated ? row(ctx.t('level.4'), `<span class="text-level-4">${esc(ctx.t('user.secureUntil', { time: hhmm(s.elevatedUntil) }))}</span>`, true) : ''}
         </div></div>
-        <button type="button" class="card-border pressable text-left" data-action="manage">
-          <div class="flex items-center gap-3 px-4 min-h-touch">${icon('usermanage', { size: 32, class: 'text-branch-usermgmt' })}<span class="flex-1 text-body font-semibold">${esc(ctx.t('user.manage'))}</span>${icon('chevron', { size: 24, class: 'text-faint' })}</div>
-        </button>
-        ${renderButton({ label: ctx.t('user.logout'), action: 'logout', icon: 'lock', extra: 'mt-auto' })}
+        <!-- landscape: management and log out share the bottom row, so log out needs no scrolling (DT-44) -->
+        <div class="contents land:mt-auto land:grid land:grid-cols-[3fr_2fr] land:gap-4">
+          <button type="button" class="card-border pressable text-left" data-action="manage">
+            <div class="flex items-center gap-3 px-4 min-h-touch">${icon('usermanage', { size: 32, class: 'text-branch-usermgmt' })}<span class="flex-1 text-body font-semibold">${esc(ctx.t('user.manage'))}</span>${icon('chevron', { size: 24, class: 'text-faint' })}</div>
+          </button>
+          ${renderButton({ label: ctx.t('user.logout'), action: 'logout', icon: 'lock', extra: 'mt-auto land:mt-0' })}
+        </div>
       </div>`,
     mount(el) {
       return onAction(el, {

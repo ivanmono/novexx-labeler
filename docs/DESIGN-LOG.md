@@ -400,3 +400,13 @@ Change:
 Where: `src/ui/screens/HomeScreen.js`
 Before → after: `home-landscape-*`
 Status: code only
+
+## DT-44 · User screen: Log out clear of the nav bar; one bottom row in landscape (2026-11-06, chat)
+
+Source: chat — the button on `#/user` looked squished
+Change:
+- Portrait: the Log out button ended 16 px above the nav bar, under the level badge that rises 17 px over the bar's edge. The screen now keeps 32 px clear above the nav bar like the other portrait screens (DT-06).
+- Landscape: Log out sat 32 px below the fold (it needed scrolling). User management and Log out now share the bottom row (3 : 2 width, so "User management" stays on one line); the page fits without scrolling, also with the L4 "secure until" row.
+Where: `src/ui/screens/UserScreen.js`
+Before → after: `user-*`
+Status: code only
