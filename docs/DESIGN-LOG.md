@@ -410,3 +410,18 @@ Change:
 Where: `src/ui/screens/UserScreen.js`
 Before → after: `user-*`
 Status: code only
+
+## DT-45 · Slider styled after the first draft's playground slider (2026-11-06, chat)
+
+Source: chat — take the slider styling from the first draft (`D:\Projects\NovexxPrototype-HTML`, `src/styles/components/_slider.css`, `playground.html`) and try it; ready to revert
+Change:
+- Track: 15 px with a 2 px gradient ring (`--hmi-gradient-stroke`, the draft's `--gradient-stroke-secondary`) on the form surface (was a flat 8 px pill).
+- Fill coloured by thirds of the range, as in the draft: red (`status-error-ink`, the draft's `--red-light`) below 1/3, yellow (`status-standby`) to 2/3, green (`status-run`) above (was brand teal at every value).
+- Thumb: 40 px round on the card surface gradient with a 2 px gradient ring (was white with a teal border); grows 10 % while dragging.
+- Min and max above the track, flush with its start and end; tick marks under the track (11, long at 0 / 50 / 100 %); Default on its own line below.
+- Steppers match the thumb: a 56 px circle with the same gradient ring and surface gradient, 28 px chevron; the touch area stays 88 × 88 px.
+- Kept from the app: the large value with unit on top (the draft's detail-page readout); the touch area of the track (68 px tall); the value label that follows the thumb in the draft is left out, the large value shows it already.
+Note: red / yellow / green are the machine-state colours (alarm, stand-by, running) everywhere else in the app; on the slider they only mean the position in the range.
+Where: `src/ui/components/Slider.js`, `src/styles/components.css`
+Before → after: `editor-slider-*`
+Status: code only — kept after the trial; Figma Slider component not updated

@@ -256,37 +256,113 @@
   }
   /* landscape: the name is hidden (land:hidden, DT-34); the level badge alone stays in the rail */
 
-  /* ---- slider (P2-09): brand track up to the thumb, 40 px thumb for gloves ---------
-     The input is a full row tall (the touch area, DT-13); the 8 px track is only its background. */
+  /* ---- slider (P2-09), styled after the first draft's playground slider (DT-45) ----
+     Gradient-ringed 15 px track, fill coloured by thirds of the range, 44 px round thumb with a
+     gradient ring and surface. The native input lies invisible over the whole container (a full
+     row tall, the touch area, DT-13); its 44 px thumb travels the same path as the drawn one. */
+  .slider__track-container {
+    --thumb: 44px;
+    --pos: calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--pct-n, 0));
+    position: relative;
+    height: var(--spacing-touch-row);
+    display: flex;
+    align-items: center;
+  }
+  .slider__track-border {
+    flex: 1;
+    padding: 2px;
+    border-radius: 12px;
+    background: var(--hmi-gradient-stroke);
+  }
+  .slider__track {
+    position: relative;
+    height: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--hmi-surface-2);
+  }
+  .slider__fill {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: calc(var(--thumb) / 2 - 2px + (100% - var(--thumb) + 4px) * var(--pct-n, 0));
+    background: var(--hmi-status-error-ink);
+  }
+  [data-zone='mid'] .slider__fill {
+    background: var(--hmi-status-standby);
+  }
+  [data-zone='high'] .slider__fill {
+    background: var(--hmi-status-run);
+  }
+  .slider__thumb {
+    position: absolute;
+    top: 50%;
+    left: var(--pos);
+    transform: translate(-50%, -50%);
+    padding: 2px;
+    border-radius: 50%;
+    background: var(--hmi-gradient-stroke);
+    pointer-events: none;
+  }
+  .slider__thumb-inner {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--hmi-gradient-surface);
+  }
+  .slider[data-dragging='true'] .slider__thumb {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
   .slider__input {
     appearance: none;
-    height: var(--spacing-touch-row);
-    background: linear-gradient(
-        to right,
-        var(--hmi-brand) 0 var(--pct, 0%),
-        var(--hmi-surface-2) var(--pct, 0%) 100%
-      )
-      center / 100% 8px no-repeat;
-    border-radius: var(--radius-pill);
-    outline: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    background: none;
   }
   .slider__input::-webkit-slider-thumb {
     appearance: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--hmi-text);
-    border: 3px solid var(--hmi-brand);
+    width: var(--thumb);
+    height: var(--thumb);
   }
   .slider__input::-moz-range-thumb {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--hmi-text);
-    border: 3px solid var(--hmi-brand);
+    width: var(--thumb);
+    height: var(--thumb);
   }
-  .slider[data-dragging='true'] .slider__input::-webkit-slider-thumb {
-    transform: scale(1.1);
+  .slider__ticks {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: calc(22px - 0.5px);
+  }
+  .slider__ticks > span {
+    width: 1px;
+    border-radius: 1px;
+    background: var(--hmi-text-muted);
+    opacity: 0.6;
+  }
+  /* min / max at the track's start and end */
+  .slider__minmax {
+    padding-inline: 2px;
+  }
+  /* steppers drawn like the thumb: gradient ring, surface gradient, 56 px circle in the 88 px target */
+  .slider__btn-ring {
+    padding: 2px;
+    border-radius: 50%;
+    background: var(--hmi-gradient-stroke);
+  }
+  .slider__btn-inner {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--hmi-gradient-surface);
+  }
+  .slider__btn[aria-disabled='true'] {
+    opacity: 0.35;
   }
 
   /* ---- sheet ------------------------------------------------------------------ */

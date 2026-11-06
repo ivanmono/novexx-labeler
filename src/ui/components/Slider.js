@@ -12,6 +12,8 @@ import { t, fmtNumber } from '../../core/i18n.js';
 import { esc, cx, onAction } from '../html.js';
 
 const fmt = (v, param) => fmtNumber(v, param.type === 'Float' && !Number.isInteger(v) ? 1 : 0);
+// fill colour by thirds of the range, as in the first draft's playground slider (DT-45)
+const zone = (pct) => (pct < 100 / 3 ? 'low' : pct < 200 / 3 ? 'mid' : 'high');
 
 export function renderSlider(param, value) {
   const step = stepFor(param);
@@ -23,17 +25,21 @@ export function renderSlider(param, value) {
         <span class="t-param text-hero font-semibold" data-slider-value>${esc(fmt(value, param))}</span>
         ${param.unit ? `<span class="text-body-lg text-muted">${esc(param.unit)}</span>` : ''}
       </div>
-      <div class="flex items-center gap-2">
-        <button type="button" class="pressable size-touch grid place-items-center rounded-md bg-surface-2 text-chrome shrink-0" data-action="dec" ${value <= param.min ? 'aria-disabled="true"' : ''} aria-label="-${step}">${icon('chevron', { size: 24, class: 'rotate-180' })}</button>
-        <div class="flex-1 relative h-touch flex items-center">
-          <input type="range" class="slider__input w-full" min="${param.min}" max="${param.max}" step="${step}" value="${value}" style="--pct:${pct}%" aria-label="${esc(t(param.labelKey))}" />
+      <div class="flex items-center gap-1">
+        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="dec" ${value <= param.min ? 'aria-disabled="true"' : ''} aria-label="-${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 28, class: 'rotate-180' })}</span></span></button>
+        <div class="flex-1 min-w-0 flex flex-col gap-2">
+          <div class="slider__minmax flex justify-between text-label text-muted"><span>${esc(fmt(param.min, param))}</span><span>${esc(fmt(param.max, param))}</span></div>
+          <div class="slider__track-container" style="--pct-n:${pct / 100}" data-zone="${zone(pct)}">
+            <div class="slider__track-border"><div class="slider__track"><div class="slider__fill"></div></div></div>
+            <div class="slider__thumb"><div class="slider__thumb-inner"></div></div>
+            <input type="range" class="slider__input" min="${param.min}" max="${param.max}" step="${step}" value="${value}" aria-label="${esc(t(param.labelKey))}" />
+          </div>
+          <div class="slider__ticks" aria-hidden="true">${Array.from({ length: 11 }, (_, i) => `<span class="${i % 5 ? 'h-1' : 'h-2'}"></span>`).join('')}</div>
         </div>
-        <button type="button" class="pressable size-touch grid place-items-center rounded-md bg-surface-2 text-chrome shrink-0" data-action="inc" ${value >= param.max ? 'aria-disabled="true"' : ''} aria-label="+${step}">${icon('chevron', { size: 24 })}</button>
+        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="inc" ${value >= param.max ? 'aria-disabled="true"' : ''} aria-label="+${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 28 })}</span></span></button>
       </div>
-      <div class="flex justify-between t-caption text-muted px-16">
-        <span>${esc(fmt(param.min, param))}</span>
+      <div class="text-center t-caption text-muted">
         <span class="${cx(value === param.default && 'text-brand')}">${esc(t('common.default'))} ${esc(fmt(param.default, param))}</span>
-        <span>${esc(fmt(param.max, param))}</span>
       </div>
     </div>`;
 }
@@ -50,10 +56,10 @@ export function openSlider(ctx, param, { onChange } = {}) {
         value = snapToRange(param, v, step);
         const input = body.querySelector('input[type=range]');
         input.value = String(value);
-        input.style.setProperty(
-          '--pct',
-          `${((value - param.min) / (param.max - param.min)) * 100}%`,
-        );
+        const pct = ((value - param.min) / (param.max - param.min)) * 100;
+        const track = body.querySelector('.slider__track-container');
+        track.style.setProperty('--pct-n', String(pct / 100));
+        track.dataset.zone = zone(pct);
         body.querySelector('[data-slider-value]').textContent = fmt(value, param);
         const root = body.querySelector('[data-slider]');
         root.dataset.state = value <= param.min ? 'min' : value >= param.max ? 'max' : 'default';
