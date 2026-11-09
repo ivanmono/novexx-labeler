@@ -129,7 +129,7 @@ Change:
 - Nav bar stays 80 px (9.4 mm) so the landscape content width is unchanged.
 Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/shell/SheetHost.js` (`wide`), `src/ui/shell/TitleBar.js`, `src/ui/components/NumericKeypad.js`, `AlphaKeyboard.js`, `DateTimePicker.js`, `src/ui/screens/HomeScreen.js`, `LoginScreen.js`
 Before → after: every screen; most visible on parameter lists (8 rows instead of 11 in portrait) and the landscape editors
-Status: code only — Figma components and the presentation frames still show 60 / 48 px; needs designer and PID sign-off (#51). Glove test on the board still to do.
+Status: both (Figma P2-17, 2026-11-09: size/touch 88, touch-row 68) — still needs designer and PID sign-off (#51); glove test on the board still to do.
 
 ## DT-14 · Type-size trial on the board; home reworked for larger type (2026-11-05, device feedback)
 
@@ -154,7 +154,7 @@ Change:
 - Nav user name: the user's own spelling (not uppercase), label size in portrait, 15 px in the 80 px landscape rail (a long name such as "m.mustermann" still ends in "…" there).
 Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/dev/DevPanel.js`, `src/ui/components/ParamRow.js`, `MenuTile.js`, `src/ui/shell/NavBar.js`, `src/ui/screens/HomeScreen.js`, `LoginScreen.js`
 Before → after: every screen; parameter lists show about 7 rows in portrait
-Status: code only — Figma tokens and components still on the old scale; needs designer and PID sign-off (#51)
+Status: both (Figma P2-17, 2026-11-09: type/size/* and HMI/* text styles on the XL scale) — still needs designer and PID sign-off (#51)
 
 ## DT-16 · Running glow around the start button much stronger (2026-11-05, device feedback)
 
@@ -162,7 +162,7 @@ Source: chat — on the board, "running" must be visible from a distance
 Change: `--hmi-glow-run` was one soft 60 px shadow at 50 % in an olive green. It is now three layers in the status run green (#22d464): a solid 4 px ring, a 40 px / 14 px-spread inner glow at 85 %, and a 140 px / 56 px-spread halo at 55 %. Light theme: same layers, toned down (ring in the darker run green, 60 % / 30 %).
 Where: `src/styles/tokens.css` (only the start button uses the token)
 Before → after: `home-*-run` portrait and landscape
-Status: code only — Figma effect style not updated
+Status: both (Figma P2-17, 2026-11-09: StartButton run / alarm variants carry the glow)
 
 ## DT-17 · Home device name and serial one step smaller (2026-11-05, device feedback)
 
@@ -170,7 +170,7 @@ Source: chat — on the board, device name and serial read too large at XL
 Change: device name body (24 px) → body-sm (22 px); type · serial body-sm (22 px) → label (20 px).
 Where: `src/ui/screens/HomeScreen.js`
 Before → after: `home-*`, top right (portrait) / top left (landscape)
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: presentation home frames)
 
 ## DT-18 · Real NOVEXX logo (2026-11-05, chat)
 
@@ -178,7 +178,7 @@ Source: Figma "Novexx Presentations", frame 0:137, layer `Logo` (0:155, image `N
 Change: the NOVEXX logo selection (608 = 609) shows the real "NOVEXX SOLUTIONS" logo instead of the spaced teal wordmark, on home (140 px wide), start-up (160 px) and stand-by (140 px). The PNG is white; the light theme renders it near-black with a CSS filter. ETIPACK and custom stay dummy wordmarks.
 Where: `src/assets/logos/novexx.png`, `src/ui/components/Logo.js`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
 Before → after: `home-*`, `startup-*`, stand-by
-Status: code only. The logo is a raster PNG at 300 px wide (about 2× the largest use); a vector version from PID would stay sharp at any size.
+Status: both (Figma P2-17, 2026-11-09: the PNG placed in every logo__img frame). The logo is a raster PNG at 300 px wide (about 2× the largest use); a vector version from PID would stay sharp at any size.
 
 ## DT-19 · Login profile list shows name and role only (2026-11-05, chat)
 
@@ -186,7 +186,7 @@ Source: chat — "do we need 'Password changed' on the login list?"
 Change: the profile rows on the login screen no longer show "Password changed <date>"; the second line is the role only (Administrator, Operator, …). The docx asks for the last password change only in the L3 user-management list (P3-16b), and on the login screen it showed every password's age to anyone at the machine. The `login.lastChange` text stays for P3-16b.
 Where: `src/ui/screens/LoginScreen.js`, `src/ui/screens/Components.js`
 Before → after: `login-*`
-Status: code only — ProfileRow in Figma still has the date line
+Status: both for the ProfileRow component (Figma P2-17, 2026-11-09); the login profiles frame is not one of the 36 presentation frames and was not rebuilt
 
 ## DT-20 · Password keypad: three columns, no clear key, backspace bottom left (2026-11-05, chat)
 
@@ -194,7 +194,7 @@ Source: chat — the number layout of the password entry: remove "C", backspace 
 Change: the login password numpad (`renderNumpad({ pin: true })`) is a 3 × 4 grid: 7 8 9 / 4 5 6 / 1 2 3 / ⌫ 0 ↵. The clear key and the two empty fillers of the 4-column value keypad are gone, so every key is wider. Backspace sits bottom left, enter bottom right. The value keypad of the parameter editors is unchanged.
 Where: `src/ui/components/Keyboard.js`, `src/ui/screens/LoginScreen.js`
 Before → after: `login-*-password`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: login password-numpad frames)
 
 ## DT-21 · Password field anchored above the keys (2026-11-05, chat)
 
@@ -202,7 +202,7 @@ Source: chat — the empty band between the password field and the keypad
 Change: on the password screen the field, the error line and the keys form one group at the bottom; the free space sits above, under the title. The field stays directly above the keys in 123 and ABC mode (it moves with the keyboard height), like the field above the keypad in the value editors. Landscape has no free space, so it looks the same. The error line is a full label line tall (was clipped at 20 px with the XL type).
 Where: `src/ui/screens/LoginScreen.js`
 Before → after: `login-*-password`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: login password-numpad frames)
 
 ## DT-22 · Text keyboard in five rows of at most ten keys (2026-11-05, chat)
 
@@ -213,7 +213,7 @@ Change: the umlauts and punctuation move to a row of their own, so no row has mo
 Five rows need more height: the keys in the landscape editor sheet are 52 px (were 68 px, four rows), and the login password field is 72 px tall in landscape (was 88 px). Portrait keeps 60 px keys.
 Where: `src/ui/components/Keyboard.js`, `src/styles/components.css`, `src/ui/screens/LoginScreen.js`
 Before → after: `editor-*-text`, `login-*-password` (ABC mode)
-Status: code only — Figma Keyboard component still has four rows
+Status: both (Figma P2-17, 2026-11-09: Key set and the text-editor frames, five rows)
 
 ## DT-23 · More vertical space in pop-ups; long titles wrap (2026-11-05, chat)
 
@@ -221,7 +221,7 @@ Source: chat — more vertical spacing between title, text and buttons in the po
 Change: modal (info, error, confirm, help) padding: top 20 → 28 px, title to text 12 → 24 px, text to buttons 16 → 32 px, bottom 20 → 28 px, sides 20 → 24 px. The text-to-buttons gap sits on the button row, outside the scrolling text, so it stays visible when a long help text scrolls. Titles wrap to two lines instead of truncating ("Trigger-Button for Applicator Test Cycle"); the icon aligns with the first line.
 Where: `src/ui/shell/ModalHost.js`
 Before → after: `confirm-*`, `help-*`
-Status: code only
+Status: both for the Modal component (Figma P2-17, 2026-11-09)
 
 ## DT-24 · Branch colour as the title bar's left edge (2026-11-05, chat)
 
@@ -229,7 +229,7 @@ Source: chat — drill-down titles showed back arrow, a vertical colour mark and
 Change: the 6 × 32 px pill between the back arrow and the title is removed; the title bar gets a 6 px left edge in the menu-branch colour instead, drawn as an inset shadow so the back arrow and title sit at the same place as on screens without a branch (a real border shifted them 6 px) (Settings blue, Production orange, Information green, Service yellow, Help teal, User management purple). Screens without a branch (main menu, login) have no edge.
 Where: `src/ui/shell/TitleBar.js`, `tests/e2e/menu.spec.js`
 Before → after: every drill-down screen, title bar
-Status: code only — Figma TitleBar `Branch` variants still show the pill (landscape not reviewed yet)
+Status: both (Figma P2-17, 2026-11-09: TitleBar branch variants carry a 6 px branch-edge bar; the builder draws the edge on page title bars)
 
 ## DT-25 · Favourites as separate cards with their screen (2026-11-05, chat)
 
@@ -237,7 +237,7 @@ Source: chat — restyle the Favourites list card
 Change: instead of one card with divided rows, each favourite is its own card (12 px apart). Above the name, the screen(s) the parameter lives on in the menu-branch colour ("Speed", "Stop · Label" when it appears on two screens), so a favourite says where it comes from. The name is semibold; the star is dropped on this screen (every row is a favourite). Value, changed marker, chevron and help button stay; un-starring still works from the help pop-up.
 Where: `src/ui/screens/ParamListScreen.js` (favourites branch), `src/ui/components/ParamRow.js` (`context`)
 Before → after: `favourites-portrait-*`
-Status: code only (landscape not reviewed yet)
+Status: code only — the favourites screen is not in the presentation set; Figma frame to follow
 
 ## DT-26 · Favourite card: help top right, chevron at the edge, smaller one-line value (2026-11-05, chat)
 
@@ -245,7 +245,7 @@ Source: chat — favourite card tweaks (screen name, name and ParamID unchanged)
 Change: the help icon is bigger (28 px, was 20) and sits in the card's top-right corner (absolute, 68 px touch area); the chevron takes the right edge, with the value, at the bottom of the card. The value is body-sm (22 px, was 24) on one line, up to 60 % of the card wide, so an IP address no longer breaks between digits. Cards are at least 100 px tall so the value row stays clear of the help corner. The ParamID has its own line under the name (it no longer runs inline after it).
 Where: `src/ui/components/ParamRow.js` (`context` variant)
 Before → after: `favourites-portrait-*`
-Status: code only
+Status: code only — see DT-25
 
 ## DT-27 · Favourite card: value on the name's line (2026-11-05, chat)
 
@@ -253,7 +253,7 @@ Source: chat — move the value (IP address) inline with the title
 Change: the card is a small grid: screen name, parameter name and ParamID stacked on the left; value and chevron sit on the name's line at the right edge (they were at the bottom of the card). The help icon stays in the top-right corner; its touch area is 68 × 44 px so it ends above the value line. Supersedes the bottom placement of DT-26.
 Where: `src/ui/components/ParamRow.js` (`context` card; value markup shared with the list row)
 Before → after: `favourites-portrait-*`
-Status: code only
+Status: code only — see DT-25
 
 ## DT-28 · Portrait editors open as a page with back (2026-11-05, chat)
 
@@ -262,7 +262,7 @@ Change: in portrait every parameter editor (selection list, numeric keypad, slid
 Deviation: docx §7.2 asks that the editor not cover the edited field; on a page the field's name is the page title instead, and the list is back as soon as the editor closes. Toggles still flip in place.
 Where: `src/ui/shell/SheetHost.js` (page mode), `src/app.js` (`back` closes an open editor first), `src/ui/editors.js`, `src/styles/components.css`, `tests/e2e/editors.spec.js`
 Before → after: `editor-*-portrait`
-Status: code only — needs designer / PID confirmation of the §7.2 deviation (open point)
+Status: both (Figma P2-17, 2026-11-09: Sheet State=page and the editor frames) — needs designer / PID confirmation of the §7.2 deviation (open point #52)
 
 ## DT-29 · Favourite card: help icon back in its right-hand column (2026-11-05, chat)
 
@@ -270,7 +270,7 @@ Source: chat — move the help icon back to the right (no absolute position), at
 Change: the help icon returns to its own 68 px column at the right of the card, 20 px like in the parameter lists, centred vertically (it was a 28 px icon pinned to the top-right corner, DT-26). Value and chevron stay on the name's line (DT-27). The help column is 48 px wide on these cards (68 px tall), so chevron and help icon sit about 20 px apart instead of about 40 px; list rows keep the 68 × 68 help target. The icon is right-aligned in that column with the same 17 px inset from the card edge as the text on the left, and sits on the value line (centres level).
 Where: `src/ui/components/ParamRow.js`
 Before → after: `favourites-portrait-*`
-Status: code only
+Status: code only — see DT-25
 
 ## DT-30 · Parameter rows: 20 px text, chevron next to help, corner mark on dependent rows (2026-11-05, chat)
 
@@ -282,7 +282,7 @@ Change (every parameter row and favourite card in the app):
 - Values wrap between words only ("PConnector PLC Signals" no longer breaks inside "PConnector").
 Where: `src/ui/components/ParamRow.js`
 Before → after: every parameter list (e.g. `pconnector`, `label`, `speed`), `favourites-*`
-Status: code only — Figma ParamRow not updated
+Status: both (Figma P2-17, 2026-11-09: ParamRow set)
 
 ## DT-31 · ParamID always on its own line under the name (2026-11-05, chat)
 
@@ -290,7 +290,7 @@ Source: chat — the number should always appear in the next row
 Change: in every parameter row the ParamID sits on its own line under the name (it ran inline after the name, and dropped to the next line only when the name was long). Same as on the favourite cards (DT-26). Rows keep 68 px; the favourite star stays after the name; the corner mark of dependent rows (DT-30) aligns with the name line.
 Where: `src/ui/components/ParamRow.js`
 Before → after: every parameter list
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: ParamRow set)
 
 ## DT-32 · Landscape pass, first fixes: nesting, status label, menu tiles (2026-11-05, landscape review)
 
@@ -301,7 +301,7 @@ Change:
 - Menu tiles (landscape, three per row): title 24 px (was 28 px, which broke "Authentication" inside the word).
 Where: `src/ui/screens/ParamListScreen.js`, `src/ui/components/ParamRow.js`, `src/ui/shell/StatusBar.js`, `src/styles/components.css`, `src/ui/components/MenuTile.js`
 Before → after: `info-*`, `pconnector-*`, landscape status rail, `menu-landscape-*`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: landscape menu and list frames)
 
 ## DT-33 · Landscape editors open as pages too (2026-11-05, landscape review)
 
@@ -309,7 +309,7 @@ Source: chat — landscape editors as pages, like portrait (DT-28)
 Change: in landscape every editor opens as a page over the main area (title bar with back and the parameter name, branch edge) instead of the docked side sheet with grip and close. Lists start at the top; the numeric keypad keeps the field beside the keys (keys 84 px); the time / date picker keeps Now / Set beside the steppers; the text keyboard sits under the field with 48 px keys (five rows under the title bar). Both back buttons close the editor. The docked sheet stays in the code (`page: false`) but no editor uses it.
 Where: `src/ui/shell/SheetHost.js`, `src/styles/components.css`, `tests/e2e/editors.spec.js`
 Before → after: `editor-*-landscape`
-Status: code only — same §7.2 deviation as DT-28 (open point #52)
+Status: both (Figma P2-17, 2026-11-09: landscape editor frames) — same §7.2 deviation as DT-28 (open point #52)
 
 ## DT-34 · Landscape home and rails: badge only, vertical state, machine data under the start column (2026-11-05, landscape review)
 
@@ -321,7 +321,7 @@ Change:
 - Home: "Log in to operate the machine" is centred (it wraps in the landscape column).
 Where: `src/ui/shell/NavBar.js`, `src/ui/shell/StatusBar.js`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-landscape` (L0, L1 run, alarm)
-Status: code only — Figma StatusBar / NavBar landscape variants and home frames not updated
+Status: both (Figma P2-17, 2026-11-09: StatusBar / NavBar landscape variants, landscape home frames)
 
 ## DT-35 · Landscape numeric keypad under the field, not beside it (2026-11-05, landscape review)
 
@@ -329,7 +329,7 @@ Source: chat — in landscape the keypad sat on the right and the field on the l
 Change: the numeric editor has the same layout in both orientations: field and range hint on top, keypad below across the full width, at the bottom of the page. In landscape the keys are 148 × 60 px (were 66 × 84 px beside the field): shorter, but more than twice as wide.
 Where: `src/ui/components/NumericKeypad.js`, `src/styles/components.css`
 Before → after: `editor-numeric-landscape`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: landscape numeric-error frames)
 
 ## DT-36 · Landscape time / date picker stacked: Now / Set at the bottom (2026-11-05, landscape review)
 
@@ -337,7 +337,7 @@ Source: chat — stack the landscape picker like the keypad (DT-35)
 Change: the time / date picker has one layout in both orientations: steppers and hint on top, Now / Set side by side at the bottom. In landscape the up / down steppers are 60 px tall (88 px in portrait) so everything fits under the title bar; the separator between the fields moves up to match.
 Where: `src/ui/components/DateTimePicker.js`
 Before → after: `editor-time-landscape`, `editor-date-landscape`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: landscape date-error frames)
 
 ## DT-37 · More space between the number field and its range hint (2026-11-05, chat)
 
@@ -345,7 +345,7 @@ Source: chat — the info text sat too close to the input field
 Change: the gap between the numeric field and the "Min · Max · Default" hint is 12 px (was 4 px), in both orientations. To keep the landscape page free of scrolling, its keypad keys are 58 px tall (were 60 px).
 Where: `src/ui/components/NumericKeypad.js`, `src/styles/components.css`
 Before → after: `editor-numeric-*`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: numeric-error frames)
 
 ## DT-38 · Landscape status rail transparent (2026-11-05, chat)
 
@@ -353,7 +353,7 @@ Source: chat — make the right-hand bar (state and icons) transparent to see ho
 Change: the landscape status rail has no fill (was the background at 70 %); the page gradient shows through. The 1 px divider to the content stays. Portrait status bar unchanged.
 Where: `src/styles/components.css`
 Before → after: any landscape screen, right rail
-Status: code only — kept after the trial, with the divider line
+Status: both (Figma P2-17, 2026-11-09: StatusBar landscape variants) — kept after the trial, with the divider line
 
 ## DT-39 · Landscape home: left column centred vertically (2026-11-05, chat)
 
@@ -361,7 +361,7 @@ Source: chat — align logo, start button, state pill and the rest in the vertic
 Change: in landscape the logo moves into the start column, and the whole group (logo, start button, state pill, log-in hint at L0, device name and serial) is centred vertically in the left column, which now spans the full height beside the quicklinks (the separate top row is gone in landscape). With the error banner the group centres in the space above it. Portrait unchanged.
 Where: `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-landscape`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: landscape home frames)
 
 ## DT-40 · Strong glow for warning and alarm too (2026-11-05, chat)
 
@@ -369,7 +369,7 @@ Source: chat — do the big running shadow (DT-16) for warning and alarm as well
 Change: the start button's glow has the same three layers in every machine state that matters from a distance: solid 4 px ring, dense 40 px inner glow, wide 140 px halo — run green, warning orange (new `--hmi-glow-warning`, `shadow-glow-warning`), alarm red (`--hmi-glow-error`, was one soft 60 px shadow). Light theme: same layers, toned down. The start button is disabled during an alarm; it no longer fades as a whole (that dimmed the glow to 40 %) — only its play icon dims.
 Where: `src/styles/tokens.css`, `src/styles/components.css`, `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-warning`, `home-*-alarm`
-Status: code only — Figma effect styles not updated
+Status: both (Figma P2-17, 2026-11-09: StartButton alarm variants; tokens updated)
 
 ## DT-41 · Start icon in the state colour (2026-11-05, chat)
 
@@ -377,7 +377,7 @@ Source: chat — on running, warning and alarm, colour the icon too
 Change: the start button's icon takes the state colour along with its glow: run green (pause icon, as before), warning orange, alarm red. Otherwise brand teal, or muted when locked (L0). The alarm icon is no longer dimmed (DT-40); the button stays disabled during an alarm.
 Where: `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-warning`, `home-*-alarm`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: StartButton icon colours)
 
 ## DT-42 · Warning in amber; state pill keeps its height (2026-11-05, chat)
 
@@ -387,7 +387,7 @@ Change:
 - The state pill is 36 px in every state: with the error / warning banner the start column ran short of height and the pill shrank. It no longer shrinks; the landscape column spacing is 12 px (was 16 px) so the whole group still fits above the banner at L0.
 Where: `src/styles/tokens.css`, `src/ui/screens/HomeScreen.js`
 Before → after: `home-*-warning`, `home-*-alarm`
-Status: code only — Figma status colour not updated
+Status: both (Figma P2-17, 2026-11-09: amber/500 / amber/700 primitives, warning aliases)
 
 ## DT-43 · Landscape home: logo at the top, machine data at the bottom, cards spread to match (2026-11-06, chat)
 
@@ -399,7 +399,7 @@ Change:
 - With the alarm banner at L0 both columns are full: the start group closes up and the logo sits 8 px from the top instead of 16 px; nothing scrolls or is cut off.
 Where: `src/ui/screens/HomeScreen.js`
 Before → after: `home-landscape-*`
-Status: code only
+Status: both (Figma P2-17, 2026-11-09: landscape home frames)
 
 ## DT-44 · User screen: Log out clear of the nav bar; one bottom row in landscape (2026-11-06, chat)
 
@@ -409,7 +409,7 @@ Change:
 - Landscape: Log out sat 32 px below the fold (it needed scrolling). User management and Log out now share the bottom row (3 : 2 width, so "User management" stays on one line); the page fits without scrolling, also with the L4 "secure until" row.
 Where: `src/ui/screens/UserScreen.js`
 Before → after: `user-*`
-Status: code only
+Status: code only — the user screen is not in the presentation set; Figma frame to follow
 
 ## DT-45 · Slider styled after the first draft's playground slider (2026-11-06, chat)
 
@@ -424,7 +424,7 @@ Change:
 Note: red / yellow / green are the machine-state colours (alarm, stand-by, running) everywhere else in the app; on the slider they only mean the position in the range.
 Where: `src/ui/components/Slider.js`, `src/styles/components.css`
 Before → after: `editor-slider-*`
-Status: code only — kept after the trial; Figma Slider component not updated
+Status: both (Figma P2-17, 2026-11-09: Slider set) — kept after the trial
 
 ## DT-46 · Start-button glow pulses while running, on warning and on alarm (2026-11-09, chat)
 
@@ -435,7 +435,7 @@ Change:
 - Tried and rejected in chat: a liquid aura with orbiting particles, and a light running around the rim (after the "glowing button" reference video); back to the pulse.
 Where: `src/ui/screens/HomeScreen.js` (`data-pulse`), `src/styles/components.css`
 Before → after: `home-*-run`, `home-*-warning`, `home-*-alarm`
-Status: code only — to be checked for smoothness on the board
+Status: both for the look (Figma P2-17, 2026-11-09: the glow at full strength); the pulse itself is code only (Figma has no animation here) — to be checked for smoothness on the board
 
 ## DT-47 · Action rows get an action pill with a pressed state (2026-11-09, P2-10)
 
@@ -445,4 +445,4 @@ Change:
 - IP fields show the address hint when a key cannot be taken, instead of ignoring it (§7.3, P2-14).
 Where: `src/ui/components/ParamRow.js`, `src/ui/screens/ParamListScreen.js` (`data-armed`), `src/styles/components.css` (`.param-action`), `src/ui/components/AlphaKeyboard.js`
 Before → after: `action-armed` (phase2-flows.spec)
-Status: code only; Figma ParamRow State=action to update with P2-17
+Status: both (Figma P2-17, 2026-11-09: ParamRow State=action carries the outlined action pill)

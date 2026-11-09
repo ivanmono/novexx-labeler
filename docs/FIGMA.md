@@ -168,6 +168,46 @@ lose the 114 px minimum). The four landscape StatusBar variants: label unrotated
 absolutely positioned went back into the auto layout. The designer's tweak frame `ready-L0-1` was left in place.
 Totals: 22 sets / 145 variants.
 
+2026-11-09 (P2-17, board-review catch-up, part 1 — tokens and components): HMI Primitives got `amber/500` / `amber/700`;
+`colour/status/warning`, `status-ink/warning` and `gradient/warning/mid` now alias amber (DT-42). `type/size/*` and the
+`HMI/*` text styles moved to the XL scale (caption 18 … hero 44, Param 24, Param LG 32; DT-15), `size/touch` 88,
+`size/touch-row` 68, `size/title` 72 (DT-13). Changing a bound type size re-lays out every text that uses it: load the
+Noto Sans / Noto Sans Symbols(2) fallback fonts first (key glyphs ↵ ⌫ ★ use them) or `setValueForMode` throws.
+All 22 component sets refilled from a fresh `--components` capture (186 variants; StatusBar and NavBar now have every
+state in both landscape orientations). Batches of sets go through one `buildFrames` call (a scratch helper merged the
+per-set payloads and ran `minify.mjs`; each call stayed under 31 kB). Serializer: a full-size `::after` that only
+paints a box-shadow (the start button's pulsing glow, DT-46) is lifted onto its element, so Figma shows the glow at full
+strength. Builder (len 31706, checksum 3284866361): CSS `inset` shadows become `INNER_SHADOW` instead of a drop shadow.
+Fixed by hand after the build, because the export did not show them correctly: the TitleBar branch variants carry a
+6 px `branch-edge` rectangle bound to `colour/branch/<name>` (DT-24), the ParamRow action pill is a fixed 64 × 44
+`action-pill` with a 2 px inside stroke bound to `colour/brand` (DT-47), and the Slider track container is fixed at
+68 px with the thumb centred and the Default line centred (its height comes from CSS, not a size class).
+Refilling the masters dropped the frames' per-row overrides, so the 36 presentation frames were rebuilt from a fresh
+`--presentation` capture (part 2, same day). Found and fixed on the way:
+- **Builder size map was stale** (`SIZE_TOKEN` still had the old 12 … 48 scale, so a 24 px text was bound to
+  `type/size/title` = 32 px). Map moved to the XL scale; the 257 component texts bound with the old map were rebound
+  from their old token to the intended size. Font-size bindings on text read back as an **array** of aliases.
+- **Inset shadows:** Figma paints an inner shadow on a frame without fill onto its children (a blue glow on the
+  editor page title). The builder now turns a hard side inset (`inset 6px 0 0 0`) into an `edge` rectangle and a hard
+  uniform inset ring into an inside stroke (len 32917, checksum 1976596149).
+- **Figtree runs wider in Figma**: texts that keep the browser's exact width wrap or truncate. In QuicklinkCard,
+  NavBar (name) and ParamRow (name and ParamID column) the texts and their wrappers fill the available width instead.
+- New variant `Sheet · State=page` (editors open as pages, DT-28 / DT-33), rendered on `#/components`.
+- Batching: several small frames go in one `buildFrames` call (start-up, two menus, HMI list, login ≈ 16 kB minified);
+  late in a long session the same batch passes the 300 s bridge timeout and finishes in Figma — poll `hmi.generated`.
+- The NOVEXX logo is a PNG now (DT-18) and arrives as an empty `logo__img` frame; the PNG is placed afterwards as an
+  image fill (`figma.createImage(figma.base64Decode(…))`, scale FIT) in every `logo__img` frame.
+- **Late in a long session the bridge slows down** (one frame ≈ 2–5 min) and a build past the 300 s timeout can die
+  half-way. What kept it moving: build only what is visible — a list's rows below the frame and the list behind a
+  full-page editor were dropped from the capture (scratch helpers `trim` / `trim2`); build editor frames without
+  their keys and **clone the finished Key / NumpadKey instances** from the portrait frame in DOM order, placing and
+  sizing them from the capture (seconds instead of minutes per key).
+- **RH frames derived from LH:** clone the 12 LH frames to `… – Landscape RH`, swap the StatusBar / NavBar instances
+  to their `Orientation=landscape-rh` variants and move them to x 0 / 720, change the "Landscape LH" value text, and
+  replace the old RH frame in its place. The content area (x 80 – 720) is the same in both captures.
+- Not rebuilt: the 16 portrait frames outside the presentation set (login profiles, user, stand-by, favourites, light
+  variants …) keep the pre-board sizes until P4-09.
+
 ## Icon export
 
 Agent step (plan P0-04, re-done for DT-01 on 2026-10-30): export every `icon/24/*` component on `Icons v1 – 24 px` as SVG and save it to `src/assets/icons/<name>.svg`, then `npm run icons:sprite` normalises (background rects removed, stroke → `currentColor`, stroke width kept at 1.5, caps/joins as exported) and builds `sprite.svg` with `viewBox="0 0 24 24"`. Re-run when Mono adds or changes icons: regenerate the 24 px page from Icons v1 first.

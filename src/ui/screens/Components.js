@@ -148,6 +148,8 @@ export function render(ctx) {
   ].map((m) => `<div class="w-[440px] grid">${renderModal(m)}</div>`);
   const sheets = [
     `<div class="w-[480px] grid">${renderSheet({ title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
+    // editors open as a page (DT-28, DT-33): the panel under the page's own title bar
+    `<div class="relative w-[480px] h-[320px]">${renderSheet({ page: true, title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
   ];
   const startButtons = [
     [STATUS_STATES.ready, 0],

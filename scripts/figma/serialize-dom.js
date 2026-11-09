@@ -647,6 +647,13 @@
     }
 
     const paint = paintOf(cs, el);
+    // a glow drawn on a full-size ::after so it can pulse (the start button, DT-46) becomes the
+    // element's own shadow in Figma, at full strength
+    if (!paint.shadow) {
+      const ac = getComputedStyle(el, '::after');
+      if (ac && ac.content !== 'none' && ac.boxShadow && ac.boxShadow !== 'none' && ac.position === 'absolute' && px(ac.top) === 0 && px(ac.left) === 0 && px(ac.right) === 0 && px(ac.bottom) === 0)
+        paint.shadow = ac.boxShadow;
+    }
     const clip =
       /hidden|auto|scroll|clip/.test(cs.overflow) || /hidden|auto|scroll/.test(cs.overflowY);
     const emit =

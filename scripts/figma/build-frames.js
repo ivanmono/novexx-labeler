@@ -156,13 +156,14 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         const col = s.match(/(rgba?\([^)]*\)|color\([^)]*\))/);
         const nums = s
           .replace(col ? col[0] : '', '')
+          .replace('inset', '')
           .trim()
           .split(/\s+/)
           .map(parseFloat);
         const c = parseColor(col ? col[0] : 'rgba(0,0,0,0.25)');
         if (!c || c.a === 0 || nums.length < 2) return null;
         return {
-          type: 'DROP_SHADOW',
+          type: /\binset\b/.test(s) ? 'INNER_SHADOW' : 'DROP_SHADOW',
           color: { r: c.r, g: c.g, b: c.b, a: c.a },
           offset: { x: nums[0], y: nums[1] },
           radius: nums[2] || 0,
@@ -226,13 +227,13 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       f.setBoundVariable(k, v);
   };
   const SIZE_TOKEN = {
-    12: 'caption',
-    14: 'label',
-    16: 'body-sm',
-    18: 'body',
-    20: 'body-lg',
-    24: 'title',
-    32: 'hero',
+    18: 'caption',
+    20: 'label',
+    22: 'body-sm',
+    24: 'body',
+    28: 'body-lg',
+    32: 'title',
+    44: 'hero',
     48: 'display',
   };
   /** Exact match → HMI/* text style; otherwise bind font size and family variables (weight stays free). */
@@ -367,7 +368,32 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         }
       }
     }
-    if (n.shadow) f.effects = shadowEffects(n.shadow);
+    if (n.shadow) {
+      // CSS inset shadows: a hard side edge (title-bar branch colour, DT-24) → an edge bar; a
+      // uniform hard ring (action pill, DT-47) → an inside stroke. Figma's inner shadow on a
+      // frame without fill would paint onto the children instead.
+      const eff = shadowEffects(n.shadow);
+      f.effects = eff.filter((e) => e.type !== 'INNER_SHADOW');
+      for (const e of eff.filter((x) => x.type === 'INNER_SHADOW' && !x.radius)) {
+        const c = { r: e.color.r, g: e.color.g, b: e.color.b, a: e.color.a };
+        if (e.offset.x && !e.offset.y && !e.spread) {
+          const rct = figma.createRectangle();
+          f.appendChild(rct);
+          rct.name = 'edge';
+          if (n.layout) rct.layoutPositioning = 'ABSOLUTE';
+          const w = Math.abs(e.offset.x);
+          rct.x = e.offset.x > 0 ? 0 : n.w - w;
+          rct.y = 0;
+          rct.resize(w, Math.max(0.01, n.h));
+          rct.fills = [boundSolid(c, null)];
+          rct.constraints = { horizontal: e.offset.x > 0 ? 'MIN' : 'MAX', vertical: 'STRETCH' };
+        } else if (!e.offset.x && !e.offset.y && e.spread) {
+          f.strokes = [boundSolid(c, null)];
+          f.strokeWeight = e.spread;
+          f.strokeAlign = 'INSIDE';
+        }
+      }
+    }
     for (const ch of n.children || []) {
       const c = await build(ch, f, n.x, n.y, n.layout);
       if (c && n.layout) applyChildLayout(c, ch, n.x, n.y, n.layout);

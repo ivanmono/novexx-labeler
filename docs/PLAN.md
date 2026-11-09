@@ -6,7 +6,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
 - **Phase 2 closed in code (2026-11-09).** P2-01 … P2-16 done: P2-10 got the action pill with a pressed state
   (DT-47), P2-14 checklist walked (one fix: IP keys), P2-15 flows added (`tests/e2e/phase2-flows.spec.js`). Left in
-  Phase 2: **P2-17** (Figma catch-up) and the **G2-3** gate. G2-1 and G2-2 were held as the board review.
+  Phase 2: the **G2-3** gate (P2-17 Figma catch-up done the same day). G2-1 and G2-2 were held as the board review.
 - **Board review 2026-11-05 … 09 (unplanned, now recorded).** The app ran on the 4.3" panel (LAN dev server
   `npx vite --host --port 5174`, board at http://172.20.2.65:5174). It produced DT-13 … DT-46:
   - touch test `#/touchtest`, touch targets 88 / 68 px and the XL type scale (DT-13 … DT-15, new ticket P1-18);
@@ -16,9 +16,10 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
     layout, state colours and amber warning (DT-32 … DT-43);
   - user screen (DT-44), slider restyled after the first draft (DT-45), start glow pulses while running /
     warning / alarm (DT-46). Rejected trials: flat inner pages without cards, liquid aura, running rim light.
-- **Figma is behind.** DT-13 … DT-47 are code only; Figma still shows the pre-board sizes. P2-17 brings it level
-  before G2-3. Builder stored in the file (`hmi.builder`, len 31635, checksum 3135273424); read the "Components"
-  section of `docs/FIGMA.md` before touching it.
+- **Figma caught up (P2-17, 2026-11-09).** Tokens, all 22 component sets (187 variants) and the 36 presentation frames
+  match the code; DT-13 … DT-47 read "both" except the favourites and user screens (frames not in the presentation
+  set). The 16 other portrait frames still show pre-board sizes. Builder len 32917, checksum 1976596149; read the
+  "Components" section of `docs/FIGMA.md` before touching it.
 - **App state:** menus, parameter lists, all editors, help, favourites and the HMI screen work with dummy data in
   portrait, LH and RH, dark and light. Tests: 83 unit (`npx vitest run`), 98 e2e (`npx playwright test`).
 - **Repo:** GitHub https://github.com/ivanmono/novexx-labeler, branch main, push over HTTPS. README and CI still open (P5-05).
@@ -29,8 +30,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 ## Next steps (proposal)
 
 1. ~~Close Phase 2 in code~~ — done 2026-11-09 (P2-10, P2-14, P2-15).
-2. **P2-17 Figma catch-up** (L): tokens, changed components and the 36 presentation frames, so Figma and code
-   are equal again before the gate.
+2. ~~P2-17 Figma catch-up~~ — done 2026-11-09 (presentation set); remaining portrait frames with P4-09.
 3. **G2-3 gate** with the designer: favourites, HMI screen, edit behaviour, plus sign-off on #51 / #52.
 4. **Phase 3**, starting with P3-01 shared pieces and the format screens (P3-02 … P3-04, gate G3-1). Build it
    straight at the board sizes, portrait and landscape together, since landscape is no longer a late pass.
