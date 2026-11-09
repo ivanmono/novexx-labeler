@@ -131,6 +131,44 @@
   .home__run[aria-disabled='true'] {
     opacity: 1;
   }
+  /* running / warning / alarm: the state glow breathes (DT-46). The glow sits on a pseudo-element
+     and only its opacity animates, so the GPU composites it instead of repainting the 140 px halo
+     every frame (docx §3: basic animations only). */
+  .home__run[data-pulse] {
+    position: relative;
+  }
+  .home__run[data-pulse]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: hmi-glow-pulse 1.6s ease-in-out infinite alternate;
+    will-change: opacity;
+  }
+  .home__run[data-pulse='run']::after {
+    box-shadow: var(--hmi-glow-run);
+  }
+  .home__run[data-pulse='warning']::after {
+    box-shadow: var(--hmi-glow-warning);
+  }
+  .home__run[data-pulse='error']::after {
+    box-shadow: var(--hmi-glow-error);
+    animation-duration: 0.8s; /* alarm pulses twice as fast */
+  }
+  @keyframes hmi-glow-pulse {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.35;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home__run[data-pulse]::after {
+      animation: none;
+    }
+  }
 
   /* ---- logo (DT-18): the NOVEXX PNG is white; the light theme renders it dark ---------- */
   [data-theme='light'] .logo__img {

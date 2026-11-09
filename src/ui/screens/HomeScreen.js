@@ -46,14 +46,9 @@ export function renderQuickEmpty(ctx, { landscape = isLandscape() } = {}) {
 export function renderStartButton(ctx, machine, level) {
   const st = statusOf(machine);
   const running = machine.state === 'run';
-  const glow =
-    st.key === 'alarm'
-      ? 'shadow-glow-error'
-      : st.key === 'warning'
-        ? 'shadow-glow-warning'
-        : running
-          ? 'shadow-glow-run'
-          : 'shadow-glow-brand';
+  // running, warning and alarm glow pulses (DT-46): drawn by .home__run[data-pulse] instead of a shadow class
+  const pulse = st.key === 'alarm' ? 'error' : st.key === 'warning' ? 'warning' : running ? 'run' : null;
+  const glow = pulse ? '' : 'shadow-glow-brand';
   const disabled = st.key === 'alarm' || st.key === 'booting';
   const locked = level < 1 && !running;
   const machineKey = running ? 'run' : st.key === 'alarm' ? 'alarm' : 'ready';
@@ -68,7 +63,7 @@ export function renderStartButton(ctx, machine, level) {
           : locked
             ? 'text-muted'
             : 'text-brand-hi';
-  return `<button type="button" class="${cx('home__run pressable shrink-0 grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
+  return `<button type="button" class="${cx('home__run pressable shrink-0 grid place-items-center rounded-pill size-36 card-border card-border--strong', glow)}" data-action="toggle" aria-label="${esc(ctx.t(running ? 'home.pause' : 'home.start'))}" ${disabled ? 'aria-disabled="true"' : ''} ${pulse ? `data-pulse="${pulse}"` : ''} data-cmp="StartButton" data-cmp-props="Machine=${machineKey},Locked=${locked ? 'yes' : 'no'}">
             <span class="grid place-items-center rounded-pill size-full ${tone}">${icon(running ? 'pause' : 'play', { size: 64 })}</span>
           </button>`;
 }

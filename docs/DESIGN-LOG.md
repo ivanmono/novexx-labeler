@@ -425,3 +425,14 @@ Note: red / yellow / green are the machine-state colours (alarm, stand-by, runni
 Where: `src/ui/components/Slider.js`, `src/styles/components.css`
 Before → after: `editor-slider-*`
 Status: code only — kept after the trial; Figma Slider component not updated
+
+## DT-46 · Start-button glow pulses while running, on warning and on alarm (2026-11-09, chat)
+
+Source: chat — animate the shadow around the home start button when it shows running, warning or alarm
+Change:
+- The state glow (DT-16 / DT-40) breathes: it fades from full strength to 35 % and back. Running and warning: 1.6 s each way; alarm: 0.8 s, so it reads as more urgent. Ready / locked keep the steady teal glow.
+- Only opacity animates, on a pseudo-element that carries the glow, so the embedded GPU composites it and the 140 px halo is not repainted every frame (docx §3: basic animations only). Ring, glow and halo fade together. Off when the system asks for reduced motion.
+- Tried and rejected in chat: a liquid aura with orbiting particles, and a light running around the rim (after the "glowing button" reference video); back to the pulse.
+Where: `src/ui/screens/HomeScreen.js` (`data-pulse`), `src/styles/components.css`
+Before → after: `home-*-run`, `home-*-warning`, `home-*-alarm`
+Status: code only — to be checked for smoothness on the board
