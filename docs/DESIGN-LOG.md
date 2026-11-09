@@ -436,3 +436,13 @@ Change:
 Where: `src/ui/screens/HomeScreen.js` (`data-pulse`), `src/styles/components.css`
 Before → after: `home-*-run`, `home-*-warning`, `home-*-alarm`
 Status: code only — to be checked for smoothness on the board
+
+## DT-47 · Action rows get an action pill with a pressed state (2026-11-09, P2-10)
+
+Source: plan — P2-10 left the dedicated pressed action-button variant open; docx §7.2 "Action: needs a pressed state"
+Change:
+- Action parameter rows (1–7, 800–808) show an outlined pill (64 × 44 px, brand outline, power icon) instead of a bare icon. It fills with the brand colour while pressed and stays filled while the "moves the machine" confirmation is open, so it is clear which action is waiting.
+- IP fields show the address hint when a key cannot be taken, instead of ignoring it (§7.3, P2-14).
+Where: `src/ui/components/ParamRow.js`, `src/ui/screens/ParamListScreen.js` (`data-armed`), `src/styles/components.css` (`.param-action`), `src/ui/components/AlphaKeyboard.js`
+Before → after: `action-armed` (phase2-flows.spec)
+Status: code only; Figma ParamRow State=action to update with P2-17

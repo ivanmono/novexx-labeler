@@ -180,11 +180,14 @@ export function render(ctx, { arg }, nodeOverride = null) {
           const p = ctx.param(btn.dataset.pid);
           if (!p) return;
           if (CONFIRM_ACTIONS.has(p.id)) {
+            // the action button stays pressed while its confirmation is open (P2-10)
+            btn.dataset.armed = 'true';
             const go = await ctx.modal.confirm({
               title: paramLabel(ctx, p),
               body: `<p>${esc(ctx.t('action.confirmMove'))}</p>`,
               okLabel: ctx.t('action.start'),
             });
+            delete btn.dataset.armed;
             if (!go) return;
           }
           const ok =

@@ -50,7 +50,7 @@ export function renderParamRow(row) {
   const affordance = locked
     ? icon('lock', { size: 22, class: 'text-muted shrink-0' })
     : action
-      ? icon('activate', { size: 24, class: 'text-brand-hi shrink-0' })
+      ? `<span class="param-action shrink-0" aria-hidden="true">${icon('activate', { size: 24 })}</span>`
       : readOnly
         ? ''
         : icon('chevron', { size: 22, class: 'text-faint shrink-0' });

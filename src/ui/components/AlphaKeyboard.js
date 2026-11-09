@@ -50,7 +50,7 @@ export function openAlphaKeyboard(ctx, param, { onConfirm } = {}) {
         enterIcon: 'activate',
         onInput: (k) => {
           if (value.length >= max) return show('max');
-          if (isIp && !/[\d.]/.test(k)) return;
+          if (isIp && !/[\d.]/.test(k)) return show('ip'); // explained, not silently dropped (§7.3)
           value += k;
           show();
         },

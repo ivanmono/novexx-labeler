@@ -25,7 +25,7 @@ Binding document: `docs/sources/Frontend_Design_Requirements_Labeller_HMI_v1.6.d
 | §7 Standard parameter screens | One generated pattern for all lists | P2-04 | e2e list screens | todo |
 | §7.1 Parameter row | Value visible, indent <= 2, favourite, help indicator with 40/600 modal, conditional rows absent, read-only and locked treatments | P2-03, P2-04, P2-11, P2-12 | styleguide, e2e | todo |
 | §7.2 Types and controls | Boolean toggle, discrete list, number keypad, string keyboard, range slider, action button, state display; time/date picker for 700/701 (not in §7.2, OPEN-POINTS #3) | P2-05 to P2-10, P2-13 | e2e per control | todo |
-| §7.3 Editing behaviour | Few steps, one confirm, invalid explained, changed-from-default marker | P2-07, P2-14 | validate.test, checklist G2-3 | todo |
+| §7.3 Editing behaviour | Few steps, one confirm, invalid explained, changed-from-default marker | P2-07, P2-14 | validate.test, checklist G2-3 | done in code, checklist in P2-14; sign-off at G2-3 |
 | §8 Special screens (common) | Empty/loading/error states, shared confirmation, defined row height and end-of-list, refresh rate | P3-01, P1-07, P4-05 | styleguide, gate G3-1 | todo |
 | §8.1 Select Format | L1; loaded marked; confirm names format; blocked while running; empty state | P3-02 | e2e formats | todo |
 | §8.2 Modify Format | L2; pre-selected; diff summary; no-differences state | P3-03 | e2e formats | todo |

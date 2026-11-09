@@ -1,30 +1,39 @@
 # Plan — Labeller HMI functional app with dummy data
 
-## Where we are (2026-11-04)
+## Where we are (2026-11-09)
 
 Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
-- **Phase 2 in progress.** Done: P2-01 … P2-09, P2-11 … P2-13, P2-16. Partly: P2-10 (confirmation in the
-  rows works; a dedicated pressed action-button variant is open). Open: **P2-14** (§7.3 checklist),
-  P2-15 (Phase 2 tests; most flows already have e2e specs under `tests/e2e/`).
-- **Presentation 2026-11-06:** 12 screens polished in portrait, landscape LH and RH (start-up, home ready and
-  alarm overlay, login keypad, main and options menu, HMI list, language list, numeric keypad, text keyboard,
-  slider, date picker); fixes logged as DT-07 … DT-10. `node scripts/figma/capture.mjs <dir> --presentation`
-  captures exactly those 36 states. Figma has all 36 (see FIGMA.md, 2026-11-04).
-- **Gates:** G2-1 and G2-2 have not been held as reviews yet (no DT entries since DT-06 at G1-2); G2-3 is
-  the next planned gate. The three go together once P2-14 is in.
-- **App state:** menus, parameter lists, all editors (toggle, selection list, numeric keypad, text keyboard,
-  slider, time/date picker, action with confirmation), help pop-up and favourites work with dummy data; log in via the nav-bar
-  badge or the dev panel (level 0–4). Tests: 83 unit (`npx vitest run`), 86 e2e (`npx playwright test`). Dev route `#/touchtest` (dev panel → touch test) measures the touch panel on the device (open point #51).
-- **Figma state:** `HMI / 01 Tokens` complete; `HMI / 02 Components` 22 sets / 145 variants;
-  `HMI / 03 Screens – Portrait` 27 dark frames (incl. the designer's tweak frame) + 3 light; `… – Landscape LH` 12 (+ the
-  designer's tweak frame `ready-L0-1`) and `… – Landscape RH` 12 (the presentation set; DT-11/DT-12 applied 2026-11-05). Light frames and the remaining landscape frames come in P4-09. The builder is stored in the
-  file (`hmi.builder`, len 31635, checksum 3135273424, see FIGMA.md for the checksum rule). The sync is driven through the Figma Console Desktop Bridge; read the "Components"
-  section of `docs/FIGMA.md` before touching it — every quirk listed there cost a failed run.
-- **Last commit:** presentation pass (12 screens × 3 layouts, DT-07 … DT-10, Figma LH/RH frames). Working tree clean. Repo is local only (no remote yet,
-  P5-05).
-- **Open questions for PID** live in `docs/OPEN-POINTS.md` (slider parameter list, L4 semantics, date/time
-  widget, browser engine, 180° rotation); assumptions taken meanwhile are recorded there.
+- **Phase 2 closed in code (2026-11-09).** P2-01 … P2-16 done: P2-10 got the action pill with a pressed state
+  (DT-47), P2-14 checklist walked (one fix: IP keys), P2-15 flows added (`tests/e2e/phase2-flows.spec.js`). Left in
+  Phase 2: **P2-17** (Figma catch-up) and the **G2-3** gate. G2-1 and G2-2 were held as the board review.
+- **Board review 2026-11-05 … 09 (unplanned, now recorded).** The app ran on the 4.3" panel (LAN dev server
+  `npx vite --host --port 5174`, board at http://172.20.2.65:5174). It produced DT-13 … DT-46:
+  - touch test `#/touchtest`, touch targets 88 / 68 px and the XL type scale (DT-13 … DT-15, new ticket P1-18);
+  - portrait review: start glow, logo, login list, keypads, keyboard, pop-ups, title-bar branch edge, favourite
+    cards, parameter rows, editors as pages (DT-16 … DT-31);
+  - landscape review, a large part of P4-02a: rails, menu tiles, editors as pages, keypad and pickers, home
+    layout, state colours and amber warning (DT-32 … DT-43);
+  - user screen (DT-44), slider restyled after the first draft (DT-45), start glow pulses while running /
+    warning / alarm (DT-46). Rejected trials: flat inner pages without cards, liquid aura, running rim light.
+- **Figma is behind.** DT-13 … DT-47 are code only; Figma still shows the pre-board sizes. P2-17 brings it level
+  before G2-3. Builder stored in the file (`hmi.builder`, len 31635, checksum 3135273424); read the "Components"
+  section of `docs/FIGMA.md` before touching it.
+- **App state:** menus, parameter lists, all editors, help, favourites and the HMI screen work with dummy data in
+  portrait, LH and RH, dark and light. Tests: 83 unit (`npx vitest run`), 98 e2e (`npx playwright test`).
+- **Repo:** GitHub https://github.com/ivanmono/novexx-labeler, branch main, push over HTTPS. README and CI still open (P5-05).
+- **Waiting on PID / designer** (`docs/OPEN-POINTS.md`): #51 touch-target re-base sign-off and glove test, #52
+  editors as full pages vs §7.2, plus the earlier ones (slider list, L4 semantics, date/time widget, browser
+  engine #18 — matters more now that DT-45/46 use `color-mix` and CSS animation — 180° rotation).
+
+## Next steps (proposal)
+
+1. ~~Close Phase 2 in code~~ — done 2026-11-09 (P2-10, P2-14, P2-15).
+2. **P2-17 Figma catch-up** (L): tokens, changed components and the 36 presentation frames, so Figma and code
+   are equal again before the gate.
+3. **G2-3 gate** with the designer: favourites, HMI screen, edit behaviour, plus sign-off on #51 / #52.
+4. **Phase 3**, starting with P3-01 shared pieces and the format screens (P3-02 … P3-04, gate G3-1). Build it
+   straight at the board sizes, portrait and landscape together, since landscape is no longer a late pass.
 
 ## Context
 
@@ -172,6 +181,7 @@ Exit: `npm run dev` shows an empty shell in all three layouts; `npm test` passes
 | P1-14 | Dev panel complete; Playwright harness with layout × theme matrix and screenshot naming | M |
 | P1-15 | Figma: `02 Components` shell parts (status bar, title bar, nav bar, toast, modal) with variants; `03 Screens` start-up + home in 3 layouts × 2 themes | M |
 | P1-16 | Stand-by state: HMI_Standby_Timer (613) dims/locks to a stand-by screen after inactivity, wake on touch, status bar "stand-by" state (prototype has a standby home; clickdummy has none) | M |
+| P1-18 | **Added 2026-11-05, done.** Touch test on the panel (`#/touchtest`); touch targets re-based to 88 / 68 px and XL type scale after the board measurement (DT-13 … DT-15, #51) | M |
 | P1-17 | Figma: generated frames bind the HMI variables (colour, radius, type) and `HMI/*` text styles and carry their theme as the `HMI Colour` mode; serializer names the token behind every value (added 2026-10-30, before the G1-2 tweaks so tweaks land on tokens) | M |
 | G1-2 | **Gate**: start-up, home (all machine states, L0), login, stand-by; Figma sync of P1-15 happens after this gate's tweaks. First input: the designer's frame `home / dark / portrait / ready-L0 - tweak` (Figma node 2045:1372), reviewed after P1-17 | – |
 
@@ -183,7 +193,7 @@ Exit: boot → home → login → level badge changes; machine state cycles from
 |---|---|---|
 | P2-01 | MenuScreen: 6 tiles/page, pager (first/middle/last), branch colour code, tile with icon + label + **sub-line**, states default/**pressed**/disabled (option absent per `seed/machine.json`), 2 columns portrait / 3 landscape | M |
 | P2-02 | All 16 menu nodes wired from `menu-tree.json`; cross-link hint for linked paths (applicator block, Digital IO, Bus card) | S |
-| G2-1 | **Gate**: main menu and all 16 menu screens, paging, branch colours | – |
+| G2-1 | **Gate**: main menu and all 16 menu screens, paging, branch colours — held as the board review 2026-11-05 | – |
 | P2-03 | ParamRow: value visible, unit, indent ≤2, states default/pressed/locked/read-only/changed-from-default/help-indicator; ParamID small low-contrast; GroupHeader | L |
 | P2-04 | ParamListScreen: scroll, conditional rows absent without breaking layout, unreadable rows absent, live State values at the 1 s refresh, shared IDs | M |
 | P2-05 | ToggleBar (immediate, no confirm) | S |
@@ -193,13 +203,14 @@ Exit: boot → home → login → level badge changes; machine state cycles from
 | P2-09 | Slider: for a defined list of range params (proposal: 122 SpeedFixed, 123 SpeedFeed_Manual, 130 Speed_Modification, 297 Test speed, 613 Standby timer), value never under the finger, stepper arrows, min/max states — list recorded in OPEN-POINTS | M |
 | P2-10 | Action / Action Button with pressed state + confirmation when it moves the machine (801/802, 1–7, 800, 803–808) | S |
 | P2-11 | Help modal: indicator on row, pop-up over list, 40/600 placeholder texts, scroll beyond | S |
-| G2-2 | **Gate**: parameter row + all editors (toggle, list, keypad, keyboard, slider, action, help) on the styleguide and on 3 real list screens | – |
+| G2-2 | **Gate**: parameter row + all editors (toggle, list, keypad, keyboard, slider, action, help) on the styleguide and on 3 real list screens — held as the board review 2026-11-05 … 06 (DT-19 … DT-37, DT-45) | – |
 | P2-12 | Favourites: marker on row, Favourites screen under Settings (a view, not a copy), feeds quicklink config in HMI screen | M |
 | P2-13 | HMI screen specifics: language (500), time/date pickers (700/701 need a date/time widget — not in the type table; design one), orientation, dark mode, logo selection, quicklinks | M |
-| P2-14 | Checklist-only ticket (no new code): walk §7.3 edit behaviour across P2-03/P2-07/P2-11 — invalid entry explained not corrected; changed-from-default marker; locked rows show lock + "needs level n" toast | S |
+| P2-14 | **Done 2026-11-09.** Checklist-only ticket (no new code): walk §7.3 edit behaviour across P2-03/P2-07/P2-11 — invalid entry explained not corrected; changed-from-default marker; locked rows show lock + "needs level n" toast | S |
 | P2-15 | Unit tests (parser, validate, access) + Playwright: home → menu → parameter → edit → back for each control; screenshot every list screen in portrait dark, plus 3 representative lists in all 6 combos | M |
 | G2-3 | **Gate**: favourites, search, HMI screen, edit-behaviour checklist | – |
 | P2-16 | Figma: component sets for tile, pager, row, header, toggle, list, keypad, keyboard, slider, favourite, help; frames for main menu + 3 representative parameter screens (after G2-3 tweaks) | L |
+| P2-17 | **Added 2026-11-09.** Figma catch-up for the board review: tokens (88 / 68 px, XL type, glows), changed components and the 36 presentation frames for DT-13 … DT-46 | L |
 
 Exit: all 21 list screens and 16 menus navigable with working editors and access gating.
 
@@ -249,11 +260,11 @@ Exit: every node in the draw.io tree plus the four docx-only screens is reachabl
 | P4-01a | Light theme pass: shell, start-up, home, menus, parameter lists + editors; contrast check; status meaning never colour-only | M |
 | P4-01b | Light theme pass: all special screens (formats, service, users, help, wizard) | M |
 | G4-1 | **Gate**: light theme, all screens | – |
-| P4-02a | Landscape LH/RH pass: shell, home, menus, parameter lists + editors (keyboards unfold without covering the field at 480 px height) | L |
+| P4-02a | Landscape LH/RH pass: shell, home, menus, parameter lists + editors (keyboards unfold without covering the field at 480 px height) — mostly done in the board review (DT-32 … DT-44); full walk incl. 180° left | L |
 | P4-02b | Landscape LH/RH pass: all special screens; reduced-content or scroll/jump designs where portrait content does not fit; 180° check of edge-anchored elements | L |
 | G4-2 | **Gate**: landscape LH + RH, all screens, incl. 180° | – |
 | P4-03 | German pass: all chrome + parameter names; run the 30 % length audit; fix truncation | M |
-| P4-04 | Touch target audit ≥60 px primary / ≥48 px rows, in all layouts | S |
+| P4-04 | Touch target audit, in all layouts — thresholds now 88 / 68 px (DT-13, #51); glove test open | S |
 | P4-05 | Empty / loading / error states audit for every data-loading screen | M |
 | P4-06 | Performance: no heavy effects, bundle size, CPU-throttled Playwright run, animation budget | S |
 | P4-07 | Accessibility basics: roles, labels, focus order for the keyboards and dialogs | S |
@@ -270,7 +281,7 @@ Exit: every node in the draw.io tree plus the four docx-only screens is reachabl
 | P5-02 | Spec/redlines: token system doc, component state matrix, per-screen notes "so the frontend can be rebuilt without asking back" | M |
 | P5-03 | Acceptance checklist §10.1 walked and recorded in REQUIREMENTS-TRACE | S |
 | P5-04 | OPEN-POINTS finalised for PID (wizard params, help texts, QR URL template, diagnosis toggle param, slider list, L4 semantics incl. "write level 4" rows, date/time widget, browser engine, OS-level vs CSS 180° rotation, touch targets to be checked on the demo display, PID's modal dialog styling suggestion) | S |
-| P5-05 | README, setup/build docs, GitHub push and CI (lint, unit, e2e) | S |
+| P5-05 | README, setup/build docs, GitHub push and CI (lint, unit, e2e) — GitHub push done 2026-11-05 | S |
 | G5-1 | **Gate**: final Figma ↔ code reconciliation; every `DT` entry reflected on both sides; prototype flow walked | – |
 
 ## Assumptions recorded in OPEN-POINTS (proceed unless PID says otherwise)

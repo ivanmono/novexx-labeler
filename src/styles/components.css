@@ -131,6 +131,28 @@
   .home__run[aria-disabled='true'] {
     opacity: 1;
   }
+  /* action button in a parameter row (docx §7.2 Action, P2-10): an outlined pill that fills while
+     pressed and stays filled while its confirmation is open (data-armed) */
+  .param-action {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    color: var(--hmi-brand-hi);
+    background: var(--hmi-surface-2);
+    box-shadow: inset 0 0 0 2px var(--hmi-brand);
+    transition:
+      background-color 120ms var(--ease-hmi),
+      color 120ms var(--ease-hmi);
+  }
+  .param-row:active .param-action,
+  .param-row[data-pressed='true'] .param-action,
+  .param-row[data-armed='true'] .param-action {
+    background: var(--hmi-brand);
+    color: var(--hmi-on-brand);
+  }
+
   /* running / warning / alarm: the state glow breathes (DT-46). The glow sits on a pseudo-element
      and only its opacity animates, so the GPU composites it instead of repainting the 140 px halo
      every frame (docx §3: basic animations only). */
