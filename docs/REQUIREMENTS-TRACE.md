@@ -97,8 +97,8 @@ Binding document: `docs/sources/Frontend_Design_Requirements_Labeller_HMI_v1.6.d
 | tests | Tests | menu | P2-02 | todo |
 | speedtest | Speed Test | mask speedtest | P3-05 | todo |
 | iotest | IO-Test | mask iotable | P3-06 | todo |
-| applicatortest | Applicator Test | list (12) | P3-07 | todo |
-| testmode | Test-Mode | list (6) | P3-07 | todo |
+| applicatortest | Applicator Test | list (12) | P3-07 | done 2026-11-10 |
+| testmode | Test-Mode | list (6) | P3-07 | done 2026-11-10 |
 | diagnostic | Diagnostic Function | menu | P2-02 | todo |
 | diaglogs | Diagnosis Logs | mask eventlog | P3-08 | todo |
 | errorhistory | Error History | mask errorlog | P3-09 | todo |

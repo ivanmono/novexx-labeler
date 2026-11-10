@@ -107,6 +107,35 @@
       "value": 18432,
       "why": "Dummy start value for the counters/live values (Excel Val empty): Labels since service."
     },
+    "722": {
+      "unit": "ms",
+      "value": 0,
+      "why": "Excel unit empty; the applicator test shows measured times, so the counter needs its unit on screen (P3-07). Milliseconds as the other applicator timings (298/299)."
+    },
+    "723": {
+      "unit": "ms",
+      "value": 0,
+      "why": "Excel unit empty; the applicator test shows measured times, so the counter needs its unit on screen (P3-07). Milliseconds as the other applicator timings (298/299)."
+    },
+    "724": {
+      "unit": "ms",
+      "value": 0,
+      "why": "Excel unit empty; the applicator test shows measured times, so the counter needs its unit on screen (P3-07). Milliseconds as the other applicator timings (298/299)."
+    },
+    "725": {
+      "unit": "ms",
+      "value": 0,
+      "why": "Excel unit empty; the applicator test shows measured times, so the counter needs its unit on screen (P3-07). Milliseconds as the other applicator timings (298/299)."
+    },
+    "726": {
+      "unit": "s",
+      "value": 0,
+      "why": "Excel unit empty; test-mode duration counted in seconds by the simulator (P3-07)."
+    },
+    "727": {
+      "value": 0,
+      "why": "Dummy start value for the test-mode cycle counter (Excel Val empty) (P3-07)."
+    },
     "729": {
       "control": "display",
       "why": "CRA_relevant_Target_Country is read-only level 4 with Editable=False; shown as a read-only value until PID defines the country selection."

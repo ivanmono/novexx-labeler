@@ -191,6 +191,14 @@ export function render(ctx, { arg }, nodeOverride = null) {
             delete btn.dataset.armed;
             if (!go) return;
           }
+          if (p.id >= 803 && p.id <= 808) {
+            // applicator test (P3-07): actuators toggle, the cycle buttons write the test times
+            const r = ctx.sim.applicator(p.id);
+            if (!r.ok) return ctx.toast.reject(ctx.t('toast.rejected'));
+            ctx.log('test', `${p.name}${r.on != null ? (r.on ? ' on' : ' off') : ''}`);
+            const state = r.on != null ? ` · ${ctx.t(r.on ? 'common.on' : 'common.off')}` : r.step ? ` · ${r.step}/4` : '';
+            return ctx.toast.ok(`${paramLabel(ctx, p)}${state}`);
+          }
           const ok =
             p.name === 'Alarm_Reset'
               ? (ctx.sim.resetAlarm(), true)

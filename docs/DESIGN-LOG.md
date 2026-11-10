@@ -550,3 +550,13 @@ Change (Mono's design, first version):
 Where: `src/ui/screens/service/IoTest.js`, `src/ui/components/TableRow.js`, `src/core/simulator.js` (`FORCE_TIMEOUT_MS`)
 Before → after: `iotest-*` (iotest.spec)
 Status: both for the TableRow set (Figma rebuilt 2026-11-10); the screen frames with P3-22b
+
+## DT-58 · Applicator test feedback and counter units (2026-11-10, P3-07)
+
+Source: plan P3-07 (buttons confirm, counters at the 1 s refresh, L3); Excel parameters 722–727 carry no unit
+Change:
+- The applicator test and test-mode screens stay parameter lists; the action rows now do something in the simulator and say so: actuator buttons toast "Cylinder active · On / Off", the single-step button "Single step cycle · 2/4", and the four times appear in the counter rows.
+- Units on the counters (through overrides.json, not by hand in the generated data): 722–725 in ms, 726 in s; 727 is a plain count.
+Where: `src/core/simulator.js` (`applicator`, test-mode tick), `src/ui/screens/ParamListScreen.js`, `src/data/overrides.json`
+Before → after: `applicatortest-l3` (applicator.spec)
+Status: code only — screen frames with P3-22b

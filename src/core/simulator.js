@@ -14,11 +14,27 @@ export const STATES = ['offline', 'online', 'pause', 'run', 'alarm', 'warning'];
 /** Dummy error catalogue (Error History seed and injection). */
 export const ERROR_CATALOGUE = {
   'E-114': { severity: 'high', text: 'Label roll empty', textDe: 'Etikettenrolle leer' },
-  'E-207': { severity: 'high', text: 'Missing label at dispensing edge', textDe: 'Fehlendes Etikett an der Spendekante' },
-  'E-031': { severity: 'mid', text: 'Printer busy timeout', textDe: 'Drucker-Busy-Zeitüberschreitung' },
-  'E-402': { severity: 'high', text: 'Applicator touch-down timeout', textDe: 'Applikator Touch-down Zeitüberschreitung' },
+  'E-207': {
+    severity: 'high',
+    text: 'Missing label at dispensing edge',
+    textDe: 'Fehlendes Etikett an der Spendekante',
+  },
+  'E-031': {
+    severity: 'mid',
+    text: 'Printer busy timeout',
+    textDe: 'Drucker-Busy-Zeitüberschreitung',
+  },
+  'E-402': {
+    severity: 'high',
+    text: 'Applicator touch-down timeout',
+    textDe: 'Applikator Touch-down Zeitüberschreitung',
+  },
   'E-055': { severity: 'low', text: 'Encoder signal lost', textDe: 'Encodersignal verloren' },
-  'W-012': { severity: 'low', text: 'Roll end warning diameter reached', textDe: 'Warn-Durchmesser Rollenende erreicht' },
+  'W-012': {
+    severity: 'low',
+    text: 'Roll end warning diameter reached',
+    textDe: 'Warn-Durchmesser Rollenende erreicht',
+  },
   'W-020': { severity: 'low', text: 'Service interval due', textDe: 'Serviceintervall fällig' },
 };
 
@@ -45,6 +61,7 @@ export const FORCE_TIMEOUT_MS = 60_000;
 export function createSimulator(store, { machine, now = () => Date.now(), interval = 1000 } = {}) {
   let timer = null;
   let tick = 0;
+  let testCycles = 0; // fractional test-mode cycles (727 counts whole ones)
   let listeners = new Set();
 
   const initial = {
@@ -57,13 +74,21 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
     warnings: [], // active warnings
     encoder: { mmin: 0, hz: 0, signal: true },
     io: Object.fromEntries(
-      (machine?.io?.groups ?? []).flatMap((g) => g.pins.map((p) => [p.pin, { ...p, group: g.id, state: false, forced: null }])),
+      (machine?.io?.groups ?? []).flatMap((g) =>
+        g.pins.map((p) => [p.pin, { ...p, group: g.id, state: false, forced: null }]),
+      ),
     ),
     speedTest: { running: false, result: null },
+    applicator: { cylinder: false, supportAir: false, vacuum: false, blow: false, step: 0 },
     standby: false,
     lastActivityAt: now(),
     options: machine?.options ?? {},
-    identity: { type: machine?.type, serial: machine?.serial, firmware: machine?.firmware, firmwareDate: machine?.firmwareDate },
+    identity: {
+      type: machine?.type,
+      serial: machine?.serial,
+      firmware: machine?.firmware,
+      firmwareDate: machine?.firmwareDate,
+    },
   };
   if (!store.get('machine')) store.replace('machine', initial);
 
@@ -166,8 +191,19 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
     boot({ durationMs, fail = false, hang = false } = {}) {
       // progress runs against the average of previous boot durations (docx §8.17), never in steps
       const prev = machine?.boot?.previousDurationsMs ?? [];
-      const expected = durationMs ?? (prev.length ? Math.round(prev.reduce((a, b) => a + b, 0) / prev.length) : (machine?.boot?.simulatedDurationMs ?? 6500));
-      setM({ booted: false, bootProgress: 0, bootStartedAt: now(), bootFail: fail, bootHang: hang, bootDurationMs: expected });
+      const expected =
+        durationMs ??
+        (prev.length
+          ? Math.round(prev.reduce((a, b) => a + b, 0) / prev.length)
+          : (machine?.boot?.simulatedDurationMs ?? 6500));
+      setM({
+        booted: false,
+        bootProgress: 0,
+        bootStartedAt: now(),
+        bootFail: fail,
+        bootHang: hang,
+        bootDurationMs: expected,
+      });
       return new Promise((resolve) => {
         const step = () => {
           const cur = m();
@@ -211,8 +247,47 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
     },
     resetForced() {
       const cur = m();
-      const io = Object.fromEntries(Object.entries(cur.io).map(([k, v]) => [k, { ...v, forced: null }]));
+      const io = Object.fromEntries(
+        Object.entries(cur.io).map(([k, v]) => [k, { ...v, forced: null }]),
+      );
       setM({ io });
+    },
+    /**
+     * Applicator test buttons (P3-07): 803–806 switch an actuator on or off; 807 runs a full test cycle
+     * and writes its four times (722–725, ms); 808 runs the next step of the cycle and writes that
+     * step's time. Returns { ok, on? , step? }.
+     */
+    applicator(pid) {
+      const cur = m();
+      const a = { ...cur.applicator };
+      const key = { 803: 'cylinder', 804: 'supportAir', 805: 'vacuum', 806: 'blow' }[pid];
+      if (key) {
+        a[key] = !a[key];
+        setM({ applicator: a });
+        return { ok: true, on: a[key] };
+      }
+      const speed = Math.max(1, Number(store.getParam(122) ?? 30)); // m/min
+      const label = Number(store.getParam(117) ?? 100); // mm
+      const jitter = (ms) => Math.round(ms * (0.95 + Math.random() * 0.1));
+      const times = {
+        722: jitter((label / ((speed * 1000) / 60)) * 1000), // dispensing
+        723: jitter(180), // applicator apply
+        724: jitter(60), // start to apply
+      };
+      times[725] = times[722] + times[723] + times[724] + jitter(40); // full cycle
+      if (pid === 807) {
+        store.setParams(times);
+        setM({ applicator: { ...a, step: 0 } });
+        return { ok: true };
+      }
+      if (pid === 808) {
+        const ids = [722, 723, 724, 725];
+        const id = ids[a.step % ids.length];
+        store.setParam(id, times[id]);
+        setM({ applicator: { ...a, step: (a.step + 1) % ids.length } });
+        return { ok: true, step: (a.step % ids.length) + 1 };
+      }
+      return { ok: false };
     },
     /** Encoder cable in or out (P3-05 "no encoder signal" state). */
     setEncoderSignal(on) {
@@ -273,7 +348,10 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
       const base = sel === 119 ? Number(store.getParam(122) ?? 30) : 24 + Math.sin(tick / 7) * 3;
       const running = cur.state === 'run';
       const signal = cur.encoder.signal !== false; // cable out: nothing measured in any speed mode
-      const mmin = signal && (running || cur.speedTest.running) ? Math.max(0, base + (Math.random() - 0.5) * 0.4) : 0;
+      const mmin =
+        signal && (running || cur.speedTest.running)
+          ? Math.max(0, base + (Math.random() - 0.5) * 0.4)
+          : 0;
       const ppr = Number(store.getParam(125) ?? 500);
       const dia = Number(store.getParam(124) ?? 36);
       const hz = mmin > 0 ? Math.round(((mmin * 1000) / 60 / (Math.PI * dia)) * ppr) : 0;
@@ -294,22 +372,54 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
       const io = { ...cur.io };
       for (const [pin, p] of Object.entries(io)) {
         let state = p.state;
-        if (p.dir === 'in') state = running ? Math.random() < 0.5 : pin.endsWith('.2') ? true : false;
+        if (p.dir === 'in')
+          state = running ? Math.random() < 0.5 : pin.endsWith('.2') ? true : false;
         else {
           const fnl = p.fn.toLowerCase();
-          state = fnl.includes('ready') ? cur.state === 'online' || running : fnl.includes('alarm') ? cur.state === 'alarm' : fnl.includes('warning') ? cur.state === 'warning' : running && Math.random() < 0.5;
+          const ap = cur.applicator;
+          state = fnl.includes('ready')
+            ? cur.state === 'online' || running
+            : fnl.includes('alarm')
+              ? cur.state === 'alarm'
+              : fnl.includes('warning')
+                ? cur.state === 'warning'
+                : fnl.includes('apply')
+                  ? ap.cylinder || (running && Math.random() < 0.5)
+                  : fnl.includes('vacuum')
+                    ? ap.vacuum
+                    : fnl.includes('blow')
+                      ? ap.blow
+                      : running && Math.random() < 0.5;
         }
         // forced outputs reset after 60 s
-        const forced = p.forced != null && now() - (p.forcedAt ?? 0) > FORCE_TIMEOUT_MS ? null : p.forced;
+        const forced =
+          p.forced != null && now() - (p.forcedAt ?? 0) > FORCE_TIMEOUT_MS ? null : p.forced;
         io[pin] = { ...p, state, forced };
       }
 
       // stand-by after HMI_Standby_Timer minutes of inactivity (0 = never)
+      // test mode (296): duration in seconds (726) and whole cycles (727) from on + off time (298/299)
+      if (store.getParam(296)) {
+        inc(726, 1);
+        const period = Number(store.getParam(298) ?? 100) + Number(store.getParam(299) ?? 500);
+        testCycles += period > 0 ? 1000 / period : 0;
+        const whole = Math.floor(testCycles);
+        if (whole) {
+          inc(727, whole);
+          testCycles -= whole;
+        }
+      }
+
       const standbyMin = Number(store.getParam(613) ?? 0);
       const idle = now() - cur.lastActivityAt;
       const standby = cur.standby || (standbyMin > 0 && idle > standbyMin * 60_000);
 
-      setM({ encoder: { mmin: Number(mmin.toFixed(1)), hz, signal }, io, standby, uptimeS: (cur.uptimeS ?? 0) + 1 });
+      setM({
+        encoder: { mmin: Number(mmin.toFixed(1)), hz, signal },
+        io,
+        standby,
+        uptimeS: (cur.uptimeS ?? 0) + 1,
+      });
       emit('tick', tick);
     },
   };
