@@ -14,6 +14,7 @@ import * as SpeedTest from './service/SpeedTest.js';
 import * as IoTest from './service/IoTest.js';
 import * as DiagnosisLogs from './service/DiagnosisLogs.js';
 import * as ErrorHistory from './service/ErrorHistory.js';
+import * as Reporting from './service/Reporting.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
 const MASKS = {
@@ -24,6 +25,7 @@ const MASKS = {
   iotest: IoTest,
   diaglogs: DiagnosisLogs,
   errorhistory: ErrorHistory,
+  reporting: Reporting,
 };
 
 export function render(ctx, info) {

@@ -110,6 +110,7 @@ Priority order: portrait dark complete first, then light, then landscape. Roughl
 ### Special screens page (2026-11-10)
 
 New page **"HMI / 04 Screens – Special"**: 14 dark portrait frames of the Phase 3 screens for restyling — Error History (list, search with keyboard, detail dialog, empty), Formats (select, modify, create with duplicate, empty), Diagnosis Logs (off L2, recording L3), Speed Test (result, no signal), IO-Test (read L1, forced L3); one row per screen. Captured with `node scripts/figma/capture.mjs <dir> --base … --special` (add `--land` for both landscape layouts).
+- Reporting (P3-10, 2026-11-10): `reporting / dark / portrait / comment-L3` on its own row (y 4800). The multi-line comment field is plain layers, not an Input instance (no multi-line variant). Builds that time out at 60 s: preload the fonts with one `Promise.all` before `buildFrames` and allow 200 s.
 - Frames with a keyboard are built without keys and the keys are placed from the Key variants afterwards (48 keyed instances time the bridge out). IO-Test read-L1 is a copy of forced-L3 with the force column hidden.
 - Added TitleBar variants `Subtitle=yes` × production / service / settings.
 - Known gaps in the frames (components lack the part): the "Loaded" tag on format rows, the red recording indicator in the status bar.

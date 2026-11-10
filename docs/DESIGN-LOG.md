@@ -636,3 +636,13 @@ Change: `activate` → `check` with a 3 px stroke (as on the keyboard submit key
 Figma: Toast Kind=ok, Modal Kind=confirm · Destructive=no and Button Tone=primary · Icon=yes swapped to icon/24/check at 3 px; screen frames follow through the instances.
 Where: `shell/ModalHost.js`, `shell/Toast.js`, `components/Button.js`, `components/DateTimePicker.js`, `screens/Components.js`
 Status: both
+
+## DT-66 · Reporting screen (2026-11-10, P3-10)
+
+Source: docx §8.8, sketch "Reporting — content and hierarchy idea"
+Change:
+- Portrait, top to bottom: "Since the last service" card (Distance / Time / Labels; short labels because the card title carries "since the last service"), last report line, "What was done" field (3 lines, 240 characters, counter), date and user (two lines: Ioskeley date and time, role and user in the level colour), Commit report (primary, bold check). Landscape: counters left, comment, stamp and button right.
+- Typing: the keyboard unfolds under the field and the counters fold away; the field drops to two lines in landscape so the keyboard fits the 480 px height.
+- Commit asks first (resetting counters is not undoable); the dialog says when there is no comment.
+Where: `src/ui/screens/service/Reporting.js`
+Status: both (Figma: special-screens frame, portrait)

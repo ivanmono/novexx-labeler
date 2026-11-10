@@ -442,6 +442,18 @@ const STATES = [
     },
     { screen: 'formats', state: 'modify-L2', route: 'screen/modifyformat', level: 2 },
     {
+      screen: 'reporting',
+      state: 'comment-L3',
+      route: 'screen/reporting',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-comment]');
+        for (const k of ['R', 'o', 'l', 'l', 'e', 'r', '␣', 'r', 'e', 'p', 'l', 'a', 'c', 'e', 'd']) await page.click(`[data-key="${k}"]`);
+        await page.click('[data-key="↵"]');
+        await page.waitForSelector('[data-action="commit"]');
+      },
+    },
+    {
       screen: 'formats',
       state: 'create-duplicate-L2',
       route: 'screen/createformat',
