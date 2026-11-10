@@ -584,6 +584,11 @@
     background: var(--hmi-on-brand);
   }
 
+  /* teal variant for settings switches (diagnosis recording); amber stays for forcing */
+  .hmi-switch--brand[aria-checked='true'] .hmi-switch__track {
+    background: var(--hmi-brand);
+  }
+
   /* loading placeholder: a turning ring (static under reduced motion) */
   .placeholder__spinner {
     width: 72px;

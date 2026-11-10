@@ -20,6 +20,7 @@ import { setTheme, setOrientation, ORIENTATION_BY_OPTION, onDisplayChange, getTh
 import { t, setLanguage, setTemporaryLanguage, clearTemporaryLanguage, languageFromOption, onLanguageChange, currentLanguage } from './core/i18n.js';
 import { canOpenNode } from './core/access.js';
 import { seedFormats } from './core/formats.js';
+import { emptyDiag, appendDiag, setRecording, DIAG_PARAM } from './core/diag.js';
 import { mountAppShell } from './ui/shell/AppShell.js';
 import { injectSprite } from './ui/components/Icon.js';
 import { mountDevPanel } from './ui/dev/DevPanel.js';
@@ -50,6 +51,7 @@ export async function boot(root, { skipBoot = false } = {}) {
     users: snap?.users ?? usersSeed.users,
     formats: seeded ? seeded.formats : (snap?.formats ?? []),
     logs: snap?.logs ?? [],
+    diag: snap?.diag ?? emptyDiag(),
     favourites: Array.isArray(snap?.favourites) ? snap.favourites : [],
     settings: {
       firstStartDone: false,
@@ -71,6 +73,7 @@ export async function boot(root, { skipBoot = false } = {}) {
   store.onParam(500, applyLang);
   store.onParam(612, applyTheme);
   store.onParam(601, applyOrientation);
+  store.onParam(DIAG_PARAM, (on) => store.set('diag', (d) => setRecording(d, !!on)));
 
   // ---- simulator -----------------------------------------------------------
   const sim = createSimulator(store, { machine: machineSeed });
@@ -168,6 +171,8 @@ export async function boot(root, { skipBoot = false } = {}) {
     log(type, detail, extra = {}) {
       const s = store.get('session');
       const entry = { at: Date.now(), type, detail, level: s.level, user: s.user?.name ?? null, ...extra };
+      // diagnosis recording (docx §8.6): a copy into the FIFO area while parameter 900 is on
+      if (store.getParam(DIAG_PARAM)) store.set('diag', (d) => appendDiag(d, entry));
       store.set('logs', (logs) => {
         const next = [...logs, entry];
         return next.length > 500 ? next.slice(-500) : next; // FIFO (docx §8.6)

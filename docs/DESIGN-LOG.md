@@ -560,3 +560,15 @@ Change:
 Where: `src/core/simulator.js` (`applicator`, test-mode tick), `src/ui/screens/ParamListScreen.js`, `src/data/overrides.json`
 Before → after: `applicatortest-l3` (applicator.spec)
 Status: code only — screen frames with P3-22b
+
+## DT-59 · Diagnosis Logs screen (2026-11-10, P3-08)
+
+Source: plan P3-08; docx §8.6 (toggle first and unambiguous, timestamp / type / role without truncation, duration and space left, FIFO, export, off-and-empty state, L2 view / L3 activate and clear)
+Change (Mono's design, first version):
+- Toggle card at the top in the strong border: label, the state in words in green ("On · recording") or grey ("Off"), and a teal switch (new `.hmi-switch--brand`; amber stays for IO forcing). Below L3 a lock and one line saying so.
+- Recording status scrolls with the list (so the list gets the height in portrait): duration, a fill bar for the area (red when under 10 % free) and the FIFO note.
+- Event rows: time in Ioskeley Mono, a type tag (error / failed login red, state amber, parameter teal, Secure Code in the L4 colour, the rest grey), the role and user in their level colour, the detail on its own line, wrapping. Newest first.
+- Export to USB and Clear side by side at the bottom; Clear is destructive and locked below L3.
+Where: `src/ui/screens/service/DiagnosisLogs.js`, `src/core/diag.js`, `src/app.js` (ctx.log, parameter 900), `src/styles/components.css`
+Before → after: `diaglogs-*` (diaglogs.spec)
+Status: code only — screen frames with P3-22b
