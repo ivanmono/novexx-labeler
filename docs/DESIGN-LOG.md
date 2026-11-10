@@ -506,3 +506,16 @@ Change:
 - Used in code: success badge (was a check drawn in CSS), file rows, "One level up", "No USB drive". Figma: ProgressResult success badge and the ListRow file variants switched to the new icons.
 Where: `src/assets/icons/{check,file,up,usb}.svg`, sprite rebuilt (71 icons); `ProgressResult.js`, `FileBrowser.js`
 Status: both (2026-11-10). The 48 px masters on "Icons v1" were not touched; to be drawn there if the 48 px set is kept in step.
+
+## DT-54 · Format screens (2026-11-10, P3-02 … P3-04)
+
+Source: plan P3-02 … P3-04; docx §8.1–8.3 (content and acceptance), clickdummy "formatlist" / "textinput" sketches (content only)
+Change (Mono's design, first version for gate G3-1):
+- Select / Modify share one page: the format list (ListRow select rows: name, "date · who (level)", a brand "Loaded" tag) in a scroll area with the scroll hint and end marker, and a fixed action strip at the bottom: a status line and the primary button. Landscape puts status and button side by side to keep four rows visible.
+- The status line carries the state: "n parameters differ from the live settings", "No differences to the stored file" (green, check), "Select a format first", or "Stop the machine to load a format" (amber). The button never silently does nothing: when it cannot act it is dimmed and explains with a toast (not selected, running, no differences, needs level 2 with a lock icon).
+- Loading is a normal confirmation (it changes the machine, not a file); overwriting is destructive (red, "cannot be undone"). Both name the format and repeat the difference count.
+- Create: the name field (Input, Kind=text) with the keyboard below on the page; a duplicate shows "<name> already exists" as you type and an "Overwrite instead" button (beside the field in landscape); the Save key on the keyboard saves.
+- Decision: after Create or Overwrite the saved format is marked loaded, because the live values now equal it.
+Where: `src/ui/screens/formats/*.js`, `src/core/formats.js`, `src/data/seed/formats.json`, `ListRow` (`tag`)
+Before → after: `formats-*` (formats.spec)
+Status: code only — Figma frames with P3-22b

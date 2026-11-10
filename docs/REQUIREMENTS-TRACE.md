@@ -27,9 +27,9 @@ Binding document: `docs/sources/Frontend_Design_Requirements_Labeller_HMI_v1.6.d
 | §7.2 Types and controls | Boolean toggle, discrete list, number keypad, string keyboard, range slider, action button, state display; time/date picker for 700/701 (not in §7.2, OPEN-POINTS #3) | P2-05 to P2-10, P2-13 | e2e per control | todo |
 | §7.3 Editing behaviour | Few steps, one confirm, invalid explained, changed-from-default marker | P2-07, P2-14 | validate.test, checklist G2-3 | done in code, checklist in P2-14; sign-off at G2-3 |
 | §8 Special screens (common) | Empty/loading/error states, shared confirmation, defined row height and end-of-list, refresh rate | P3-01, P1-07, P4-05 | styleguide, gate G3-1 | todo |
-| §8.1 Select Format | L1; loaded marked; confirm names format; blocked while running; empty state | P3-02 | e2e formats | todo |
-| §8.2 Modify Format | L2; pre-selected; diff summary; no-differences state | P3-03 | e2e formats | todo |
-| §8.3 Create New Format | L2; not pre-filled; duplicate inline; toast on return | P3-04 | e2e formats | todo |
+| §8.1 Select Format | L1; loaded marked; confirm names format; blocked while running; empty state | P3-02 | e2e formats | done 2026-11-10 |
+| §8.2 Modify Format | L2; pre-selected; diff summary; no-differences state | P3-03 | e2e formats | done 2026-11-10 |
+| §8.3 Create New Format | L2; not pre-filled; duplicate inline; toast on return | P3-04 | e2e formats | done 2026-11-10 |
 | §8.4 Speed Test | m/min and Hz at 1 s; no-signal state; result block; read L1 run L2 | P3-05 | e2e speed test | todo |
 | §8.5 IO-Test | Modular table; input/output at a glance; forcing at L3 with marking and reset-all; both faces | P3-06 | e2e IO test | todo |
 | §8.6 Diagnosis Logs | Toggle first; timestamp, type, role; FIFO; export; off/empty state; L2 view L3 activate | P3-08 | e2e logs | todo |

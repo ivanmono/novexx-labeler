@@ -10,6 +10,7 @@ import treeJson from './data/menu-tree.json';
 import masksJson from './data/masks.json';
 import machineSeed from './data/seed/machine.json';
 import usersSeed from './data/seed/users.json';
+import formatsSeed from './data/seed/formats.json';
 
 import { createStore } from './core/store.js';
 import { loadSnapshot, autoSave, factoryReset } from './core/persist.js';
@@ -18,6 +19,7 @@ import { createSimulator } from './core/simulator.js';
 import { setTheme, setOrientation, ORIENTATION_BY_OPTION, onDisplayChange, getTheme, getOrientation } from './core/theme.js';
 import { t, setLanguage, setTemporaryLanguage, clearTemporaryLanguage, languageFromOption, onLanguageChange, currentLanguage } from './core/i18n.js';
 import { canOpenNode } from './core/access.js';
+import { seedFormats } from './core/formats.js';
 import { mountAppShell } from './ui/shell/AppShell.js';
 import { injectSprite } from './ui/components/Icon.js';
 import { mountDevPanel } from './ui/dev/DevPanel.js';
@@ -41,13 +43,19 @@ export async function boot(root, { skipBoot = false } = {}) {
   // ---- store ---------------------------------------------------------------
   const initialParams = Object.fromEntries(paramsJson.map((p) => [String(p.id), p.value ?? p.default ?? null]));
   const snap = loadSnapshot();
+  // formats: seeded once per device (a snapshot from before P3-02 holds an empty list)
+  const seeded = snap?.settings?.formatsSeeded ? null : seedFormats(formatsSeed, paramsJson, initialParams);
   const store = createStore({
     params: { ...initialParams, ...(snap?.params ?? {}) },
     users: snap?.users ?? usersSeed.users,
-    formats: snap?.formats ?? [],
+    formats: seeded ? seeded.formats : (snap?.formats ?? []),
     logs: snap?.logs ?? [],
     favourites: Array.isArray(snap?.favourites) ? snap.favourites : [],
-    settings: snap?.settings ?? { firstStartDone: false },
+    settings: {
+      firstStartDone: false,
+      ...(snap?.settings ?? {}),
+      ...(seeded ? { formatsSeeded: true, loadedFormat: seeded.loaded } : {}),
+    },
     session: { level: 0, user: null, elevatedUntil: null, loginAt: null },
     ui: { route: null },
   });

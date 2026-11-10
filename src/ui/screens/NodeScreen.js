@@ -7,11 +7,18 @@ import * as Menu from './MenuScreen.js';
 import * as ParamList from './ParamListScreen.js';
 import * as Favourites from './FavouritesScreen.js';
 import * as Placeholder from './PlaceholderScreen.js';
+import * as SelectFormat from './formats/SelectFormat.js';
+import * as ModifyFormat from './formats/ModifyFormat.js';
+import * as CreateFormat from './formats/CreateFormat.js';
+
+/** Special masks with their own screen (Phase 3), by node id. */
+const MASKS = { selectformat: SelectFormat, modifyformat: ModifyFormat, createformat: CreateFormat };
 
 export function render(ctx, info) {
   const node = ctx.node(info.arg);
   if (node?.kind === 'menu') return Menu.render(ctx, info);
   if (node?.kind === 'list') return ParamList.render(ctx, info);
   if (node?.kind === 'favourites') return Favourites.render(ctx, info);
+  if (node && MASKS[node.id]) return MASKS[node.id].render(ctx, info);
   return Placeholder.render(ctx, info);
 }

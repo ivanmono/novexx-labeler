@@ -21,7 +21,8 @@ import { esc, cx } from '../html.js';
 /**
  * @param {{ kind?:'value'|'nav'|'select', title:string, meta?:string, value?:string,
  *           icon?:string|null, state?:'default'|'selected'|'disabled', last?:boolean,
- *           action?:string, id?:string|number, valueHtml?:string }} row
+ *           action?:string, id?:string|number, valueHtml?:string, tag?:string }} row
+ * `tag`: a short brand pill after the title, e.g. "Loaded" on the format the machine runs with.
  */
 export function renderListRow(row) {
   const {
@@ -35,6 +36,7 @@ export function renderListRow(row) {
     last = false,
     action = kind === 'select' ? 'pick' : 'open',
     id = '',
+    tag = '',
   } = row;
   const props = `Kind=${kind},State=${state},Icon=${iconName ? 'yes' : 'no'},Divider=${last ? 'no' : 'yes'}`;
   const divider = !last && 'border-b border-line-soft';
@@ -56,6 +58,7 @@ export function renderListRow(row) {
         <span class="${cx('text-body break-words line-clamp-2', selected ? 'font-semibold' : '')}">${esc(title)}</span>
         ${meta ? `<span class="text-label text-muted truncate">${esc(meta)}</span>` : ''}
       </span>
+      ${tag ? `<span class="list-row__tag shrink-0 px-3 py-1 rounded-pill bg-brand/20 text-brand-hi t-caption" data-tag>${esc(tag)}</span>` : ''}
       ${value ? `<span class="t-param text-label text-muted shrink-0">${esc(value)}</span>` : ''}
       ${trail}
     </button>`;

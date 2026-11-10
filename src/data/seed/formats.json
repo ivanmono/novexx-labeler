@@ -1,0 +1,11 @@
+{
+  "$comment": "Dummy formats (docx §8.1–8.3). A format holds the values of the format-relevant parameters (Excel column 'format relevant', params.json formatRelevant). Each seed lists only what differs from the factory values; core/formats.js fills in the rest at first start. 'loaded' marks the one the machine runs with.",
+  "formats": [
+    { "id": "f-standard", "name": "Standard 100x50", "savedAt": "2026-09-12T09:40:00", "by": "m.mustermann", "level": 3, "loaded": true, "changes": {} },
+    { "id": "f-bottle330", "name": "Bottle 330 ml", "savedAt": "2026-09-08T14:05:00", "by": "a.supervisor", "level": 2, "changes": { "117": 60, "122": 42, "142": 120 } },
+    { "id": "f-bottle500", "name": "Bottle 500 ml", "savedAt": "2026-09-08T14:20:00", "by": "a.supervisor", "level": 2, "changes": { "117": 75, "122": 38, "142": 140 } },
+    { "id": "f-pharma", "name": "Pharma small", "savedAt": "2026-09-02T07:55:00", "by": "a.supervisor", "level": 2, "changes": { "117": 35, "122": 18, "144": 8 } },
+    { "id": "f-carton", "name": "Carton side", "savedAt": "2026-08-28T11:30:00", "by": "m.mustermann", "level": 3, "changes": { "117": 150, "122": 35, "124": 50 } },
+    { "id": "f-testroll", "name": "Test roll", "savedAt": "2026-08-14T16:10:00", "by": "m.mustermann", "level": 3, "changes": { "130": 50, "145": 250 } }
+  ]
+}
