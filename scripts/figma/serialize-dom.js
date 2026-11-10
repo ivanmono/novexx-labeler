@@ -272,7 +272,7 @@
     if (!sym) return null;
     const vb = sym.getAttribute('viewBox') || '0 0 48 48';
     const inner = sym.innerHTML.replace(/currentColor/g, color);
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${px(r.width)}" height="${px(r.height)}" fill="none" stroke="${color}">${inner}</svg>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" width="${px(r.width)}" height="${px(r.height)}" fill="none" stroke="${color}" stroke-width="${parseFloat(getComputedStyle(svgEl).strokeWidth) || 1.5}">${inner}</svg>`;
   }
 
   /** Non-sprite inline SVG (e.g. the logo mark): the markup itself, currentColor resolved, sized to its box */
@@ -586,6 +586,7 @@
             icon: i.icon,
             color: i.color,
             token: i.token,
+            stroke: i.stroke,
           })),
           opacities: collect(root, 'frame')
             .filter((f) => f !== root && f.opacity != null && f.opacity < 1)
@@ -634,6 +635,7 @@
           name: `icon/${iconName}`,
           icon: iconName,
           color: cs.color,
+          stroke: parseFloat(cs.strokeWidth) || 1.5, // 1.5 px set, 2 px for bolder key icons (DT-64)
           ...withToken(cs.color, classCandidates(el, ['text', 'stroke', 'fill'], true)),
           ...box,
           rot: rot || undefined,

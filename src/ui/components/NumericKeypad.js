@@ -23,7 +23,7 @@ export function renderNumericField(param, { entry = '', current, error = null } 
   return `
     <div class="numeric-field flex flex-col gap-3" data-numeric-field data-cmp="Input" data-cmp-props="Kind=number,State=${error ? 'error' : entry === '' ? 'empty' : 'filled'}">
       <div class="card-border card-border--strong"><div class="flex items-center gap-2 pl-4 pr-4 h-16">
-        <span class="flex-1 t-param text-title truncate ${entry === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
+        <span class="flex-1 t-param text-body-sm leading-[35px] truncate ${entry === '' ? 'text-faint/60' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
         ${unit}
       </div></div>
       <div class="flex flex-col gap-1 px-1 min-h-10">
@@ -72,7 +72,7 @@ export function openNumericKeypad(ctx, param, { onConfirm } = {}) {
       const err = body.querySelector('[data-error]');
       const show = (error = null) => {
         field.textContent = entry === '' ? fmt(current, param) : entry;
-        field.classList.toggle('text-faint', entry === '');
+        field.classList.toggle('text-faint/60', entry === '');
         field.classList.toggle('text-text', entry !== '');
         err.textContent = error ? numericErrorText(param, error) : '';
       };

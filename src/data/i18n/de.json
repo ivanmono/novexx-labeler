@@ -248,5 +248,22 @@
   "diag.type.io": "IO",
   "diag.type.test": "Test",
   "diag.type.favourite": "Favorit",
-  "diag.type.other": "Ereignis"
+  "diag.type.other": "Ereignis",
+  "err.search": "ID oder Meldung suchen",
+  "err.minChars": "Mindestens 2 Zeichen eingeben, um zu filtern",
+  "err.results": "{n} von {total} Einträgen",
+  "err.noMatch": "Kein Fehler passt zu „{q}“",
+  "err.noMatchHint": "Die Suche durchsucht Fehler-ID und Meldung.",
+  "err.empty": "Keine Fehler aufgezeichnet",
+  "err.emptyHint": "Fehler und Warnungen erscheinen hier, neueste zuerst.",
+  "err.sev.high": "Hoch",
+  "err.sev.mid": "Mittel",
+  "err.sev.low": "Niedrig",
+  "err.loggedIn": "Angemeldet: {who}",
+  "err.nobody": "niemand (L0)",
+  "err.clear": "Verlauf löschen",
+  "err.clearTitle": "Fehlerverlauf löschen?",
+  "err.clearBody": "Alle {n} Einträge werden gelöscht. Vorher das Diagnoseprotokoll exportieren, falls sie noch gebraucht werden.",
+  "err.cleared": "Fehlerverlauf gelöscht",
+  "err.fifo": "Die ältesten Einträge werden überschrieben, wenn der Verlauf voll ist ({total})."
 }

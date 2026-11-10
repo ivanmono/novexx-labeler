@@ -58,7 +58,7 @@ export function renderListRow(row) {
         <span class="${cx('text-body break-words line-clamp-2', selected ? 'font-semibold' : '')}">${esc(title)}</span>
         ${meta ? `<span class="text-label text-muted truncate">${esc(meta)}</span>` : ''}
       </span>
-      ${tag ? `<span class="list-row__tag shrink-0 px-3 py-1 rounded-pill bg-brand/20 text-brand-hi t-caption" data-tag>${esc(tag)}</span>` : ''}
+      ${tag ? `<span class="list-row__tag shrink-0 px-3 pt-[5px] pb-[3px] rounded-pill bg-brand/20 text-brand-hi t-caption" data-tag>${esc(tag)}</span>` : ''}
       ${value ? `<span class="t-param text-label text-muted shrink-0">${esc(value)}</span>` : ''}
       ${trail}
     </button>`;

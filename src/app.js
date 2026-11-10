@@ -21,6 +21,7 @@ import { t, setLanguage, setTemporaryLanguage, clearTemporaryLanguage, languageF
 import { canOpenNode } from './core/access.js';
 import { seedFormats } from './core/formats.js';
 import { emptyDiag, appendDiag, setRecording, DIAG_PARAM } from './core/diag.js';
+import { appendError, seedErrors } from './core/errorlog.js';
 import { mountAppShell } from './ui/shell/AppShell.js';
 import { injectSprite } from './ui/components/Icon.js';
 import { mountDevPanel } from './ui/dev/DevPanel.js';
@@ -52,11 +53,14 @@ export async function boot(root, { skipBoot = false } = {}) {
     formats: seeded ? seeded.formats : (snap?.formats ?? []),
     logs: snap?.logs ?? [],
     diag: snap?.diag ?? emptyDiag(),
+    // error history: a dummy history once per device (P3-09), then every raised error / warning
+    errorlog: snap?.settings?.errorsSeeded ? (snap?.errorlog ?? []) : seedErrors(),
     favourites: Array.isArray(snap?.favourites) ? snap.favourites : [],
     settings: {
       firstStartDone: false,
       ...(snap?.settings ?? {}),
       ...(seeded ? { formatsSeeded: true, loadedFormat: seeded.loaded } : {}),
+      errorsSeeded: true,
     },
     session: { level: 0, user: null, elevatedUntil: null, loginAt: null },
     ui: { route: null },
@@ -78,6 +82,10 @@ export async function boot(root, { skipBoot = false } = {}) {
   // ---- simulator -----------------------------------------------------------
   const sim = createSimulator(store, { machine: machineSeed });
   sim.on((evt, payload) => {
+    if (evt === 'error') {
+      const s = store.get('session');
+      store.set('errorlog', (l) => appendError(l, { code: payload.code, severity: payload.severity, at: payload.at ?? Date.now(), level: s.level, user: s.user?.name ?? null }));
+    }
     if (evt === 'error') ctx.log('error', `${payload.code} ${payload.text}`, { code: payload.code, severity: payload.severity });
     if (evt === 'state') ctx.log('state', `${payload.from} → ${payload.to}`);
   });

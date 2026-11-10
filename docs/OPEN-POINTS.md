@@ -66,7 +66,7 @@ Summarised from the clickdummy report (26 questions, duplicates merged). Questio
 | 44 | Mode of the IO test force switches at L1 vs L3 | Two faces (docx §8.5): below L3 no force column and a "needs level 3" line; at L3 switches on outputs only. Forcing drives the output HIGH; switching it off releases it (built 2026-11-10, DT-57) | P3-06 | open |
 | 45 | User management: picker for black/white lists | Manual ID entry; picker later with the web server | P3-16b | open |
 | 46 | Speed test refresh rate | 1 s (docx §8.4) | P3-05 | open |
-| 47 | Error history: severity levels and colours | high / mid / low with icon + text | P3-09 | open |
+| 47 | Error history: severity levels and colours | high / mid / low with icon + word: High red, Medium amber, Low grey (built 2026-11-10, DT-60); the real levels come from the firmware catalogue | P3-09 | open |
 | 48 | Backup naming: separator and date format in "device + serial + date" | `<device>_<serial>_<yyyy-mm-dd>` | P3-11 | open |
 | 49 | Icon grid: rules say 48 px stroke 2, docx proposals are 24 px stroke 1.8 | Mono's Icons v1 geometry on a 24 px canvas with a 1.5 px stroke (DT-01, 2026-10-30); names identical | P0-04 | open |
 | 50 | The clickdummy report quotes three different resolutions (272x480, 480x640, 480x800) | 800x480 per docx §3 | all | open |

@@ -13,6 +13,7 @@ import * as CreateFormat from './formats/CreateFormat.js';
 import * as SpeedTest from './service/SpeedTest.js';
 import * as IoTest from './service/IoTest.js';
 import * as DiagnosisLogs from './service/DiagnosisLogs.js';
+import * as ErrorHistory from './service/ErrorHistory.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
 const MASKS = {
@@ -22,6 +23,7 @@ const MASKS = {
   speedtest: SpeedTest,
   iotest: IoTest,
   diaglogs: DiagnosisLogs,
+  errorhistory: ErrorHistory,
 };
 
 export function render(ctx, info) {

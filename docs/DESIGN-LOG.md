@@ -572,3 +572,67 @@ Change (Mono's design, first version):
 Where: `src/ui/screens/service/DiagnosisLogs.js`, `src/core/diag.js`, `src/app.js` (ctx.log, parameter 900), `src/styles/components.css`
 Before → after: `diaglogs-*` (diaglogs.spec)
 Status: code only — screen frames with P3-22b
+
+## DT-60 · Error History screen (2026-11-10, P3-09)
+
+Source: plan P3-09; docx §8.7 (newest first, ID / message / severity / time / role, search with the keyboard over ID and text, row opens the full text, empty state and end marker, FIFO, read L1 / clear L3)
+Change (Mono's design, first version):
+- Search field on top; the keyboard unfolds directly under it and folds away with its check key. A count line under it ("3 of 9 entries", or "Type 2 or more characters").
+- Rows: a severity tag with icon and word (High red, Medium amber, Low grey — colour never alone), ID in Ioskeley Mono, date and time, the role and user in their level colour, the message on its own line (two lines max) with a chevron; the row opens a dialog with the full message, what to do and who was logged in.
+- IDs match with or without the hyphen ("e207" finds E-207), since an operator types what they read off a label.
+- In landscape the open keyboard leaves only the count line visible; the results show once the keyboard is folded. Accepted for now: the keyboard needs the height.
+Where: `src/ui/screens/service/ErrorHistory.js`, `src/core/errorlog.js`, `src/core/simulator.js` (catalogue help texts), `src/app.js`
+Before → after: `errorhistory-l3` (errorhistory.spec)
+Status: code only — screen frames with P3-22b
+
+## DT-61 · Badges optically centred (2026-11-10, chat)
+
+Source: chat — "all badges has less padding on top comparing to bottom"
+Change: capitals sit above the middle of the line box (Figtree and Ioskeley Mono reserve descender room that caps never use), so every caps badge showed 1–2.6 px less space above the letters than below. Measured on screen and corrected by moving padding from bottom to top at the same badge height:
+- caption tags (Error History severity, Diagnosis Logs type): 3 / 1 px instead of 2 / 2
+- "Loaded" tag (formats) and the IO state lamp (HIGH / LOW): 5 / 3 px instead of 4 / 4
+- IO IN / OUT tag: 2 px top with a 19 px line instead of 0 / 0 on 21.6 px
+- home state pill (fixed 36 px): 1 px top
+Now within 0.4 px top to bottom. The nav-bar level badge was already balanced. Not using CSS \`text-box-trim\`, which would do this per font, until the board's browser is known (open point #18).
+Where: `ListRow.js`, `TableRow.js`, `HomeScreen.js`, `service/DiagnosisLogs.js`, `service/ErrorHistory.js`
+Status: both (2026-11-10: Figma TableRow lamp and IN/OUT tag, StatePill)
+
+## DT-62 · Log entry layout from Figma (2026-11-10, Figma)
+
+Source: Figma node 2108:8556 ("Frame 5", designer) — "for Error History and similar screens apply this layout for entries"
+Change (Error History and Diagnosis Logs):
+- Line 1: the tag as a pill (radius full, 8 px sides, 9 px between icon and word), then "•", the error ID (Ioskeley Mono, text colour), "•", the time (Ioskeley Mono, muted); 9 px gaps. Diagnosis Logs: tag • time (no ID).
+- Line 2: the role and user in the level colour. Line 3: the message (body, two lines max in Error History). 7 px between lines.
+- Error History: the chevron centred vertically at the right; line 1 may run into its column (as in the Figma frame), lines 2–3 keep 30 px clear. Row padding 13 px left, 16 px right, 12 px top / bottom.
+- Deviation: the time shows a two-digit year (10.11.26 08:58). With the four-digit year the line does not fit next to the widest tag (Medium) in the browser (437 px needed, 425 px available); the full date stays in the detail dialog.
+Where: `src/ui/screens/service/ErrorHistory.js`, `src/ui/screens/service/DiagnosisLogs.js`
+Status: both (Figma entry frame by the designer; the special-screen frames still show the old row layout)
+
+## DT-63 · Input entry text 22 px, faint at 60 % (2026-11-10, Figma)
+
+Source: Figma `Input` set (2097:15533), designer edits — "i did some changes on inputs, implement"
+Change:
+- Number and text inputs: the entry is Ioskeley Mono Semibold 22 px on a 35 px line (token `text-body-sm` + `leading-[35px]`) instead of 32 px (number) / 28 px (text).
+- Placeholder or current value (empty state) and the character counter (`0/32`) use text-faint at 60 % opacity (`text-faint/60`) instead of text-faint.
+- Password input unchanged (32 px dots, 88 px high); field, unit, hint and error text unchanged.
+Where: `AlphaKeyboard.js` (renderTextField), `NumericKeypad.js` (renderNumericField and its live toggle), `formats/CreateFormat.js`, `service/ErrorHistory.js` (search field toggle)
+Status: both (Figma by the designer)
+
+## DT-64 · Bigger, bolder icons in keys and stepper buttons (2026-11-10, chat)
+
+Source: chat — "Caret icon inside buttons like on date time picker, should be a bit bigger and bolder. Same with Check icon on keyboard."
+Change:
+- Date / time stepper chevrons 24 → 30 px and slider − / + chevrons 28 → 32 px, drawn with a 3 px stroke (double the set's 1.5 px; first 2 px, then "even more bolder, at least double").
+- Keyboard check 24 → 30 px, numpad check 28 → 32 px, 3 px stroke as well ("do the same with check icon in keyboard").
+- New option `icon(name, { stroke })`: the sprite no longer hard-codes stroke-width on its shapes (`build-sprite.mjs`); they inherit it from `svg.icon`, which sets `var(--icon-stroke, 1.5px)`. Every other icon stays 1.5 px.
+- Figma: the same sizes and strokes on DateTimePicker, Slider, Key and NumpadKey (3 px); the capture and the stored builder carry the stroke width, so rebuilt frames keep it.
+Where: `Icon.js`, `components.css`, `scripts/build-sprite.mjs`, `src/assets/icons/sprite.svg`, `DateTimePicker.js`, `Slider.js`, `Keyboard.js`, `Components.js`, `scripts/figma/serialize-dom.js`, `scripts/figma/build-frames.js`
+Status: both
+
+## DT-65 · Confirmation uses the bold check (2026-11-10, chat)
+
+Source: chat — "change it with 'fat' check icon" (about `activate` used for confirmation)
+Change: `activate` → `check` with a 3 px stroke (as on the keyboard submit key, DT-64) on the confirmation dialog header (non-destructive; destructive keeps `alarm`), the OK toast and the date/time picker "Set" button. `renderButton` gained `iconStroke`. Action parameter rows keep `activate` (there it means "runs an action", not "confirm").
+Figma: Toast Kind=ok, Modal Kind=confirm · Destructive=no and Button Tone=primary · Icon=yes swapped to icon/24/check at 3 px; screen frames follow through the instances.
+Where: `shell/ModalHost.js`, `shell/Toast.js`, `components/Button.js`, `components/DateTimePicker.js`, `screens/Components.js`
+Status: both

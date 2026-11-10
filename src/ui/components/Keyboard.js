@@ -55,7 +55,7 @@ export function renderKey(k, { layout = 'lower', enterLabel = '↵', enterIcon =
         ? icon('back', { size: 24 })
         : k === '↵'
           ? enterIcon
-            ? icon(enterIcon, { size: 24 })
+            ? icon(enterIcon, { size: 30, stroke: 3 })
             : esc(enterLabel)
           : k === '⇧'
             ? '⇧'
@@ -203,14 +203,14 @@ export function renderNumpad({
     ${dig('7')}${dig('8')}${dig('9')}
     ${dig('4')}${dig('5')}${dig('6')}
     ${dig('1')}${dig('2')}${dig('3')}
-    ${key('⌫', 'bg-surface-2', icon('back', { size: 24 }))}${dig('0')}${key('↵', 'bg-brand text-on-brand', icon(enterIcon, { size: 28 }))}
+    ${key('⌫', 'bg-surface-2', icon('back', { size: 24 }))}${dig('0')}${key('↵', 'bg-brand text-on-brand', icon(enterIcon, { size: 32, stroke: 3 }))}
   </div>`;
   return `
   <div class="numpad select-none grid grid-cols-4 gap-1.5" data-numpad role="group" aria-label="Numeric keypad">
     ${dig('7')}${dig('8')}${dig('9')}${key('⌫', 'bg-surface-2', icon('back', { size: 24 }))}
     ${dig('4')}${dig('5')}${dig('6')}${key('C', 'bg-surface-2 text-body-sm')}
     ${dig('1')}${dig('2')}${dig('3')}${showMinMax ? key('MIN', 'bg-surface-2 text-label') : key('', 'invisible')}
-    ${allowSign ? key('-', 'bg-key text-title t-param') : showMinMax ? key('MAX', 'bg-surface-2 text-label') : key('', 'invisible')}${dig('0')}${allowDecimal ? key('.', 'bg-key text-title t-param') : key('', 'invisible')}${key('↵', 'bg-brand text-on-brand', icon(enterIcon, { size: 28 }))}
+    ${allowSign ? key('-', 'bg-key text-title t-param') : showMinMax ? key('MAX', 'bg-surface-2 text-label') : key('', 'invisible')}${dig('0')}${allowDecimal ? key('.', 'bg-key text-title t-param') : key('', 'invisible')}${key('↵', 'bg-brand text-on-brand', icon(enterIcon, { size: 32, stroke: 3 }))}
   </div>`;
 }
 

@@ -50,12 +50,13 @@ export function render(ctx, { arg }) {
   };
 
   const row = (e, last) => `
-    <div class="${cx('px-4 py-3 flex flex-col gap-1', !last && 'border-b border-line-soft')}" data-diag-entry>
-      <div class="flex items-center gap-2 flex-wrap">
+    <div class="${cx('px-4 py-3 flex flex-col gap-[7px]', !last && 'border-b border-line-soft')}" data-diag-entry>
+      <div class="flex items-center gap-[9px] flex-wrap">
+        <span class="${cx('t-caption px-2 pt-[3px] pb-px rounded-pill', TYPE_TONE[e.type] ?? 'bg-surface-2 text-chrome')}" data-type="${esc(e.type)}">${esc(typeLabel(e.type))}</span>
+        <span class="t-param font-normal text-caption text-text" aria-hidden="true">•</span>
         <span class="t-param text-label text-muted">${esc(stamp(e.at))}</span>
-        <span class="${cx('t-caption px-2 py-0.5 rounded-xs', TYPE_TONE[e.type] ?? 'bg-surface-2 text-chrome')}" data-type="${esc(e.type)}">${esc(typeLabel(e.type))}</span>
-        <span class="ml-auto text-label font-semibold text-level-${Math.max(0, Math.min(4, e.level ?? 0))}">L${esc(String(e.level ?? 0))}${e.user ? ` · ${esc(e.user)}` : ''}</span>
       </div>
+      <div class="text-label font-semibold text-level-${Math.max(0, Math.min(4, e.level ?? 0))}">L${esc(String(e.level ?? 0))}${e.user ? ` · ${esc(e.user)}` : ''}</div>
       <div class="text-body break-words">${esc(e.detail)}</div>
     </div>`;
 

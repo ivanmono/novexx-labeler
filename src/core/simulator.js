@@ -12,30 +12,60 @@
 export const STATES = ['offline', 'online', 'pause', 'run', 'alarm', 'warning'];
 
 /** Dummy error catalogue (Error History seed and injection). */
+/**
+ * Dummy error catalogue (the real texts come from the firmware). `help` is the "what to do" text
+ * shown when a row in the Error History is opened (P3-09).
+ */
 export const ERROR_CATALOGUE = {
-  'E-114': { severity: 'high', text: 'Label roll empty', textDe: 'Etikettenrolle leer' },
+  'E-114': {
+    severity: 'high',
+    text: 'Label roll empty',
+    textDe: 'Etikettenrolle leer',
+    help: 'The label roll is used up. Insert a new roll, thread the web along the path label on the machine and press Reset alarm.',
+    helpDe: 'Die Etikettenrolle ist aufgebraucht. Neue Rolle einlegen, die Bahn entlang des Bahnverlaufs-Etiketts einfädeln und Alarm zurücksetzen drücken.',
+  },
   'E-207': {
     severity: 'high',
     text: 'Missing label at dispensing edge',
     textDe: 'Fehlendes Etikett an der Spendekante',
+    help: 'The label sensor did not see a label when one was expected. Check the label roll and the gap on the web, clean the label sensor and teach it again if the error repeats.',
+    helpDe: 'Der Etikettensensor hat kein Etikett erkannt, obwohl eines erwartet wurde. Etikettenrolle und Lücke auf der Bahn prüfen, Etikettensensor reinigen und bei Wiederholung neu einlernen.',
   },
   'E-031': {
     severity: 'mid',
     text: 'Printer busy timeout',
     textDe: 'Drucker-Busy-Zeitüberschreitung',
+    help: 'The printer did not release its busy signal in time. Check the printer for errors and the cable on the MIO card (X1.4).',
+    helpDe: 'Der Drucker hat sein Busy-Signal nicht rechtzeitig freigegeben. Drucker auf Fehler und das Kabel an der MIO-Karte (X1.4) prüfen.',
   },
   'E-402': {
     severity: 'high',
     text: 'Applicator touch-down timeout',
     textDe: 'Applikator Touch-down Zeitüberschreitung',
+    help: 'The applicator did not reach the product in time. Check the air pressure, the cylinder and the touch-down sensor (X1.5); run the applicator test at level 3.',
+    helpDe: 'Der Applikator hat das Produkt nicht rechtzeitig erreicht. Luftdruck, Zylinder und Touch-down-Sensor (X1.5) prüfen; Applikatortest auf Ebene 3 ausführen.',
   },
-  'E-055': { severity: 'low', text: 'Encoder signal lost', textDe: 'Encodersignal verloren' },
+  'E-055': {
+    severity: 'low',
+    text: 'Encoder signal lost',
+    textDe: 'Encodersignal verloren',
+    help: 'No pulses from the external encoder. Check the encoder cable and run the speed test.',
+    helpDe: 'Keine Impulse vom externen Encoder. Encoder-Kabel prüfen und den Geschwindigkeitstest ausführen.',
+  },
   'W-012': {
     severity: 'low',
     text: 'Roll end warning diameter reached',
     textDe: 'Warn-Durchmesser Rollenende erreicht',
+    help: 'The roll is close to its end. Have a new roll ready; production continues until the roll is empty.',
+    helpDe: 'Die Rolle ist fast aufgebraucht. Neue Rolle bereithalten; die Produktion läuft weiter, bis die Rolle leer ist.',
   },
-  'W-020': { severity: 'low', text: 'Service interval due', textDe: 'Serviceintervall fällig' },
+  'W-020': {
+    severity: 'low',
+    text: 'Service interval due',
+    textDe: 'Serviceintervall fällig',
+    help: 'The service interval has been reached. Plan the service and record it under Service › Reporting.',
+    helpDe: 'Das Serviceintervall ist erreicht. Service planen und unter Service › Reporting eintragen.',
+  },
 };
 
 const COUNTER_IDS = {

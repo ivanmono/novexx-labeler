@@ -165,9 +165,11 @@ export function render(ctx) {
         'Dispensing speed used when Speed Selection is set to Fixed. The help text is shown in full; longer texts scroll.',
       ),
     },
-  ].map((m) => `<div class="w-[440px] grid">${renderModal(m)}</div>`);
+    // the modal root is a full-screen overlay (absolute, inset 0): in flow here, or the five samples cover the sheet
+  ].map((m) => `<div class="w-[440px] grid [&>.modal]:static [&>.modal]:p-0 [&>.modal]:bg-transparent">${renderModal(m)}</div>`);
   const sheets = [
-    `<div class="w-[480px] grid">${renderSheet({ title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
+    // the sheet root is an overlay anchored to its nearest positioned box: keep it inside the sample
+    `<div class="relative w-[480px] h-[240px] overflow-hidden">${renderSheet({ title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
     // editors open as a page (DT-28, DT-33): the panel under the page's own title bar
     `<div class="relative w-[480px] h-[320px]">${renderSheet({ page: true, title: 'Fixed Speed', body: '<div class="text-muted text-body-sm py-6 text-center">editor content</div>' })}</div>`,
   ];
@@ -296,7 +298,7 @@ export function render(ctx) {
     renderButton({ label: ctx.t('user.logout'), action: 'noop', icon: 'lock' }),
     renderButton({ label: ctx.t('home.ackWarnings'), action: 'noop' }),
     renderButton({ label: ctx.t('home.start'), action: 'noop', tone: 'primary' }),
-    renderButton({ label: ctx.t('picker.set'), action: 'noop', tone: 'primary', icon: 'activate' }),
+    renderButton({ label: ctx.t('picker.set'), action: 'noop', tone: 'primary', icon: 'check', iconStroke: 3 }),
     renderButton({ label: ctx.t('home.resetAlarm'), action: 'noop', tone: 'danger' }),
   ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
   const keys = [
@@ -311,7 +313,7 @@ export function render(ctx) {
     renderNumpadKey('7', 'bg-key text-title t-param'),
     renderNumpadKey('C', 'bg-surface-2 text-body-sm'),
     renderNumpadKey('⌫', 'bg-surface-2', icon('back', { size: 24 })),
-    renderNumpadKey('↵', 'bg-brand text-on-brand', icon('check', { size: 28 })),
+    renderNumpadKey('↵', 'bg-brand text-on-brand', icon('check', { size: 32, stroke: 3 })),
   ].map((h) => `<div class="w-[110px] h-[60px] grid">${h}</div>`);
   const progress = [
     renderProgressBar({ value: 0.45 }),

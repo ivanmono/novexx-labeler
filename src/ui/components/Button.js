@@ -17,7 +17,8 @@ export function renderButton({
   action,
   tone = 'secondary',
   icon: iconName = null,
+  iconStroke = null, // e.g. 3 for the bold confirm check (DT-65)
   extra = '',
 }) {
-  return `<button type="button" class="${cx('pressable h-touch rounded-md text-body font-semibold flex items-center justify-center gap-2', TONE[tone] ?? TONE.secondary, extra)}" data-action="${esc(action)}" data-cmp="Button" data-cmp-props="Tone=${tone},Icon=${iconName ? 'yes' : 'no'}">${iconName ? icon(iconName, { size: 24 }) : ''}<span>${esc(label)}</span></button>`;
+  return `<button type="button" class="${cx('pressable h-touch rounded-md text-body font-semibold flex items-center justify-center gap-2', TONE[tone] ?? TONE.secondary, extra)}" data-action="${esc(action)}" data-cmp="Button" data-cmp-props="Tone=${tone},Icon=${iconName ? 'yes' : 'no'}">${iconName ? icon(iconName, { size: 24, ...(iconStroke ? { stroke: iconStroke } : {}) }) : ''}<span>${esc(label)}</span></button>`;
 }

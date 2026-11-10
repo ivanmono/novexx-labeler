@@ -107,19 +107,28 @@ Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are 
 
 Priority order: portrait dark complete first, then light, then landscape. Roughly 54 screens × 6 variants ≈ 324 frames, created in batches per area.
 
+### Special screens page (2026-11-10)
+
+New page **"HMI / 04 Screens – Special"**: 14 dark portrait frames of the Phase 3 screens for restyling — Error History (list, search with keyboard, detail dialog, empty), Formats (select, modify, create with duplicate, empty), Diagnosis Logs (off L2, recording L3), Speed Test (result, no signal), IO-Test (read L1, forced L3); one row per screen. Captured with `node scripts/figma/capture.mjs <dir> --base … --special` (add `--land` for both landscape layouts).
+- Frames with a keyboard are built without keys and the keys are placed from the Key variants afterwards (48 keyed instances time the bridge out). IO-Test read-L1 is a copy of forced-L3 with the force column hidden.
+- Added TitleBar variants `Subtitle=yes` × production / service / settings.
+- Known gaps in the frames (components lack the part): the "Loaded" tag on format rows, the red recording indicator in the status bar.
+- **Icon stroke width (DT-64):** the capture records each icon's computed stroke width (1.5 px; 3 px for the key checks and the stepper and slider chevrons) and the builder applies it instead of a fixed 1.5. Updated in place: DateTimePicker and Slider chevrons, Key / NumpadKey check.
+- **Translucent fills:** a variable-bound paint loses its opacity in Figma when a variable mode is set on an ancestor or the node is copied. The builder now leaves fills with alpha < 1 unbound (resolved colour + opacity); existing ones on the HMI pages were converted (tints 10–20 %, nav bar 85 %), while fills of tokens that carry their own alpha (`colour/line-soft`, `colour/text-faint`, `colour/overlay`) stay bound. Those unbound tints do not follow a theme switch; proper fix later: alpha variants as variables. Stored builder: len 34540, checksum 1882251029 (after DT-64).
+
 ### New icons (2026-11-10, DT-53)
 
 `icon/24/check`, `file`, `up`, `usb` added to "Icons v1 – 24 px" (next grid slots, labels cloned from the page, frame grown to 744 px). Exported as SVG into `src/assets/icons/`, sprite rebuilt (71 icons). Not drawn on the 48 px "Icons v1" page.
 
 ### Phase 3 shared sets (2026-11-10, P3-01 / part of P3-22a)
 
-ListRow (rebuilt: `Kind × State × Icon × Divider`, the two old `Divider=yes|no` variants renamed first so they were refilled in place), ListEnd, TableHeader, TableRow, PathBar, Placeholder, ProgressResult — a column at x 2720 / 3300 from y 2919 on "HMI / 02 Components". Hand fixes after the build: buttons in Placeholder / ProgressResult set to fill the width at 88 px, the spinner drawn as a grey ring with a brand arc, the success check rotated 45°, set backgrounds for the transparent sets. **Builder fix:** a variable-bound paint loses its opacity when assigned; `setFills` re-applies it (NavBar variants and the bar instances on the screen pages corrected). Stored builder: len 33592, checksum 212915718.
+ListRow (rebuilt: `Kind × State × Icon × Divider`, the two old `Divider=yes|no` variants renamed first so they were refilled in place), ListEnd, TableHeader, TableRow, PathBar, Placeholder, ProgressResult — a column at x 2720 / 3300 from y 2919 on "HMI / 02 Components". Hand fixes after the build: buttons in Placeholder / ProgressResult set to fill the width at 88 px, the spinner drawn as a grey ring with a brand arc, the success check rotated 45°, set backgrounds for the transparent sets. **Builder fix:** a variable-bound paint loses its opacity when assigned; `setFills` re-applies it (NavBar variants and the bar instances on the screen pages corrected).
 
 ### Input set (2026-11-10)
 
 New set `Input · Kind=number|text|password × State=empty|filled|error` (9 variants), next to DateTimePicker. Code: `renderNumericField`, `renderTextField`, `renderPasswordField` carry `data-cmp="Input"`; the Components sheet shows all nine. Built alone with `payload.mjs --components <dir> "HMI / 02 Components" Input`, so the designer edits to other sets stay as they are.
 
-Also 2026-11-10: designer edits pulled into code (Modal buttons 78 px, DT-49; light L2 / L3 badge text, DT-50); icon strokes 1.5 px on all HMI pages (DT-48). Mono font switched to Ioskeley Mono (DT-51). Stored builder: len 33230, checksum 3354690257.
+Also 2026-11-10: designer edits pulled into code (Modal buttons 78 px, DT-49; light L2 / L3 badge text, DT-50); icon strokes 1.5 px on all HMI pages (DT-48). Mono font switched to Ioskeley Mono (DT-51). Stored builder: see the newest section.
 
 ### Synced so far (2026-10-30)
 

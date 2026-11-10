@@ -248,5 +248,22 @@
   "diag.type.io": "IO",
   "diag.type.test": "Test",
   "diag.type.favourite": "Favourite",
-  "diag.type.other": "Event"
+  "diag.type.other": "Event",
+  "err.search": "Search ID or message",
+  "err.minChars": "Type 2 or more characters to filter",
+  "err.results": "{n} of {total} entries",
+  "err.noMatch": "No error matches “{q}”",
+  "err.noMatchHint": "Search looks at the error ID and the message.",
+  "err.empty": "No errors recorded",
+  "err.emptyHint": "Errors and warnings appear here, newest first.",
+  "err.sev.high": "High",
+  "err.sev.mid": "Medium",
+  "err.sev.low": "Low",
+  "err.loggedIn": "Logged in: {who}",
+  "err.nobody": "nobody (L0)",
+  "err.clear": "Clear history",
+  "err.clearTitle": "Clear error history?",
+  "err.clearBody": "All {n} entries are deleted. Export the diagnosis log first if you still need them.",
+  "err.cleared": "Error history cleared",
+  "err.fifo": "Oldest entries are overwritten when the history is full ({total})."
 }

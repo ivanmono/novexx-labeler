@@ -70,9 +70,9 @@ export function renderDateTimePicker(param, value, { error = null } = {}) {
     return `
       <div class="flex flex-col items-center gap-1 ${f.digits === 4 ? 'w-[120px]' : 'w-[84px]'}" data-field="${f.key}">
         <span class="t-caption text-muted">${esc(t(f.label))}</span>
-        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="1" ${atMax ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} +1">${icon('chevron', { size: 24, class: '-rotate-90' })}</button>
+        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="1" ${atMax ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} +1">${icon('chevron', { size: 30, stroke: 3, class: '-rotate-90' })}</button>
         <span class="t-param text-hero font-semibold leading-none py-2 ${cx(error && f.key !== 'y' && kind === 'date' && 'text-status-error-ink')}" data-value="${f.key}">${esc(text)}</span>
-        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="-1" ${atMin ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} -1">${icon('chevron', { size: 24, class: 'rotate-90' })}</button>
+        <button type="button" class="pressable h-touch land:h-[60px] w-full grid place-items-center rounded-md bg-surface-2 text-chrome" data-action="step" data-key="${f.key}" data-dir="-1" ${atMin ? 'aria-disabled="true"' : ''} aria-label="${esc(t(f.label))} -1">${icon('chevron', { size: 30, stroke: 3, class: 'rotate-90' })}</button>
       </div>`;
   };
   // separators sit on the value line (label + gap + stepper + gap + value padding above it);
@@ -99,7 +99,7 @@ export function openDateTimePicker(ctx, param, { onConfirm, now = () => new Date
   let value = pickerValue(param, ctx.store.getParam(param.id));
   const footer = `<div class="grid grid-cols-2 gap-3 mt-3" data-picker-actions>
       ${renderButton({ label: t('picker.now'), action: 'now', icon: 'history' })}
-      ${renderButton({ label: t('picker.set'), action: 'set', tone: 'primary', icon: 'activate' })}
+      ${renderButton({ label: t('picker.set'), action: 'set', tone: 'primary', icon: 'check', iconStroke: 3 })}
     </div>`;
   return ctx.sheet.open({
     title: t(param.labelKey),

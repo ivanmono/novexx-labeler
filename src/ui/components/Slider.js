@@ -26,7 +26,7 @@ export function renderSlider(param, value) {
         ${param.unit ? `<span class="text-body-lg text-muted">${esc(param.unit)}</span>` : ''}
       </div>
       <div class="flex items-center gap-1">
-        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="dec" ${value <= param.min ? 'aria-disabled="true"' : ''} aria-label="-${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 28, class: 'rotate-180' })}</span></span></button>
+        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="dec" ${value <= param.min ? 'aria-disabled="true"' : ''} aria-label="-${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 32, stroke: 3, class: 'rotate-180' })}</span></span></button>
         <div class="flex-1 min-w-0 flex flex-col gap-2">
           <div class="slider__minmax flex justify-between text-label text-muted"><span>${esc(fmt(param.min, param))}</span><span>${esc(fmt(param.max, param))}</span></div>
           <div class="slider__track-container" style="--pct-n:${pct / 100}" data-zone="${zone(pct)}">
@@ -36,7 +36,7 @@ export function renderSlider(param, value) {
           </div>
           <div class="slider__ticks" aria-hidden="true">${Array.from({ length: 11 }, (_, i) => `<span class="${i % 5 ? 'h-1' : 'h-2'}"></span>`).join('')}</div>
         </div>
-        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="inc" ${value >= param.max ? 'aria-disabled="true"' : ''} aria-label="+${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 28 })}</span></span></button>
+        <button type="button" class="slider__btn pressable size-touch grid place-items-center text-chrome shrink-0" data-action="inc" ${value >= param.max ? 'aria-disabled="true"' : ''} aria-label="+${step}"><span class="slider__btn-ring"><span class="slider__btn-inner">${icon('chevron', { size: 32, stroke: 3 })}</span></span></button>
       </div>
       <div class="text-center t-caption text-muted">
         <span class="${cx(value === param.default && 'text-brand')}">${esc(t('common.default'))} ${esc(fmt(param.default, param))}</span>

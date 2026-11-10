@@ -25,7 +25,10 @@
     font: inherit;
     color: inherit;
   }
+  /* the sprite's shapes carry no stroke-width and inherit it through <use>: 1.5 px, or
+     --icon-stroke set per icon via icon(name, { stroke }) (DT-64) */
   svg.icon {
+    stroke-width: var(--icon-stroke, 1.5px);
     width: 1em;
     height: 1em;
     flex: none;

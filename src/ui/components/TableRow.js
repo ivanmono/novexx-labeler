@@ -24,7 +24,7 @@ export function renderTableHeader({ force = true } = {}) {
 
 /** State indicator: a lamp pill, filled dot + HIGH on green, ring + LOW on grey (colour is not the only cue). */
 export function renderStateLamp(high) {
-  return `<span class="${cx('justify-self-center flex items-center gap-1.5 t-param text-label pl-2 pr-3 py-1 rounded-pill', high ? 'bg-status-run text-on-brand' : 'bg-surface-2 text-muted')}" data-state="${high ? 'high' : 'low'}"><span class="${cx('size-2.5 rounded-pill', high ? 'bg-on-brand' : 'border-2 border-current')}" aria-hidden="true"></span>${esc(t(high ? 'io.high' : 'io.low'))}</span>`;
+  return `<span class="${cx('justify-self-center flex items-center gap-1.5 t-param text-label pl-2 pr-3 pt-[5px] pb-[3px] rounded-pill', high ? 'bg-status-run text-on-brand' : 'bg-surface-2 text-muted')}" data-state="${high ? 'high' : 'low'}"><span class="${cx('size-2.5 rounded-pill', high ? 'bg-on-brand' : 'border-2 border-current')}" aria-hidden="true"></span>${esc(t(high ? 'io.high' : 'io.low'))}</span>`;
 }
 
 /** Force switch (also usable on its own): 64 × 36 track inside a 68 px touch area. */
@@ -63,7 +63,7 @@ export function renderTableRow(row) {
       ${marked ? '<span class="absolute inset-y-0 left-0 w-1.5 bg-status-warning" aria-hidden="true"></span>' : ''}
       <span class="flex flex-col gap-0.5">
         <span class="t-param text-label text-muted">${esc(pin)}</span>
-        <span class="${cx('self-start t-caption px-1.5 rounded-xs', isOut ? 'bg-brand/20 text-brand-hi' : 'bg-surface-2 text-chrome')}" data-dir>${esc(t(isOut ? 'io.out' : 'io.in'))}</span>
+        <span class="${cx('self-start t-caption px-1.5 pt-[2px] leading-[19px] rounded-xs', isOut ? 'bg-brand/20 text-brand-hi' : 'bg-surface-2 text-chrome')}" data-dir>${esc(t(isOut ? 'io.out' : 'io.in'))}</span>
       </span>
       <span class="min-w-0 flex flex-col py-2">
         <span class="text-body break-words line-clamp-2">${esc(label)}</span>

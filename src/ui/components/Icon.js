@@ -29,12 +29,15 @@ export function iconExists(name) {
 
 /**
  * @param {string} name
- * @param {{ size?: number | string, class?: string, label?: string }} [opts]
+ * @param {{ size?: number | string, class?: string, label?: string, stroke?: number }} [opts]
+ *   stroke: line width in px instead of the set's 1.5 (e.g. 2 for icons inside filled keys, DT-64)
  * @returns {string} HTML
  */
 export function icon(name, opts = {}) {
   const safe = KNOWN.has(name) ? name : 'tbd';
-  const size = opts.size != null ? `width:${toPx(opts.size)};height:${toPx(opts.size)}` : '';
+  const size =
+    (opts.size != null ? `width:${toPx(opts.size)};height:${toPx(opts.size)};` : '') +
+    (opts.stroke != null ? `--icon-stroke:${toPx(opts.stroke)}` : '');
   const aria = opts.label ? `role="img" aria-label="${escape(opts.label)}"` : 'aria-hidden="true"';
   return `<svg class="icon ${opts.class ?? ''}" ${aria} style="${size}" data-icon="${safe}"><use href="#icon-${safe}"></use></svg>`;
 }

@@ -346,6 +346,122 @@ const STATES = [
       );
     },
   },
+  // ---- Phase 3 special screens (P3-02 … P3-09) --------------------------------------------------
+  ...[
+    { screen: 'errors', state: 'list-L1', route: 'screen/errorhistory', level: 1 },
+    {
+      screen: 'errors',
+      state: 'search-L1',
+      route: 'screen/errorhistory',
+      level: 1,
+      steps: async (page) => {
+        await page.click('[data-err-search]');
+        for (const k of ['e', '123', '2']) await page.click(`[data-key="${k}"]`);
+      },
+    },
+    {
+      screen: 'errors',
+      state: 'detail-L1',
+      route: 'screen/errorhistory',
+      level: 1,
+      steps: async (page) => {
+        await page.click('[data-err="E-207"]');
+        await page.waitForSelector('.modal');
+      },
+    },
+    {
+      screen: 'errors',
+      state: 'empty-L3',
+      route: 'screen/errorhistory',
+      level: 3,
+      steps: async (page) => {
+        await page.evaluate(() => window.__hmi.store.replace('errorlog', []));
+      },
+    },
+    { screen: 'diag', state: 'off-L2', route: 'screen/diaglogs', level: 2 },
+    {
+      screen: 'diag',
+      state: 'recording-L3',
+      route: 'screen/diaglogs',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-diag-toggle] [role="switch"]');
+        await page.evaluate(() => {
+          const { ctx, set } = window.__hmi;
+          ctx.setParam(122, 35);
+          ctx.log('loginFailed', 's.operator');
+          set('state', 'warning');
+          set('state', 'reset');
+        });
+      },
+    },
+    { screen: 'iotest', state: 'read-L1', route: 'screen/iotest', level: 1 },
+    {
+      screen: 'iotest',
+      state: 'forced-L3',
+      route: 'screen/iotest',
+      level: 3,
+      steps: async (page) => {
+        await page.evaluate(() => window.__hmi.sim.forceOutput('X2.1', true));
+        await page.waitForSelector('[data-forced]');
+      },
+    },
+    {
+      screen: 'speedtest',
+      state: 'result-L2',
+      route: 'screen/speedtest',
+      level: 2,
+      steps: async (page) => {
+        await page.evaluate(() => {
+          const { sim } = window.__hmi;
+          sim.startSpeedTest();
+          sim.tick();
+          sim.stopSpeedTest();
+        });
+        await page.waitForSelector('[data-result-state="done"]');
+      },
+    },
+    {
+      screen: 'speedtest',
+      state: 'nosignal-L1',
+      route: 'screen/speedtest',
+      level: 1,
+      steps: async (page) => {
+        await page.evaluate(() => window.__hmi.set('state', 'nosignal'));
+        await page.waitForSelector('[data-no-signal]');
+      },
+    },
+    {
+      screen: 'formats',
+      state: 'select-L1',
+      route: 'screen/selectformat',
+      level: 1,
+      steps: async (page) => {
+        await page.click('[data-id="f-bottle330"]');
+      },
+    },
+    { screen: 'formats', state: 'modify-L2', route: 'screen/modifyformat', level: 2 },
+    {
+      screen: 'formats',
+      state: 'create-duplicate-L2',
+      route: 'screen/createformat',
+      level: 2,
+      steps: async (page) => {
+        for (const k of [...'carton', '␣', ...'side']) await page.click(`[data-key="${k}"]`);
+        await page.waitForSelector('[data-action="overwriteInstead"]');
+      },
+    },
+    {
+      screen: 'formats',
+      state: 'empty-L1',
+      route: 'screen/selectformat',
+      level: 1,
+      steps: async (page) => {
+        await page.evaluate(() => window.__hmi.store.replace('formats', []));
+        await page.waitForSelector('[data-formats-empty]');
+      },
+    },
+  ].map((x) => ({ theme: 'dark', orientation: 'portrait', special: true, ...x })),
 ].map((s) => ({ ...s, name: `${s.screen} / ${s.theme} / ${s.orientation} / ${s.state}` }));
 
 // --presentation: the 12 screens picked for the client presentation (2026-11-06), dark, in the
@@ -364,6 +480,14 @@ const PRESENTATION = [
   'editor/slider',
   'editor/date-error',
 ];
+if (args.includes('--special')) {
+  const picked = STATES.filter((x) => x.special);
+  STATES.length = 0;
+  const layouts = args.includes('--land') ? ['portrait', 'landscape-lh', 'landscape-rh'] : ['portrait'];
+  for (const orientation of layouts)
+    for (const st of picked)
+      STATES.push({ ...st, orientation, name: `${st.screen} / dark / ${orientation} / ${st.state}` });
+}
 if (args.includes('--presentation')) {
   const picked = PRESENTATION.map((k) => {
     const st = STATES.find((x) => `${x.screen}/${x.state}` === k && x.theme === 'dark');

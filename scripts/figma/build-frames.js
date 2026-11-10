@@ -213,6 +213,9 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
   const boundSolid = (c, token, alpha) => {
     const v = token && variables.get(token);
     if (!v) return solid(c);
+    // translucent fills stay unbound: Figma resets a bound paint's opacity to 1 on a mode change or a
+    // copy, so a 15 % tint would turn solid (2026-11-10). The colour is the resolved token value.
+    if (alpha != null && alpha < 1) return solid(c ? { ...c, a: alpha } : null);
     const base = c || { r: 0, g: 0, b: 0, a: 1 };
     const paint = {
       type: 'SOLID',
@@ -224,8 +227,18 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
   /** Assign paints; Figma resets a variable-bound paint's opacity to 1 on assignment, so it is set again after. */
   const setFills = (node, paints) => {
     node.fills = paints;
-    if (paints.some((p) => p && p.opacity != null && p.opacity < 1))
+    if (paints.some((p) => p && p.opacity != null && p.opacity < 1)) {
       node.fills = node.fills.map((p, i) => ({ ...p, opacity: paints[i]?.opacity ?? p.opacity }));
+      // setting a variable mode on an ancestor resolves the paints again: keep the opacities to re-apply
+      node.setPluginData('hmi.alpha', JSON.stringify(paints.map((p) => p?.opacity ?? 1)));
+    }
+  };
+  /** Re-apply the stored fill opacities under `root` (after a variable mode was set on it). */
+  const reapplyAlpha = (root) => {
+    for (const n of root.findAll((x) => x.getPluginData('hmi.alpha') !== '')) {
+      const ops = JSON.parse(n.getPluginData('hmi.alpha'));
+      if (Array.isArray(n.fills)) n.fills = n.fills.map((p, i) => ({ ...p, opacity: ops[i] ?? p.opacity }));
+    }
   };
   const bindRadius = (f, token) => {
     const v = variables.get(token);
@@ -505,7 +518,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       if (c) {
         const paint = boundSolid({ ...c, a: 1 }, n.icons[i].token);
         for (const v of icons[i].findAll((x) => 'strokes' in x)) {
-          if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = 1.5; } // icon strokes stay 1.5 px at any size (DT-48)
+          if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = n.icons[i].stroke ?? 1.5; } // px width kept at any size (DT-48, DT-64)
           if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
         }
       }
@@ -645,7 +658,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         if (c) {
           const paint = boundSolid({ ...c, a: 1 }, n.token);
           for (const v of inst.findAll((x) => 'strokes' in x)) {
-            if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = 1.5; } // icon strokes stay 1.5 px at any size (DT-48)
+            if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = n.stroke ?? 1.5; } // icon strokes keep their px width at any size (DT-48, DT-64)
             if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
           }
           if (c.a < 1) inst.opacity = (n.opacity ?? 1) * c.a;
@@ -788,6 +801,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       (m) => m.name.toLowerCase() === (root.theme || 'dark'),
     );
     if (mode) frame.setExplicitVariableModeForCollection(colourCollection, mode.modeId);
+    reapplyAlpha(frame);
     frame.setPluginData('hmi.generated', new Date().toISOString());
     results.push({ name: cap.name, id: frame.id, x, y });
   }

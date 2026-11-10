@@ -72,7 +72,7 @@ export function renderStartButton(ctx, machine, level) {
 
 /** Machine-state pill under the start control (Figma StatePill · State). */
 export function renderStatePill(ctx, st) {
-  return `<div class="home__pill shrink-0 land:mt-4 inline-flex items-center gap-2 px-3 h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
+  return `<div class="home__pill shrink-0 land:mt-4 inline-flex items-center gap-2 px-3 pt-px h-9 rounded-pill bg-surface-2" role="status" data-cmp="StatePill" data-cmp-props="State=${st.key}">
             <span class="size-3 rounded-pill bg-${st.color}"></span><span class="t-caption leading-none">${esc(ctx.t(st.label))}</span>
           </div>`;
 }

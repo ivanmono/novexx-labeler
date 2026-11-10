@@ -83,7 +83,7 @@ export function render(ctx, info) {
       const hint = el.querySelector('[data-hint]');
       const show = (error = '') => {
         field.textContent = name || ctx.t('format.namePlaceholder');
-        field.classList.toggle('text-faint', name === '');
+        field.classList.toggle('text-faint/60', name === '');
         field.classList.toggle('text-text', name !== '');
         if (count) count.textContent = `${name.length}/${MAX}`;
         const taken = findByName(ctx.store.get('formats'), name);
