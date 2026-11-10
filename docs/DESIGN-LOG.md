@@ -496,3 +496,13 @@ Where: `src/ui/components/{ListRow,TableRow,ConfirmDialog,ProgressResult,Placeho
 Before → after: `shared-*` (shared.spec)
 Status: both (2026-11-10; Figma sets ListRow, ListEnd, TableHeader, TableRow, PathBar, Placeholder, ProgressResult)
 Note (Figma builder, same day): assigning a variable-bound paint resets its opacity to 1, so translucent fills (NavBar 85 %, tints) came out opaque in Figma. The builder now sets the opacity again after the assignment (`setFills`); 30 NavBar variants and 73 bar instances on the screen pages were corrected in place.
+
+## DT-53 · Four new icons: check, file, up, usb (2026-11-10, chat)
+
+Source: chat — "create missing icons in Icons v1 – 24 px page"; open point #53 (the P3-01 pieces had no check, file, "one level up" or USB icon)
+Change:
+- New components on "Icons v1 – 24 px", drawn to the rules of that page (24 px canvas, 1.5 px stroke, round caps and joins, half-pixel coordinates, corner radius 1.5, 45° diagonals): `icon/24/check` (tick), `icon/24/file` (page with folded corner, no lines — `recipe` keeps the lined page for formats), `icon/24/up` (arrow up on a bent stem: one folder level up), `icon/24/usb` (stick with two contacts; redrawn by the designer the same day: larger body 5–19 × 10–22, connector 8–16). Checked at 48 px on light and dark next to `files`, `recipe`, `back`, `lock`, `plus`.
+- No separate folder icon: `files` already is a closed folder and stays the folder row icon.
+- Used in code: success badge (was a check drawn in CSS), file rows, "One level up", "No USB drive". Figma: ProgressResult success badge and the ListRow file variants switched to the new icons.
+Where: `src/assets/icons/{check,file,up,usb}.svg`, sprite rebuilt (71 icons); `ProgressResult.js`, `FileBrowser.js`
+Status: both (2026-11-10). The 48 px masters on "Icons v1" were not touched; to be drawn there if the 48 px set is kept in step.

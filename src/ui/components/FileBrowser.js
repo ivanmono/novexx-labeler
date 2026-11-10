@@ -39,7 +39,7 @@ export function renderFileBrowser({ path, entries, selected = null, usb = true }
   if (!usb) {
     return renderPlaceholder({
       kind: 'empty',
-      icon: 'files',
+      icon: 'usb',
       title: t('files.noUsb'),
       text: t('files.noUsbHint'),
     });
@@ -50,7 +50,7 @@ export function renderFileBrowser({ path, entries, selected = null, usb = true }
   );
   const rows = [];
   if (path.length > 1)
-    rows.push({ kind: 'nav', title: t('files.up'), icon: 'back', action: 'up', id: '..' });
+    rows.push({ kind: 'nav', title: t('files.up'), icon: 'up', action: 'up', id: '..' });
   for (const e of sorted) {
     if (e.type === 'folder') {
       rows.push({
@@ -66,7 +66,7 @@ export function renderFileBrowser({ path, entries, selected = null, usb = true }
         kind: 'select',
         title: e.name,
         meta: [e.size, e.date].filter(Boolean).join(' · '),
-        icon: 'recipe',
+        icon: 'file',
         action: 'pick',
         id: e.name,
         state: e.allowed === false ? 'disabled' : e.name === selected ? 'selected' : 'default',

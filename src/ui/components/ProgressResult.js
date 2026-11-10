@@ -16,10 +16,6 @@ import { renderButton } from './Button.js';
 import { t } from '../../core/i18n.js';
 import { esc, cx } from '../html.js';
 
-// the icon set has no check mark yet (open point #53); drawn as a rotated corner until it has one
-const CHECK =
-  '<span class="block w-4 h-8 -mt-2 border-r-4 border-b-4 border-current rotate-45 rounded-[2px]" aria-hidden="true"></span>';
-
 /**
  * @param {{ state:'running'|'success'|'failure', title:string, phase?:string, value?:number,
  *           message?:string, warning?:string, steps?:string[],
@@ -40,7 +36,7 @@ export function renderProgressResult(o) {
   const badge =
     state === 'running'
       ? ''
-      : `<span class="${cx('grid place-items-center size-20 rounded-pill', state === 'success' ? 'bg-status-run/20 text-status-run-ink' : 'bg-status-error/20 text-status-error-ink')}">${state === 'success' ? CHECK : icon('alarm', { size: 44 })}</span>`;
+      : `<span class="${cx('grid place-items-center size-20 rounded-pill', state === 'success' ? 'bg-status-run/20 text-status-run-ink' : 'bg-status-error/20 text-status-error-ink')}">${icon(state === 'success' ? 'check' : 'alarm', { size: 44 })}</span>`;
   const body =
     state === 'running'
       ? `<div class="w-full flex flex-col gap-2">

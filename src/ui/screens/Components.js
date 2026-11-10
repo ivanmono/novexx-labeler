@@ -197,7 +197,7 @@ export function render(ctx) {
   const card = (h) =>
     `<div class="w-[448px] grid"><div class="card-border"><div class="py-1">${h}</div></div></div>`;
   const fmt = { title: 'Standard 100x50', meta: '12.09.26 · L3' };
-  const file = { title: 'XLS22x_v1.01.fw', meta: '18.4 MB · 21.09.26', icon: 'recipe' };
+  const file = { title: 'XLS22x_v1.01.fw', meta: '18.4 MB · 21.09.26', icon: 'file' };
   const listRows = [
     renderListRow({
       kind: 'value',

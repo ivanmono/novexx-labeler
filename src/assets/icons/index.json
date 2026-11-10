@@ -1,5 +1,5 @@
 {
-  "count": 67,
+  "count": 71,
   "names": [
     "activate",
     "alarm",
@@ -12,6 +12,7 @@
     "camera",
     "can",
     "card",
+    "check",
     "chevron",
     "compare",
     "counter",
@@ -20,6 +21,7 @@
     "display",
     "drive",
     "drivecfg",
+    "file",
     "files",
     "folderopen",
     "formatnew",
@@ -63,6 +65,8 @@
     "test",
     "testmode",
     "unwinder",
+    "up",
+    "usb",
     "useradd",
     "usermanage",
     "userpolicy",
