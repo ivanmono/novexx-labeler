@@ -21,7 +21,7 @@ export function renderNumericField(param, { entry = '', current, error = null } 
     .filter(Boolean)
     .join(' · ');
   return `
-    <div class="numeric-field flex flex-col gap-3" data-numeric-field>
+    <div class="numeric-field flex flex-col gap-3" data-numeric-field data-cmp="Input" data-cmp-props="Kind=number,State=${error ? 'error' : entry === '' ? 'empty' : 'filled'}">
       <div class="card-border card-border--strong"><div class="flex items-center gap-2 pl-4 pr-4 h-16">
         <span class="flex-1 t-param text-title truncate ${entry === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(entry === '' ? fmt(current, param) : entry)}</span>
         ${unit}

@@ -293,7 +293,7 @@
   --color-key-pressed: var(--hmi-keyboard-key-pressed);
 
   --font-sans: 'Figtree', system-ui, sans-serif;
-  --font-mono: 'Fira Code', ui-monospace, monospace;
+  --font-mono: 'Ioskeley Mono', ui-monospace, monospace;
 
   /* type scale (docx §1 asks to check for larger sizes on the target display). Chosen on the real
      4.3" panel (217 ppi): XL of the DT-14 trial, smallest text 18 px (DT-13, DT-14) */

@@ -8,6 +8,8 @@
  *   - stroke colour → currentColor, keep the exported stroke-width (1.5), caps and joins
  *   - canvas size read from the source viewBox; a file on another canvas is reported
  *   - no ids, no fills other than "none"
+ *   - in the sprite only: vector-effect="non-scaling-stroke" on stroked shapes, so the stroke stays
+ *     1.5 px at any rendered size (icons are drawn at 24 px but shown at 24–48 px; DT-48)
  * Idempotent: running it twice yields the same files.
  */
 import fs from 'node:fs';
@@ -59,7 +61,8 @@ for (const name of names) {
   }
   const clean = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none">\n${inner}\n</svg>\n`;
   fs.writeFileSync(file, clean);
-  symbols.push(`<symbol id="icon-${name}" viewBox="0 0 ${size} ${size}" fill="none">\n${inner}\n</symbol>`);
+  const fixed = inner.replace(/<(path|circle|line|polyline|polygon|rect|ellipse)\b(?![^>]*vector-effect)(?=[^>]*stroke-width)/g, '<$1 vector-effect="non-scaling-stroke"');
+  symbols.push(`<symbol id="icon-${name}" viewBox="0 0 ${size} ${size}" fill="none">\n${fixed}\n</symbol>`);
   index[name] = { paths: (inner.match(/<path/g) ?? []).length };
 }
 const sprite = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n${symbols.join('\n')}\n</svg>\n`;

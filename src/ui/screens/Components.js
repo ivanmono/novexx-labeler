@@ -14,7 +14,9 @@ import { renderToast } from '../shell/Toast.js';
 import { renderModal } from '../shell/ModalHost.js';
 import { renderSheet } from '../shell/SheetHost.js';
 import { renderStartButton, renderStatePill } from './HomeScreen.js';
-import { renderProfileRow } from './LoginScreen.js';
+import { renderProfileRow, renderPasswordField } from './LoginScreen.js';
+import { renderNumericField, numericErrorText } from '../components/NumericKeypad.js';
+import { renderTextField } from '../components/AlphaKeyboard.js';
 import { renderListRow } from './UserScreen.js';
 import { renderProgressBar } from './StartupScreen.js';
 import { renderButton } from '../components/Button.js';
@@ -271,6 +273,18 @@ export function render(ctx) {
     ([p, v]) =>
       `<div class="w-[448px] grid">${renderDateTimePicker(p, v, { error: pickerError(p, v) })}</div>`,
   );
+  const numParam = ctx.param(117);
+  const inputs = [
+    renderNumericField(numParam, { entry: '', current: 250 }),
+    renderNumericField(numParam, { entry: '250' }),
+    renderNumericField(numParam, { entry: '3000', error: numericErrorText(numParam, 'max') }),
+    renderTextField({ value: '', placeholder: 'Jakobs XLS 224', max: 32 }),
+    renderTextField({ value: 'Jakobs XLS 224', max: 32 }),
+    renderTextField({ value: '192.168.0.', max: 15, error: ctx.t('edit.invalidIp') }),
+    renderPasswordField({ value: ' ' }),
+    renderPasswordField({ value: '••••' }),
+    renderPasswordField({ value: ' ', error: ctx.t('login.wrong') }),
+  ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
   ctx.shell.setScreen({
     title: 'Components',
     back: true,
@@ -299,6 +313,7 @@ export function render(ctx) {
         ${section('OptionRow · Selected', optionRows)}
         ${section('Slider · State', sliders)}
         ${section('DateTimePicker · Kind × State', pickers)}
+        ${section('Input · Kind × State', inputs)}
       </div>`,
   });
 }

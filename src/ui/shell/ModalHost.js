@@ -22,9 +22,9 @@ export function renderModal({ kind = 'info', title, body = '', destructive = fal
         <div class="modal__body px-6 text-body text-text leading-snug ${scroll ? 'scroll-y' : ''} min-h-0" data-cmp-slot="body">${body}
           ${destructive ? `<p class="mt-4 text-label text-status-error-ink font-semibold">${esc(t('dialog.destructiveHint'))}</p>` : ''}
         </div>
-        <div class="flex gap-3 px-6 pt-8 pb-7"> <!-- gap outside the scroll area so it shows when the body scrolls (DT-23) -->
-          ${isConfirm ? `<button type="button" class="pressable flex-1 h-touch rounded-md bg-surface-2 text-body font-semibold" data-action="cancel">${esc(cancelLabel ?? t('action.cancel'))}</button>` : ''}
-          <button type="button" class="${cx('pressable flex-1 h-touch rounded-md text-body font-semibold', destructive ? 'bg-status-error text-white' : 'bg-brand text-on-brand')}" data-action="ok">${esc(okLabel ?? (isConfirm ? t('action.confirm') : t('action.ok')))}</button>
+        <div class="flex gap-3 px-6 pt-8 pb-7"> <!-- gap outside the scroll area so it shows when the body scrolls (DT-23); buttons 78 px (DT-49) -->
+          ${isConfirm ? `<button type="button" class="pressable flex-1 h-[78px] rounded-md bg-surface-2 text-body font-semibold" data-action="cancel">${esc(cancelLabel ?? t('action.cancel'))}</button>` : ''}
+          <button type="button" class="${cx('pressable flex-1 h-[78px] rounded-md text-body font-semibold', destructive ? 'bg-status-error text-white' : 'bg-brand text-on-brand')}" data-action="ok">${esc(okLabel ?? (isConfirm ? t('action.confirm') : t('action.ok')))}</button>
         </div>
       </div>
     </div>

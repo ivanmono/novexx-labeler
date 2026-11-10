@@ -11,7 +11,7 @@ import { esc } from '../html.js';
 
 export function renderTextField({ value = '', placeholder = '', error = null, max = null }) {
   return `
-    <div class="text-field flex flex-col gap-1" data-text-field>
+    <div class="text-field flex flex-col gap-1" data-text-field data-cmp="Input" data-cmp-props="Kind=text,State=${error ? 'error' : value === '' ? 'empty' : 'filled'}">
       <div class="card-border card-border--strong"><div class="flex items-center gap-2 px-4 h-16">
         <span class="flex-1 t-param text-body-lg truncate ${value === '' ? 'text-faint' : 'text-text'}" data-entry>${esc(value === '' ? placeholder : value)}</span>
         ${max ? `<span class="t-caption text-faint shrink-0" data-count>${value.length}/${max}</span>` : ''}

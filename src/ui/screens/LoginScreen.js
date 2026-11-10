@@ -6,6 +6,26 @@
 import { icon } from '../components/Icon.js';
 import { renderNumpad, mountNumpad, mountKeyboard } from '../components/Keyboard.js';
 import { esc, onAction, cx } from '../html.js';
+import { t } from '../../core/i18n.js';
+
+/**
+ * Password field (Figma Input · Kind=password): masked entry, show / hide, keyboard mode, and the
+ * error line under it. `value` is the text to show (already masked).
+ */
+export function renderPasswordField({ value = ' ', error = null } = {}) {
+  const state = error ? 'error' : value.trim() ? 'filled' : 'empty';
+  return `
+    <div class="password-field" data-cmp="Input" data-cmp-props="Kind=password,State=${state}">
+      <div class="card-border card-border--strong">
+        <div class="flex items-center gap-1 pl-4 pr-1 h-touch land:h-[72px]">
+          <span class="flex-1 t-param text-title tracking-[0.3em] truncate" data-field aria-label="${esc(t('login.password'))}">${esc(value)}</span>
+          <button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-chrome" data-action="toggleShow" aria-label="${esc(t('login.show'))}" data-show>${icon('lock', { size: 26 })}</button>
+          <button type="button" class="pressable h-touch-row min-w-touch-row px-3 rounded-md bg-surface-2 text-label font-semibold" data-action="mode" data-mode>ABC</button>
+        </div>
+      </div>
+      <div class="text-label text-status-error-ink font-semibold min-h-6 mt-1 mb-1 px-1" data-error aria-live="polite">${esc(error ?? '')}</div>
+    </div>`;
+}
 
 /** Profile row on the login screen (Figma ProfileRow · Level × Enabled). */
 export function renderProfileRow(ctx, u) {
@@ -58,16 +78,7 @@ export function render(ctx) {
       html: `
         <div class="flex-1 min-h-0 flex flex-col" data-password data-user="${esc(user.id)}">
           <!-- field, error and keys stay together at the bottom; the free space sits above (DT-21) -->
-          <div class="px-3 pt-3 mt-auto">
-            <div class="card-border card-border--strong">
-              <div class="flex items-center gap-1 pl-4 pr-1 h-touch land:h-[72px]">
-                <span class="flex-1 t-param text-title tracking-[0.3em] truncate" data-field aria-label="${esc(ctx.t('login.password'))}">${esc(masked())}</span>
-                <button type="button" class="pressable size-touch-row grid place-items-center rounded-md text-chrome" data-action="toggleShow" aria-label="${esc(ctx.t('login.show'))}" data-show>${icon('lock', { size: 26 })}</button>
-                <button type="button" class="pressable h-touch-row min-w-touch-row px-3 rounded-md bg-surface-2 text-label font-semibold" data-action="mode" data-mode>ABC</button>
-              </div>
-            </div>
-            <div class="text-label text-status-error-ink font-semibold min-h-6 mt-1 mb-1 px-1" data-error aria-live="polite"></div>
-          </div>
+          <div class="px-3 pt-3 mt-auto">${renderPasswordField({ value: masked() })}</div>
           <div class="px-3 pb-8 land:pb-3" data-keys></div>
         </div>`,
       mount(el) {

@@ -40,5 +40,5 @@ component is at `#/styleguide`.
 
 ## Stack
 
-Vite 7, Tailwind CSS 4, vanilla JavaScript (ES modules), Vitest, Playwright. Fonts Figtree and Fira Code
+Vite 7, Tailwind CSS 4, vanilla JavaScript (ES modules), Vitest, Playwright. Fonts Figtree and Ioskeley Mono
 self-hosted (OFL). Icons from Mono's Figma "Icons v1" set as a single-colour SVG sprite.

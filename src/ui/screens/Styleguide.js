@@ -31,8 +31,8 @@ const TYPE = [
   ['text-body-sm', 'Body small 16'],
   ['text-label', 'Label 14'],
   ['t-caption', 'Caption 12 · 600 · caps'],
-  ['t-param text-title', 'Fira Code 24 · 600  12.5 m/min'],
-  ['t-param text-body', 'Fira Code 18 · 600  0.0.0.0'],
+  ['t-param text-title', 'Ioskeley Mono 24 · 600  12.5 m/min'],
+  ['t-param text-body', 'Ioskeley Mono 18 · 600  0.0.0.0'],
 ];
 const RADII = ['xs', 'sm', 'md', 'card'];
 const SPACING = [1, 2, 3, 4, 6, 8, 12, 15];
@@ -65,7 +65,7 @@ export function renderTokens() {
             <div class="text-caption text-muted font-mono" data-sg-color="${n}"></div></div></div>`)
         .join('')}</div>`),
     ).join('')}
-    ${sec('Type scale (Figtree / Fira Code, self-hosted)', frame(`<div class="p-4 flex flex-col gap-3">${TYPE.map(([cls, label]) => `<div class="${cls} truncate">${label} — Etikettierer Übersicht</div>`).join('')}</div>`))}
+    ${sec('Type scale (Figtree / Ioskeley Mono, self-hosted)', frame(`<div class="p-4 flex flex-col gap-3">${TYPE.map(([cls, label]) => `<div class="${cls} truncate">${label} — Etikettierer Übersicht</div>`).join('')}</div>`))}
     ${sec('Surfaces, radii, shadows', `
       <div class="grid grid-cols-2 gap-3">
         <div class="card-border"><div class="p-4 text-body-sm">card-border<br><span class="text-muted">gradient stroke 1 px, r 24/23</span></div></div>

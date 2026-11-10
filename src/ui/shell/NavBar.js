@@ -20,6 +20,9 @@ const LINE = {
   booting: 'standby',
 };
 
+/** Levels whose badge colour needs light text (DT-50, Figma NavBar). */
+const LIGHT_BADGE = new Set([2, 3]);
+
 export function renderNavBar({ level = 0, userName = null, canBack = true, machine, orientation = layoutOf() }) {
   const st = statusOf(machine);
   const lvl = Math.max(0, Math.min(4, Number(level) || 0));
@@ -30,7 +33,7 @@ export function renderNavBar({ level = 0, userName = null, canBack = true, machi
       ${icon('back', { size: 32 })}<span class="t-caption">${esc(t('nav.back'))}</span>
     </button>
     <button type="button" class="nav-bar__user pressable flex flex-col items-center justify-center gap-0.5 flex-1" data-action="user" aria-label="${esc(t(`level.${lvl}`))}">
-      <span class="nav-bar__badge grid place-items-center size-11 rounded-pill text-body-sm font-bold text-black bg-level-${lvl}" data-badge>${esc(t(`level.short.${lvl}`))}</span>
+      <span class="nav-bar__badge grid place-items-center size-11 rounded-pill text-body-sm font-bold ${LIGHT_BADGE.has(lvl) ? 'text-white' : 'text-black'} bg-level-${lvl}" data-badge>${esc(t(`level.short.${lvl}`))}</span>
       <span class="nav-bar__name text-label land:hidden font-semibold text-level-${lvl} max-w-full px-1 land:px-0 text-center">${esc(userName ?? t(`level.${lvl}`)).replace('.', '.\u200b')}</span>
     </button>
     <button type="button" class="nav-bar__btn pressable flex flex-col items-center justify-center gap-0.5 text-chrome flex-1 ${lvl === 0 ? 'opacity-60' : ''}" data-action="menu">

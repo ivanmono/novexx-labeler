@@ -1,0 +1,23 @@
+/* Ioskeley Mono (SIL OFL 1.1, github.com/ahatem/IoskeleyMono v2.2.0, web subset): parameter values,
+   codes and counters (DT-51). Self-hosted, no network at runtime. Licence: src/assets/fonts/ioskeley-mono/LICENSE.txt */
+@font-face {
+  font-family: 'Ioskeley Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('../assets/fonts/ioskeley-mono/IoskeleyMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Ioskeley Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url('../assets/fonts/ioskeley-mono/IoskeleyMono-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Ioskeley Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('../assets/fonts/ioskeley-mono/IoskeleyMono-Bold.woff2') format('woff2');
+}

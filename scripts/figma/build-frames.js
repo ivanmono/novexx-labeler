@@ -192,6 +192,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     const candidates = [
       { family, style },
       { family, style: style.replace('SemiBold', 'Semi Bold') },
+      { family, style: style.replace('SemiBold', 'Semibold') }, // Ioskeley Mono spelling (DT-51)
       { family: 'Inter', style: style.replace('ExtraBold', 'Extra Bold') },
       { family: 'Inter', style: 'Regular' },
     ];
@@ -246,7 +247,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     const style = textStyles.find(
       (s) =>
         s.fontName.family === fnt.family &&
-        s.fontName.style.replace(' ', '') === styleName &&
+        s.fontName.style.replace(' ', '').toLowerCase() === styleName.toLowerCase() &&
         s.fontSize === fnt.size &&
         (lhPct == null
           ? s.lineHeight.unit === 'AUTO'
@@ -260,7 +261,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     const sz = variables.get(`type/size/${SIZE_TOKEN[fnt.size]}`);
     if (sz) t.setBoundVariable('fontSize', sz);
     const fam = variables.get(
-      fnt.family === 'Fira Code'
+      fnt.family === 'Ioskeley Mono' || fnt.family === 'Fira Code'
         ? 'type/family/mono'
         : fnt.family === 'Figtree'
           ? 'type/family/sans'
@@ -498,7 +499,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       if (c) {
         const paint = boundSolid({ ...c, a: 1 }, n.icons[i].token);
         for (const v of icons[i].findAll((x) => 'strokes' in x)) {
-          if (v.strokes.length) v.strokes = [paint];
+          if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = 1.5; } // icon strokes stay 1.5 px at any size (DT-48)
           if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
         }
       }
@@ -624,7 +625,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         const inst = comp.createInstance();
         parent.appendChild(inst);
         inst.name = n.name;
-        if (Math.abs(comp.width - n.w) > 0.01) inst.rescale(n.w / comp.width); // scales stroke weight too, like the SVG
+        if (Math.abs(comp.width - n.w) > 0.01) inst.rescale(n.w / comp.width); // stroke weight is reset to 1.5 below (DT-48)
         inst.x = n.x - ox;
         inst.y = n.y - oy;
         if (n.rot) {
@@ -638,7 +639,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         if (c) {
           const paint = boundSolid({ ...c, a: 1 }, n.token);
           for (const v of inst.findAll((x) => 'strokes' in x)) {
-            if (v.strokes.length) v.strokes = [paint];
+            if (v.strokes.length) { v.strokes = [paint]; v.strokeWeight = 1.5; } // icon strokes stay 1.5 px at any size (DT-48)
             if ('fills' in v && Array.isArray(v.fills) && v.fills.length) v.fills = [paint];
           }
           if (c.a < 1) inst.opacity = (n.opacity ?? 1) * c.a;

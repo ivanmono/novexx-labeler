@@ -446,3 +446,38 @@ Change:
 Where: `src/ui/components/ParamRow.js`, `src/ui/screens/ParamListScreen.js` (`data-armed`), `src/styles/components.css` (`.param-action`), `src/ui/components/AlphaKeyboard.js`
 Before → after: `action-armed` (phase2-flows.spec)
 Status: both (Figma P2-17, 2026-11-09: ParamRow State=action carries the outlined action pill)
+
+## DT-48 · Icon strokes stay 1.5 px at every size (2026-11-10, chat)
+
+Source: chat — "all icons from icon set should be 1.5 stroke thickness"
+Change:
+- The icon set is drawn on a 24 px canvas with a 1.5 px stroke. Icons shown larger (32 px in the bars, 48 px on tiles) scaled the stroke with them, to about 2 px and more. The stroke now stays 1.5 px at any size.
+- Code: the sprite gives every stroked shape `vector-effect="non-scaling-stroke"` (added by `scripts/build-sprite.mjs`; the exported SVGs are unchanged).
+- Figma: stroke weight 1.5 on every icon instance on the HMI pages (components and screens; 565 vectors changed); the builder resets it after scaling, so rebuilds keep it. The masters on "Icons v1 – 24 px" were already 1.5 and were not touched. Spinners and progress rings are not icons and keep their own stroke.
+Where: `scripts/build-sprite.mjs`, `src/assets/icons/sprite.svg`, `scripts/figma/build-frames.js`
+Status: both (2026-11-10)
+
+## DT-49 · Dialog buttons 78 px tall (2026-11-10, Figma)
+
+Source: Figma — designer edit of the Modal set: the buttons hug their label with 24 px padding (78 px) instead of the 88 px touch height
+Change: OK / Cancel / destructive buttons in every dialog are 78 px tall; radius 16 and the 32 / 28 px space around them unchanged. Still well above the 60 px minimum of docx §5.4, but below the 88 px touch target of DT-13 — part of the #51 sign-off.
+Where: `src/ui/shell/ModalHost.js`
+Status: both (2026-11-10; Figma edited by the designer, code followed)
+
+## DT-50 · Light badge text for levels 2 and 3 (2026-11-10, Figma)
+
+Source: Figma — designer edit of the NavBar set (portrait L2 / L3 badge text white); chat: "dependable on user role user badge should have light text like i added to NavBar"
+Change: the level badge shows white text on the orange (L2, supervisor) and purple (L3) badges, black text on L0, L1 and L4. Contrast in dark theme: white on orange 3.0 : 1, on purple 3.9 : 1 (22 px bold, large text). In the light theme the darker level colours would read better with white on every level (L0 5.4, L1 4.7, L4 5.6 : 1 against 3.9, 4.5, 3.7 with black) — open for the designer.
+Where: `src/ui/shell/NavBar.js` (`LIGHT_BADGE`)
+Status: both (2026-11-10; Figma landscape NavBar variants set to match the designer's portrait ones)
+
+## DT-51 · Ioskeley Mono replaces Fira Code (2026-11-10, chat)
+
+Source: chat — "Download this font and use it instead Fira Code: https://ahatem.github.io/IoskeleyMono/"
+Change:
+- The monospace face for parameter values, codes, counters and the password field is Ioskeley Mono v2.2.0 (built on Iosevka; SIL OFL 1.1, like Fira Code). Figtree stays the text face.
+- Code: Regular / SemiBold / Bold from the release's web subset (Latin, punctuation, arrows, math; about 95 KB each) self-hosted in `src/assets/fonts/ioskeley-mono/` with the licence; `@fontsource/fira-code` removed. Token `--font-mono`.
+- Ioskeley is narrower than Fira Code, so values take less width at the same size.
+- Figma: the font has to be installed on the machine running Figma (desktop TTF, Normal / Hinted). Then `type/family/mono` switches to it and every mono text follows; the builder maps both names to that variable.
+Where: `src/styles/fonts.css`, `src/styles/app.css`, `src/styles/tokens.css`, `scripts/figma/build-frames.js`
+Status: both (2026-11-10: font installed; `type/family/mono` and the HMI/Param text styles switched, 289 mono texts on the HMI pages now Ioskeley Mono Regular / Semibold / Bold, no missing fonts; the builder also accepts the "Semibold" spelling)
