@@ -211,6 +211,16 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
       const io = Object.fromEntries(Object.entries(cur.io).map(([k, v]) => [k, { ...v, forced: null }]));
       setM({ io });
     },
+    /** Encoder cable in or out (P3-05 "no encoder signal" state). */
+    setEncoderSignal(on) {
+      const cur = m();
+      setM({ encoder: { ...cur.encoder, signal: !!on, ...(on ? {} : { mmin: 0, hz: 0 }) } });
+    },
+    /** Stop a running speed test without a result (leaving the screen, docx §8.4). */
+    abortSpeedTest() {
+      const cur = m();
+      if (cur.speedTest.running) setM({ speedTest: { ...cur.speedTest, running: false } });
+    },
     startSpeedTest() {
       setM({ speedTest: { running: true, result: null, startedAt: now() } });
     },
@@ -259,11 +269,11 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
       const sel = Number(store.getParam(118));
       const base = sel === 119 ? Number(store.getParam(122) ?? 30) : 24 + Math.sin(tick / 7) * 3;
       const running = cur.state === 'run';
-      const mmin = running || cur.speedTest.running ? Math.max(0, base + (Math.random() - 0.5) * 0.4) : 0;
+      const signal = cur.encoder.signal !== false; // cable out: nothing measured in any speed mode
+      const mmin = signal && (running || cur.speedTest.running) ? Math.max(0, base + (Math.random() - 0.5) * 0.4) : 0;
       const ppr = Number(store.getParam(125) ?? 500);
       const dia = Number(store.getParam(124) ?? 36);
       const hz = mmin > 0 ? Math.round(((mmin * 1000) / 60 / (Math.PI * dia)) * ppr) : 0;
-      const signal = !(sel !== 119 && cur.encoder.signal === false);
       store.setParam(730, Number(mmin.toFixed(2)));
 
       // dispensing while running: one label per cycle depending on speed and label length

@@ -103,3 +103,20 @@ describe('simulator', () => {
     await expect(sim2.boot({ durationMs: 150, fail: true })).resolves.toBe(false);
   });
 });
+
+describe('encoder signal and speed test abort (P3-05)', () => {
+  it('no signal: nothing measured, a test gives no result; abort leaves no result', () => {
+    const { store, sim } = setup();
+    sim.startSpeedTest();
+    sim.tick();
+    expect(store.get('machine').encoder.mmin).toBeGreaterThan(0);
+    sim.abortSpeedTest();
+    expect(store.get('machine').speedTest).toMatchObject({ running: false, result: null });
+    sim.setEncoderSignal(false);
+    sim.startSpeedTest();
+    sim.tick();
+    expect(store.get('machine').encoder).toMatchObject({ mmin: 0, hz: 0, signal: false });
+    sim.stopSpeedTest();
+    expect(store.get('machine').speedTest.result.nextLabelMs).toBeNull();
+  });
+});

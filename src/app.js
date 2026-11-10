@@ -247,6 +247,8 @@ export async function boot(root, { skipBoot = false } = {}) {
         else if (value === 'warning') sim.injectError('W-012');
         else if (value === 'reset') sim.resetAlarm();
         else if (value === 'standby') sim.enterStandby();
+        else if (value === 'nosignal') sim.setEncoderSignal(false);
+        else if (value === 'signal') sim.setEncoderSignal(true);
         else sim.command(map[value]);
       }
     },

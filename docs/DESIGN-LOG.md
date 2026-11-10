@@ -526,3 +526,15 @@ Source: chat — "Change icon on keyboard teal submit button to check icon"
 Change: the teal submit key on the alphabetical keyboard and on both numpads (parameter editors, login, Create Format) shows the new `check` icon instead of `activate` (power) or `save`. The power icon stays where it means "run / switch on": start button, action rows, the start confirmation. The date picker's "Set" button is a button, not a keyboard key, and keeps its icon.
 Where: `src/ui/components/Keyboard.js` (default), `AlphaKeyboard.js`, `NumericKeypad.js`, `LoginScreen.js`, `formats/CreateFormat.js`
 Status: both (2026-11-10: Figma Key and NumpadKey `Kind=enter` variants swapped to `icon/24/check`; the screen frames follow)
+
+## DT-56 · Speed Test screen (2026-11-10, P3-05)
+
+Source: plan P3-05; docx §8.4 (live m/min and Hz once a second, no-signal state, result block set apart, warning before the test, read L1 / run L2)
+Change (Mono's design, first version):
+- Two cards: "Live · external encoder" with two large Ioskeley Mono readouts (m/min, Hz) and a status dot (green = signal, red = none); "Result" in a strong-border card with time to next label and rated product rate. Landscape: the two cards side by side.
+- No signal: both readouts "—" plus a red "No encoder signal" line with what to check; never a 0 that looks like a reading.
+- Bottom strip: amber "The test moves the machine." and Run speed test (L2, lock below); while measuring, "Measuring… n of 5 s", a progress bar and Stop. The test length (5 s) is a prototype value; the real one comes from the firmware.
+- Product rate shows "Off (Calc Product Rate)" when parameter 136 is off instead of a number.
+Where: `src/ui/screens/service/SpeedTest.js`, `src/core/simulator.js`
+Before → after: `speedtest-*` (speedtest.spec)
+Status: code only — Figma frames with P3-22b

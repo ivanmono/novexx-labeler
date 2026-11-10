@@ -82,14 +82,14 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 | ID                  | Title                                                          | Size | Status |
 | ------------------- | -------------------------------------------------------------- | ---- | ------ |
 | [P3-01](P3-01.md)   | Shared list, table, dialog, progress, placeholder, USB browser | L    | done   |
-| [G3-1](G3-1.md)     | **Gate: shared components and formats**                        | -    | ready  |
+| [G3-1](G3-1.md)     | **Gate: shared components and formats**                        | -    | held   |
 | [P3-02](P3-02.md)   | Select Format                                                  | M    | done   |
 | [G3-2](G3-2.md)     | **Gate: service tests**                                        | -    | todo   |
 | [P3-03](P3-03.md)   | Modify Format                                                  | M    | done   |
 | [G3-3](G3-3.md)     | **Gate: diagnostics and files**                                | -    | todo   |
 | [P3-04](P3-04.md)   | Create New Format                                              | S    | done   |
 | [G3-4](G3-4.md)     | **Gate: users**                                                | -    | todo   |
-| [P3-05](P3-05.md)   | Speed Test                                                     | M    | todo   |
+| [P3-05](P3-05.md)   | Speed Test                                                     | M    | done   |
 | [G3-5](G3-5.md)     | **Gate: help and wizard**                                      | -    | todo   |
 | [P3-06](P3-06.md)   | IO-Test                                                        | L    | todo   |
 | [P3-07](P3-07.md)   | Applicator Test and Test-Mode                                  | M    | todo   |

@@ -10,9 +10,15 @@ import * as Placeholder from './PlaceholderScreen.js';
 import * as SelectFormat from './formats/SelectFormat.js';
 import * as ModifyFormat from './formats/ModifyFormat.js';
 import * as CreateFormat from './formats/CreateFormat.js';
+import * as SpeedTest from './service/SpeedTest.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
-const MASKS = { selectformat: SelectFormat, modifyformat: ModifyFormat, createformat: CreateFormat };
+const MASKS = {
+  selectformat: SelectFormat,
+  modifyformat: ModifyFormat,
+  createformat: CreateFormat,
+  speedtest: SpeedTest,
+};
 
 export function render(ctx, info) {
   const node = ctx.node(info.arg);
