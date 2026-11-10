@@ -12,6 +12,7 @@ import { statusOf } from '../shell/StatusBar.js';
 import { isLandscape, onDisplayChange } from '../../core/theme.js';
 import { formatParamValue, paramLabel, relTime } from '../format.js';
 import { esc, onAction, cx } from '../html.js';
+import { confirmAction } from '../components/ConfirmDialog.js';
 
 const QUICKLINK_IDS = [614, 615, 616, 617];
 
@@ -47,7 +48,8 @@ export function renderStartButton(ctx, machine, level) {
   const st = statusOf(machine);
   const running = machine.state === 'run';
   // running, warning and alarm glow pulses (DT-46): drawn by .home__run[data-pulse] instead of a shadow class
-  const pulse = st.key === 'alarm' ? 'error' : st.key === 'warning' ? 'warning' : running ? 'run' : null;
+  const pulse =
+    st.key === 'alarm' ? 'error' : st.key === 'warning' ? 'warning' : running ? 'run' : null;
   const glow = pulse ? '' : 'shadow-glow-brand';
   const disabled = st.key === 'alarm' || st.key === 'booting';
   const locked = level < 1 && !running;
@@ -182,9 +184,9 @@ export function render(ctx) {
           if (ctx.level < 1) return needLogin();
           const m = ctx.store.get('machine');
           if (m.state === 'run') return ctx.sim.command('Pause');
-          const ok = await ctx.modal.confirm({
+          const ok = await confirmAction(ctx, {
             title: ctx.t('home.start'),
-            body: `<p>${esc(ctx.t('home.startConfirm'))}</p>`,
+            text: ctx.t('home.startConfirm'),
             okLabel: ctx.t('action.start'),
           });
           if (ok && !ctx.sim.command('Run')) ctx.toast.reject(ctx.t('toast.rejected'));

@@ -14,6 +14,7 @@ import { formatParamValue, paramLabel } from '../format.js';
 import { openEditor } from '../editors.js';
 import { openHelp } from '../components/HelpModal.js';
 import { esc, onAction } from '../html.js';
+import { confirmAction } from '../components/ConfirmDialog.js';
 
 const READ_ONLY_CONTROLS = new Set(['display', 'state']);
 
@@ -182,9 +183,9 @@ export function render(ctx, { arg }, nodeOverride = null) {
           if (CONFIRM_ACTIONS.has(p.id)) {
             // the action button stays pressed while its confirmation is open (P2-10)
             btn.dataset.armed = 'true';
-            const go = await ctx.modal.confirm({
+            const go = await confirmAction(ctx, {
               title: paramLabel(ctx, p),
-              body: `<p>${esc(ctx.t('action.confirmMove'))}</p>`,
+              text: ctx.t('action.confirmMove'),
               okLabel: ctx.t('action.start'),
             });
             delete btn.dataset.armed;

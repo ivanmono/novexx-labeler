@@ -17,7 +17,11 @@ import { renderStartButton, renderStatePill } from './HomeScreen.js';
 import { renderProfileRow, renderPasswordField } from './LoginScreen.js';
 import { renderNumericField, numericErrorText } from '../components/NumericKeypad.js';
 import { renderTextField } from '../components/AlphaKeyboard.js';
-import { renderListRow } from './UserScreen.js';
+import { renderListRow, renderListEnd } from '../components/ListRow.js';
+import { renderTableRow, renderTableHeader } from '../components/TableRow.js';
+import { renderProgressResult } from '../components/ProgressResult.js';
+import { renderPlaceholder } from '../components/Placeholder.js';
+import { renderPathBar } from '../components/FileBrowser.js';
 import { renderProgressBar } from './StartupScreen.js';
 import { renderButton } from '../components/Button.js';
 import { renderKey, renderNumpadKey } from '../components/Keyboard.js';
@@ -80,7 +84,11 @@ export function render(ctx) {
     statusBars.push(
       railRow(
         Object.values(STATUS_STATES).map((m) =>
-          rails(o, 'status', renderStatusBar({ machine: m, getParam, session: {}, orientation: o })),
+          rails(
+            o,
+            'status',
+            renderStatusBar({ machine: m, getParam, session: {}, orientation: o }),
+          ),
         ),
       ),
     );
@@ -95,7 +103,17 @@ export function render(ctx) {
       railRow(
         [0, 1, 2, 3, 4].flatMap((level) =>
           Object.keys(LINE_MACHINE).map((line) =>
-            rails(o, 'nav', renderNavBar({ level, userName: USER_BY_LEVEL[level], canBack: true, machine: LINE_MACHINE[line], orientation: o })),
+            rails(
+              o,
+              'nav',
+              renderNavBar({
+                level,
+                userName: USER_BY_LEVEL[level],
+                canBack: true,
+                machine: LINE_MACHINE[line],
+                orientation: o,
+              }),
+            ),
           ),
         ),
       ),
@@ -175,13 +193,105 @@ export function render(ctx) {
       profileRows.push(
         `<div class="w-[448px] grid">${renderProfileRow(ctx, sampleUser(level, enabled))}</div>`,
       );
+  // ListRow · Kind × State × Icon × Divider (P3-01): the combinations the screens use
+  const card = (h) =>
+    `<div class="w-[448px] grid"><div class="card-border"><div class="py-1">${h}</div></div></div>`;
+  const fmt = { title: 'Standard 100x50', meta: '12.09.26 · L3' };
+  const file = { title: 'XLS22x_v1.01.fw', meta: '18.4 MB · 21.09.26', icon: 'recipe' };
   const listRows = [
-    renderListRow(
-      ctx.t('user.level'),
-      `<span class="text-level-1">${esc(`L1 · ${ctx.t('level.1')}`)}</span>`,
-    ),
-    renderListRow(ctx.t('user.autoLogoff'), esc(ctx.t('user.minutes', { n: 5 })), { last: true }),
+    renderListRow({
+      kind: 'value',
+      title: ctx.t('user.level'),
+      valueHtml: `<span class="text-level-1">${esc(`L1 · ${ctx.t('level.1')}`)}</span>`,
+    }),
+    renderListRow({
+      kind: 'value',
+      title: ctx.t('user.autoLogoff'),
+      value: ctx.t('user.minutes', { n: 5 }),
+      last: true,
+    }),
+    renderListRow({
+      kind: 'nav',
+      title: 'archive',
+      meta: ctx.t('files.folder'),
+      icon: 'files',
+    }),
+    renderListRow({
+      kind: 'nav',
+      title: 'archive',
+      meta: ctx.t('files.folder'),
+      icon: 'files',
+      state: 'disabled',
+    }),
+    renderListRow({ kind: 'nav', title: ctx.t('user.manage'), meta: 'L3' }),
+    renderListRow({ kind: 'select', ...fmt }),
+    renderListRow({ kind: 'select', ...fmt, state: 'selected' }),
+    renderListRow({ kind: 'select', ...fmt, state: 'disabled' }),
+    renderListRow({ kind: 'select', ...file }),
+    renderListRow({ kind: 'select', ...file, state: 'selected' }),
+    renderListRow({ kind: 'select', ...file, state: 'disabled' }),
+  ].map(card);
+  const listEnd = [`<div class="w-[448px] grid">${renderListEnd()}</div>`];
+  const io = (o) =>
+    card(
+      renderTableRow({
+        pin: o.kind === 'input' ? 'IN 1' : 'OUT 1',
+        label: o.kind === 'input' ? 'Start sensor' : 'Printer start',
+        canForce: true,
+        ...o,
+      }),
+    );
+  const tableRows = [
+    card(renderTableHeader()),
+    io({ kind: 'input', high: true }),
+    io({ kind: 'input', high: false }),
+    io({ kind: 'output', high: true }),
+    io({ kind: 'output', high: false }),
+    io({ kind: 'output', high: true, forced: true }),
+    io({ kind: 'output', high: false, forced: true }),
+  ];
+  const progressViews = [
+    renderProgressResult({
+      state: 'running',
+      title: 'Installing firmware',
+      phase: 'Writing image · step 2 of 4',
+      value: 0.42,
+      warning: 'Do not remove the USB drive or switch off the machine.',
+    }),
+    renderProgressResult({
+      state: 'success',
+      title: 'Firmware installed',
+      message: 'Version 1.01 is installed. Restart the machine to use it.',
+      actions: [{ label: 'Restart machine', action: 'noop', tone: 'primary' }],
+    }),
+    renderProgressResult({
+      state: 'failure',
+      title: 'Update failed',
+      message: 'The image was rejected: its signature is not valid.',
+      steps: [
+        'Copy the firmware file again from the PID download area.',
+        'Try the update again. Version 1.00 is still installed.',
+      ],
+      actions: [
+        { label: ctx.t('action.close'), action: 'noop' },
+        { label: ctx.t('action.retry'), action: 'noop', tone: 'primary' },
+      ],
+    }),
   ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
+  const placeholders = [
+    renderPlaceholder({
+      kind: 'empty',
+      icon: 'recipe',
+      title: 'No format stored yet',
+      text: 'Save the current settings as a format to see it here.',
+    }),
+    renderPlaceholder({ kind: 'loading' }),
+    renderPlaceholder({
+      kind: 'error',
+      text: 'The format list could not be read from the internal storage.',
+    }),
+  ].map((h) => `<div class="w-[448px] grid">${h}</div>`);
+  const pathBars = [`<div class="w-[448px] grid">${renderPathBar(['USB', 'firmware'])}</div>`];
   const buttons = [
     renderButton({ label: ctx.t('user.logout'), action: 'noop', icon: 'lock' }),
     renderButton({ label: ctx.t('home.ackWarnings'), action: 'noop' }),
@@ -301,7 +411,12 @@ export function render(ctx) {
         ${section('StartButton · Machine × Locked', startButtons)}
         ${section('StatePill · State', pills)}
         ${section('ProfileRow · Level × Enabled', profileRows)}
-        ${section('ListRow · Divider', listRows)}
+        ${section('ListRow · Kind × State × Icon × Divider', listRows)}
+        ${section('ListEnd', listEnd)}
+        ${section('TableHeader · TableRow · Kind × Value × Forced', tableRows)}
+        ${section('ProgressResult · State', progressViews)}
+        ${section('Placeholder · Kind', placeholders)}
+        ${section('PathBar', pathBars)}
         ${section('Button · Tone × Icon', buttons)}
         ${section('Key · Kind × Content', keys)}
         ${section('NumpadKey · Kind × Content', numpadKeys)}

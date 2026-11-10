@@ -1,9 +1,14 @@
 # Plan — Labeller HMI functional app with dummy data
 
-## Where we are (2026-11-09)
+## Where we are (2026-11-10)
 
 Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
+- **Phase 3 started (2026-11-10).** P3-01 done: shared list row, end marker and scroll indication, IO table row,
+  one confirmation pattern (`confirmAction`), progress / result, placeholders and the USB file browser, all on the
+  styleguide and as Figma sets (part of P3-22a). Same day: designer edits pulled from Figma (dialog buttons 78 px,
+  light L2 / L3 badge text, DT-49 / DT-50), icon strokes 1.5 px at every size (DT-48), Input set (number / text /
+  password), Ioskeley Mono replaces Fira Code (DT-51), and a builder fix for translucent fills (DT-52 note).
 - **Phase 2 closed in code (2026-11-09).** P2-01 … P2-16 done: P2-10 got the action pill with a pressed state
   (DT-47), P2-14 checklist walked (one fix: IP keys), P2-15 flows added (`tests/e2e/phase2-flows.spec.js`). Left in
   Phase 2: the **G2-3** gate (P2-17 Figma catch-up done the same day). G2-1 and G2-2 were held as the board review.
@@ -21,7 +26,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
   set). The 16 other portrait frames still show pre-board sizes. Builder len 32917, checksum 1976596149; read the
   "Components" section of `docs/FIGMA.md` before touching it.
 - **App state:** menus, parameter lists, all editors, help, favourites and the HMI screen work with dummy data in
-  portrait, LH and RH, dark and light. Tests: 83 unit (`npx vitest run`), 98 e2e (`npx playwright test`).
+  portrait, LH and RH, dark and light. Tests: 98 unit (`npx vitest run`), 108 e2e (`npx playwright test`).
 - **Repo:** GitHub https://github.com/ivanmono/novexx-labeler, branch main, push over HTTPS. README and CI still open (P5-05).
 - **Waiting on PID / designer** (`docs/OPEN-POINTS.md`): #51 touch-target re-base sign-off and glove test, #52
   editors as full pages vs §7.2, plus the earlier ones (slider list, L4 semantics, date/time widget, browser
@@ -32,7 +37,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 1. ~~Close Phase 2 in code~~ — done 2026-11-09 (P2-10, P2-14, P2-15).
 2. ~~P2-17 Figma catch-up~~ — done 2026-11-09 (presentation set); remaining portrait frames with P4-09.
 3. **G2-3 gate** with the designer: favourites, HMI screen, edit behaviour, plus sign-off on #51 / #52.
-4. **Phase 3**, starting with P3-01 shared pieces and the format screens (P3-02 … P3-04, gate G3-1). Build it
+4. **Phase 3**: ~~P3-01 shared pieces~~ (done 2026-11-10); next the format screens (P3-02 … P3-04, gate G3-1). Build it
    straight at the board sizes, portrait and landscape together, since landscape is no longer a late pass.
 
 ## Context

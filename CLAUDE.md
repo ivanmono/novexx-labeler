@@ -27,7 +27,7 @@ npm run check          # lint + data:validate + unit tests
 
 - Vanilla JS ES modules, no framework, no TypeScript. Components are functions returning HTML strings with Tailwind utilities; only the handful of classes in `components.css` are component classes.
 - Dynamic class names must be listed in `@source inline(...)` in `src/styles/app.css` or Tailwind will not emit them.
-- No CDN or network at runtime. Fonts via `@fontsource`, icons via the sprite (`icon('name')` from `src/ui/components/Icon.js`).
+- No CDN or network at runtime. Fonts self-hosted (Figtree via `@fontsource`, Ioskeley Mono in `src/assets/fonts/`), icons via the sprite (`icon('name')` from `src/ui/components/Icon.js`).
 - No hover-only states; touch targets ≥88 px primary (10 mm), ≥68 px rows (8 mm) on the 4.3" panel (DT-13, #51). Transitions opt-in via `.pressable`, ≤120 ms.
 - Every parameter has exactly one value in the store, keyed by ParamID, even when it appears on several screens.
 - Show conditions go through `src/core/conditions.js` (`;` = OR lowest, `&` = AND, `{id}`, `=`, `!=`, `>`, `<`).

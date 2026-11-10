@@ -221,6 +221,12 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
     };
     return figma.variables.setBoundVariableForPaint(paint, 'color', v);
   };
+  /** Assign paints; Figma resets a variable-bound paint's opacity to 1 on assignment, so it is set again after. */
+  const setFills = (node, paints) => {
+    node.fills = paints;
+    if (paints.some((p) => p && p.opacity != null && p.opacity < 1))
+      node.fills = node.fills.map((p, i) => ({ ...p, opacity: paints[i]?.opacity ?? p.opacity }));
+  };
   const bindRadius = (f, token) => {
     const v = variables.get(token);
     if (!v) return;
@@ -323,7 +329,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
         });
       }
     }
-    f.fills = fills;
+    setFills(f, fills);
     const [tl, tr, br, bl] = n.radius || [0, 0, 0, 0];
     f.topLeftRadius = tl;
     f.topRightRadius = tr;
@@ -483,7 +489,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
           Math.abs(cur.color.r - c.r) < 0.01 &&
           Math.abs(cur.color.g - c.g) < 0.01 &&
           Math.abs(cur.color.b - c.b) < 0.01;
-      if (!same && (c || want)) t.fills = [boundSolid(c, tc.token, tc.alpha)];
+      if (!same && (c || want)) setFills(t, [boundSolid(c, tc.token, tc.alpha)]);
     });
     const icons = inst.findAll((x) => x.type === 'INSTANCE' && x.name.startsWith('icon/'));
     const nIcons = Math.min(icons.length, (n.icons || []).length);
@@ -555,7 +561,7 @@ async function buildFrames(CAPTURES, PAGE, { gap = 80, components = false } = {}
       if (n.font.letterSpacing) t.letterSpacing = { value: n.font.letterSpacing, unit: 'PIXELS' };
       await applyType(t, n.font);
       const c = parseColor(n.font.color);
-      if (c || n.font.token) t.fills = [boundSolid(c, n.font.token, n.font.alpha)];
+      if (c || n.font.token) setFills(t, [boundSolid(c, n.font.token, n.font.alpha)]);
       t.name = n.name;
       const align =
         { left: 'LEFT', start: 'LEFT', center: 'CENTER', right: 'RIGHT', end: 'RIGHT' }[

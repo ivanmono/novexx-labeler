@@ -81,7 +81,7 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 
 | ID                  | Title                                                          | Size | Status |
 | ------------------- | -------------------------------------------------------------- | ---- | ------ |
-| [P3-01](P3-01.md)   | Shared list, table, dialog, progress, placeholder, USB browser | L    | todo   |
+| [P3-01](P3-01.md)   | Shared list, table, dialog, progress, placeholder, USB browser | L    | done   |
 | [G3-1](G3-1.md)     | **Gate: shared components and formats**                        | -    | todo   |
 | [P3-02](P3-02.md)   | Select Format                                                  | M    | todo   |
 | [G3-2](G3-2.md)     | **Gate: service tests**                                        | -    | todo   |
@@ -108,7 +108,7 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 | [P3-19](P3-19.md)   | Reporting QR                                                   | S    | todo   |
 | [P3-20](P3-20.md)   | Search                                                         | M    | todo   |
 | [P3-21](P3-21.md)   | Setup wizard                                                   | L    | todo   |
-| [P3-22a](P3-22a.md) | Figma: special-screen components                               | M    | todo   |
+| [P3-22a](P3-22a.md) | Figma: special-screen components                               | M    | doing  |
 | [P3-22b](P3-22b.md) | Figma: Formats and Service frames (portrait dark)              | M    | todo   |
 | [P3-22c](P3-22c.md) | Figma: Users, Help, Wizard frames (portrait dark)              | M    | todo   |
 

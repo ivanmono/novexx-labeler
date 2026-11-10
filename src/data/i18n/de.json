@@ -148,5 +148,20 @@
   "picker.now": "Jetzt",
   "picker.set": "Übernehmen",
   "picker.noSuchDay": "Den {date} gibt es in diesem Monat nicht",
-  "picker.outOfRange": "Datum zwischen {min} und {max} wählen"
+  "picker.outOfRange": "Datum zwischen {min} und {max} wählen",
+  "list.loading": "Daten werden gelesen …",
+  "list.readError": "Daten konnten nicht gelesen werden",
+  "io.pin": "Pin",
+  "io.function": "Funktion",
+  "io.state": "Zustand",
+  "io.force": "Forcen",
+  "io.forced": "Geforct",
+  "io.high": "HIGH",
+  "io.low": "LOW",
+  "progress.nextSteps": "So geht es weiter",
+  "files.noUsb": "Kein USB-Stick",
+  "files.noUsbHint": "USB-Stick einstecken, um die Dateien zu sehen.",
+  "files.up": "Eine Ebene höher",
+  "files.folder": "Ordner",
+  "files.emptyFolder": "Dieser Ordner ist leer"
 }

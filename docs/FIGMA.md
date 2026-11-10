@@ -107,6 +107,10 @@ Figma → code: `get_variable_defs` + `get_design_context` on `HMI /` pages are 
 
 Priority order: portrait dark complete first, then light, then landscape. Roughly 54 screens × 6 variants ≈ 324 frames, created in batches per area.
 
+### Phase 3 shared sets (2026-11-10, P3-01 / part of P3-22a)
+
+ListRow (rebuilt: `Kind × State × Icon × Divider`, the two old `Divider=yes|no` variants renamed first so they were refilled in place), ListEnd, TableHeader, TableRow, PathBar, Placeholder, ProgressResult — a column at x 2720 / 3300 from y 2919 on "HMI / 02 Components". Hand fixes after the build: buttons in Placeholder / ProgressResult set to fill the width at 88 px, the spinner drawn as a grey ring with a brand arc, the success check rotated 45°, set backgrounds for the transparent sets. **Builder fix:** a variable-bound paint loses its opacity when assigned; `setFills` re-applies it (NavBar variants and the bar instances on the screen pages corrected). Stored builder: len 33592, checksum 212915718.
+
 ### Input set (2026-11-10)
 
 New set `Input · Kind=number|text|password × State=empty|filled|error` (9 variants), next to DateTimePicker. Code: `renderNumericField`, `renderTextField`, `renderPasswordField` carry `data-cmp="Input"`; the Components sheet shows all nine. Built alone with `payload.mjs --components <dir> "HMI / 02 Components" Input`, so the designer edits to other sets stay as they are.

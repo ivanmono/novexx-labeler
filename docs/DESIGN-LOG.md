@@ -481,3 +481,18 @@ Change:
 - Figma: the font has to be installed on the machine running Figma (desktop TTF, Normal / Hinted). Then `type/family/mono` switches to it and every mono text follows; the builder maps both names to that variable.
 Where: `src/styles/fonts.css`, `src/styles/app.css`, `src/styles/tokens.css`, `scripts/figma/build-frames.js`
 Status: both (2026-11-10: font installed; `type/family/mono` and the HMI/Param text styles switched, 289 mono texts on the HMI pages now Ioskeley Mono Regular / Semibold / Bold, no missing fonts; the builder also accepts the "Semibold" spelling)
+
+## DT-52 · Shared pieces for the special screens (2026-11-10, P3-01)
+
+Source: plan P3-01; docx §5.4 (list row, table row, confirmation, progress / result, placeholders) and §8 (scroll indication, end-of-list marker, one confirmation pattern, "no USB drive" as an empty state). The clickdummy sketches give the content only.
+Change (Mono's visual design for these, first version for gate G3-1):
+- List rows: title with a meta line (date · level, size · date), 68 px minimum; selected = brand tint (15 %) + filled radio mark; disabled = 40 % opacity. Folder and file rows carry a 44 px icon tile that turns brand when selected.
+- End of list: "End of list" between two hairlines. Scroll indication: a fade to the page colour and a chevron at the bottom edge while more content follows.
+- IO rows: HIGH as a green pill, LOW grey; the force switch turns amber when on; a forced output gets an amber left edge, a 10 % amber tint and the "Forced" tag, so it can be found in a long list (amber = warning colour, DT-42).
+- Progress / result: a strong card; running shows the phase, the percentage in Ioskeley Mono and a warning line in amber; success / failure show a 80 px tinted badge (green check / red alarm). The check is drawn in CSS until the icon set has one (#53).
+- Placeholders: 96 px icon disc, title, one line of help, optional action; loading is a turning ring (static when reduced motion is asked for).
+- File browser: path bar (open-folder icon, last folder bold), "One level up" row, folders before files, foreign files greyed.
+Where: `src/ui/components/{ListRow,TableRow,ConfirmDialog,ProgressResult,Placeholder,FileBrowser}.js`, `src/styles/components.css` (`.scroll-hint`, `.hmi-switch`, `.placeholder__spinner`)
+Before → after: `shared-*` (shared.spec)
+Status: both (2026-11-10; Figma sets ListRow, ListEnd, TableHeader, TableRow, PathBar, Placeholder, ProgressResult)
+Note (Figma builder, same day): assigning a variable-bound paint resets its opacity to 1, so translucent fills (NavBar 85 %, tints) came out opaque in Figma. The builder now sets the opacity again after the assignment (`setFills`); 30 NavBar variants and 73 bar instances on the screen pages were corrected in place.

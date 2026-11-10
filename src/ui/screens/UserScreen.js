@@ -4,12 +4,9 @@
  */
 import { icon } from '../components/Icon.js';
 import { renderButton } from '../components/Button.js';
-import { esc, onAction, hhmm, cx } from '../html.js';
-
-/** Label · value row in a card (Figma ListRow · Divider=yes|no); the value HTML may carry a colour. */
-export function renderListRow(label, valueHtml, { last = false } = {}) {
-  return `<div class="${cx('flex items-center justify-between gap-4 min-h-touch-row px-4', !last && 'border-b border-line-soft')}" data-cmp="ListRow" data-cmp-props="Divider=${last ? 'no' : 'yes'}"><span class="text-body text-muted">${esc(label)}</span><span class="text-body font-semibold text-right truncate">${valueHtml}</span></div>`;
-}
+import { renderListRow } from '../components/ListRow.js';
+import { esc, onAction, hhmm } from '../html.js';
+import { confirmAction } from '../components/ConfirmDialog.js';
 
 export function render(ctx) {
   const s = ctx.session;
@@ -18,7 +15,8 @@ export function render(ctx) {
     return;
   }
   const u = s.user ?? { name: ctx.t(`level.${s.level}`), level: s.level, autoLogoffMin: 0 };
-  const row = (label, value, last = false) => renderListRow(label, value, { last });
+  const row = (label, value, last = false) =>
+    renderListRow({ kind: 'value', title: label, valueHtml: value, last });
   const elevated = s.level === 4 && s.elevatedUntil;
   ctx.shell.setScreen({
     title: ctx.t('user.title'),
@@ -46,9 +44,9 @@ export function render(ctx) {
         manage: () => ctx.goScreen('usermanage'),
         logout: async () => {
           if (
-            await ctx.modal.confirm({
+            await confirmAction(ctx, {
               title: ctx.t('user.logout'),
-              body: `<p>${esc(ctx.t('user.logoutConfirm', { name: u.name }))}</p>`,
+              text: ctx.t('user.logoutConfirm', { name: u.name }),
               okLabel: ctx.t('user.logout'),
             })
           )

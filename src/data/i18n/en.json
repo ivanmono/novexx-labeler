@@ -148,5 +148,20 @@
   "picker.now": "Now",
   "picker.set": "Set",
   "picker.noSuchDay": "{date} does not exist in this month",
-  "picker.outOfRange": "Pick a date between {min} and {max}"
+  "picker.outOfRange": "Pick a date between {min} and {max}",
+  "list.loading": "Reading data…",
+  "list.readError": "Data could not be read",
+  "io.pin": "Pin",
+  "io.function": "Function",
+  "io.state": "State",
+  "io.force": "Force",
+  "io.forced": "Forced",
+  "io.high": "HIGH",
+  "io.low": "LOW",
+  "progress.nextSteps": "What to do next",
+  "files.noUsb": "No USB drive",
+  "files.noUsbHint": "Plug in a USB drive to see its files.",
+  "files.up": "One level up",
+  "files.folder": "Folder",
+  "files.emptyFolder": "This folder is empty"
 }
