@@ -519,3 +519,10 @@ Change (Mono's design, first version for gate G3-1):
 Where: `src/ui/screens/formats/*.js`, `src/core/formats.js`, `src/data/seed/formats.json`, `ListRow` (`tag`)
 Before → after: `formats-*` (formats.spec)
 Status: code only — Figma frames with P3-22b
+
+## DT-55 · Keyboard submit key shows a check (2026-11-10, chat)
+
+Source: chat — "Change icon on keyboard teal submit button to check icon"
+Change: the teal submit key on the alphabetical keyboard and on both numpads (parameter editors, login, Create Format) shows the new `check` icon instead of `activate` (power) or `save`. The power icon stays where it means "run / switch on": start button, action rows, the start confirmation. The date picker's "Set" button is a button, not a keyboard key, and keeps its icon.
+Where: `src/ui/components/Keyboard.js` (default), `AlphaKeyboard.js`, `NumericKeypad.js`, `LoginScreen.js`, `formats/CreateFormat.js`
+Status: both (2026-11-10: Figma Key and NumpadKey `Kind=enter` variants swapped to `icon/24/check`; the screen frames follow)

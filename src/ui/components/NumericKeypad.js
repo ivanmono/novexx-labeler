@@ -65,7 +65,7 @@ export function openNumericKeypad(ctx, param, { onConfirm } = {}) {
       allowDecimal: param.type === 'Float',
       allowSign: param.min != null && param.min < 0,
       showMinMax: param.min != null && param.max != null,
-      enterIcon: 'activate',
+      enterIcon: 'check',
     })}</div></div>`,
     mount(body, close) {
       const field = body.querySelector('[data-entry]');

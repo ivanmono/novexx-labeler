@@ -106,7 +106,7 @@ export function render(ctx) {
           host.innerHTML = '';
           el.querySelector('[data-mode]').textContent = mode === 'num' ? 'ABC' : '123';
           if (mode === 'num') {
-            host.innerHTML = renderNumpad({ enterIcon: 'activate', pin: true });
+            host.innerHTML = renderNumpad({ enterIcon: 'check', pin: true });
             keyDispose = mountNumpad(host, {
               onInput: (k) => {
                 password += k;
@@ -129,7 +129,7 @@ export function render(ctx) {
                 update();
               },
               onEnter: submit,
-              enterIcon: 'activate',
+              enterIcon: 'check',
             });
             keyDispose = kb.dispose;
           }

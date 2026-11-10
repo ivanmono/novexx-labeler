@@ -192,7 +192,7 @@ export function renderNumpad({
   allowDecimal = false,
   allowSign = false,
   showMinMax = false,
-  enterIcon = 'activate',
+  enterIcon = 'check',
   pin = false,
 } = {}) {
   const key = renderNumpadKey;

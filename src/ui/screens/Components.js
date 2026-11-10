@@ -304,14 +304,14 @@ export function render(ctx) {
     renderKey('123'),
     renderKey('⌫'),
     renderKey('␣'),
-    renderKey('↵', { enterIcon: 'activate' }),
+    renderKey('↵', { enterIcon: 'check' }),
     renderKey('↵'),
   ].map((h) => `<div class="w-9 h-[52px] grid">${h}</div>`);
   const numpadKeys = [
     renderNumpadKey('7', 'bg-key text-title t-param'),
     renderNumpadKey('C', 'bg-surface-2 text-body-sm'),
     renderNumpadKey('⌫', 'bg-surface-2', icon('back', { size: 24 })),
-    renderNumpadKey('↵', 'bg-brand text-on-brand', icon('activate', { size: 28 })),
+    renderNumpadKey('↵', 'bg-brand text-on-brand', icon('check', { size: 28 })),
   ].map((h) => `<div class="w-[110px] h-[60px] grid">${h}</div>`);
   const progress = [
     renderProgressBar({ value: 0.45 }),

@@ -113,7 +113,7 @@ export function render(ctx, info) {
 
       const kb = mountKeyboard(el.querySelector('[data-keys]'), {
         layout: 'lower',
-        enterIcon: 'save',
+        enterIcon: 'check',
         onInput: (k) => {
           if (name.length >= MAX) return show(ctx.t('edit.tooLong', { n: MAX }));
           name += k;

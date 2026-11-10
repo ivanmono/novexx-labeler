@@ -47,7 +47,7 @@ export function openAlphaKeyboard(ctx, param, { onConfirm } = {}) {
       };
       const kb = mountKeyboard(body.querySelector('[data-keys]'), {
         layout: isIp ? 'symbols' : 'lower',
-        enterIcon: 'activate',
+        enterIcon: 'check',
         onInput: (k) => {
           if (value.length >= max) return show('max');
           if (isIp && !/[\d.]/.test(k)) return show('ip'); // explained, not silently dropped (§7.3)
