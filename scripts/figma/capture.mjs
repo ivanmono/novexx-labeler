@@ -454,6 +454,48 @@ const STATES = [
       },
     },
     {
+      screen: 'backup',
+      state: 'browse-L3',
+      route: 'screen/backup',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-id="backups"]');
+        await page.click('[data-id="bottle-330ml_template.fmt"]');
+      },
+    },
+    {
+      screen: 'backup',
+      state: 'name-L2',
+      route: 'screen/backup',
+      level: 2,
+      steps: async (page) => {
+        await page.click('[data-id="backups"]');
+        await page.click('[data-action="create"]');
+        await page.waitForSelector('[data-backup-name]');
+      },
+    },
+    {
+      screen: 'backup',
+      state: 'running-L2',
+      route: 'screen/backup',
+      level: 2,
+      steps: async (page) => {
+        await page.click('[data-action="create"]');
+        await page.click('[data-action="save"]');
+        await page.waitForTimeout(1500);
+      },
+    },
+    {
+      screen: 'backup',
+      state: 'nousb-L2',
+      route: 'screen/backup',
+      level: 2,
+      steps: async (page) => {
+        await page.evaluate(() => window.__hmi.set('state', 'nousb'));
+        await page.waitForSelector('[data-no-usb]');
+      },
+    },
+    {
       screen: 'formats',
       state: 'create-duplicate-L2',
       route: 'screen/createformat',

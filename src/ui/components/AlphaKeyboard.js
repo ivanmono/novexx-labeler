@@ -9,11 +9,12 @@ import { validateIp, validateText } from '../../core/validate.js';
 import { t } from '../../core/i18n.js';
 import { esc } from '../html.js';
 
-export function renderTextField({ value = '', placeholder = '', error = null, max = null }) {
+/** `wrap`: a long value breaks onto a second line instead of being cut (file names, P3-11). */
+export function renderTextField({ value = '', placeholder = '', error = null, max = null, wrap = false }) {
   return `
     <div class="text-field flex flex-col gap-1" data-text-field data-cmp="Input" data-cmp-props="Kind=text,State=${error ? 'error' : value === '' ? 'empty' : 'filled'}">
-      <div class="card-border card-border--strong"><div class="flex items-center gap-2 px-4 h-16">
-        <span class="flex-1 t-param text-body-sm leading-[35px] truncate ${value === '' ? 'text-faint/60' : 'text-text'}" data-entry>${esc(value === '' ? placeholder : value)}</span>
+      <div class="card-border card-border--strong"><div class="flex items-center gap-2 px-4 ${wrap ? 'min-h-16 py-[14px]' : 'h-16'}">
+        <span class="flex-1 t-param text-body-sm leading-[35px] ${wrap ? '[overflow-wrap:anywhere]' : 'truncate'} ${value === '' ? 'text-faint/60' : 'text-text'}" data-entry>${esc(value === '' ? placeholder : value)}</span>
         ${max ? `<span class="t-caption text-faint/60 shrink-0" data-count>${value.length}/${max}</span>` : ''}
       </div></div>
       <div class="text-label text-status-error-ink font-semibold min-h-5 px-1" data-error aria-live="polite">${esc(error ?? '')}</div>

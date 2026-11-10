@@ -111,6 +111,7 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
     speedTest: { running: false, result: null },
     applicator: { cylinder: false, supportAir: false, vacuum: false, blow: false, step: 0 },
     standby: false,
+    usb: true, // a USB drive is plugged in (P3-11); the dev panel pulls it
     lastActivityAt: now(),
     options: machine?.options ?? {},
     identity: {
@@ -323,6 +324,10 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
     setEncoderSignal(on) {
       const cur = m();
       setM({ encoder: { ...cur.encoder, signal: !!on, ...(on ? {} : { mmin: 0, hz: 0 }) } });
+    },
+    /** USB drive plugged in or pulled (P3-11). */
+    setUsb(on) {
+      setM({ usb: !!on });
     },
     /** Stop a running speed test without a result (leaving the screen, docx §8.4). */
     abortSpeedTest() {

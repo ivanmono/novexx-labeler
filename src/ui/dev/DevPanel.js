@@ -29,7 +29,7 @@ export function mountDevPanel(api) {
       <label>Access level <select data-dev="level" style="${S}">${[0, 1, 2, 3, 4].map((l) => `<option value="${l}">L${l}</option>`).join('')}</select></label>
       <div>Machine state <span data-dev-state style="color:#88e6c6"></span></div>
       <div style="display:flex;flex-wrap:wrap;gap:4px">
-        ${['run', 'pause', 'online', 'offline', 'warning', 'alarm', 'reset', 'standby', 'nosignal', 'signal'].map((s) => `<button type="button" data-dev-cmd="${s}" style="${B}">${s}</button>`).join('')}
+        ${['run', 'pause', 'online', 'offline', 'warning', 'alarm', 'reset', 'standby', 'nosignal', 'signal', 'usb', 'nousb'].map((s) => `<button type="button" data-dev-cmd="${s}" style="${B}">${s}</button>`).join('')}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:4px">
         <button type="button" data-dev-go="home" style="${B}">home</button>

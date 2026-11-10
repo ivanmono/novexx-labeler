@@ -22,6 +22,7 @@ import { canOpenNode } from './core/access.js';
 import { seedFormats } from './core/formats.js';
 import { emptyDiag, appendDiag, setRecording, DIAG_PARAM } from './core/diag.js';
 import { appendError, seedErrors } from './core/errorlog.js';
+import { seedUsb } from './core/backup.js';
 import { mountAppShell } from './ui/shell/AppShell.js';
 import { injectSprite } from './ui/components/Icon.js';
 import { mountDevPanel } from './ui/dev/DevPanel.js';
@@ -56,11 +57,14 @@ export async function boot(root, { skipBoot = false } = {}) {
     // error history: a dummy history once per device (P3-09), then every raised error / warning
     errorlog: snap?.settings?.errorsSeeded ? (snap?.errorlog ?? []) : seedErrors(),
     favourites: Array.isArray(snap?.favourites) ? snap.favourites : [],
+    // USB drive contents (P3-11): a dummy drive once per device, then what the screen writes
+    usb: snap?.settings?.usbSeeded && snap?.usb ? snap.usb : seedUsb({ params: { ...initialParams, ...(snap?.params ?? {}) }, formats: seeded ? seeded.formats : (snap?.formats ?? []), paramsMeta: paramsJson, device: (snap?.params ?? {})['600'] ?? initialParams['600'], serial: machineSeed.serial }),
     settings: {
       firstStartDone: false,
       ...(snap?.settings ?? {}),
       ...(seeded ? { formatsSeeded: true, loadedFormat: seeded.loaded } : {}),
       errorsSeeded: true,
+      usbSeeded: true,
     },
     session: { level: 0, user: null, elevatedUntil: null, loginAt: null },
     ui: { route: null },
@@ -127,8 +131,11 @@ export async function boot(root, { skipBoot = false } = {}) {
     go: (route) => router.go(route),
     goScreen: (id) => router.go(toScreenRoute(id)),
     // an open editor page / sheet is closed first (DT-28): nav back leaves the editor, not the screen
-    back: () => (ctx.shell.sheet.isOpen ? ctx.shell.sheet.close() : router.back('home')),
+    back: () => (ctx.busy ? ctx.shell.toast.reject(ctx.busy) : ctx.shell.sheet.isOpen ? ctx.shell.sheet.close() : router.back('home')),
+    /** Set while a long operation must not be left (backup, firmware): back / menu / home refuse with this text. */
+    busy: null,
     openMenu() {
+      if (ctx.busy) return ctx.shell.toast.reject(ctx.busy);
       if (ctx.level < 1) {
         ctx.shell.toast.reject(t('toast.needsLevel', { n: 1 }));
         router.go('login');
@@ -137,6 +144,7 @@ export async function boot(root, { skipBoot = false } = {}) {
       router.go(toScreenRoute('root'));
     },
     openUser() {
+      if (ctx.busy) return ctx.shell.toast.reject(ctx.busy);
       router.go(ctx.level === 0 ? 'login' : 'user');
     },
     canOpen: (node) => canOpenNode(node, ctx.level, paramsById),
@@ -262,6 +270,8 @@ export async function boot(root, { skipBoot = false } = {}) {
         else if (value === 'standby') sim.enterStandby();
         else if (value === 'nosignal') sim.setEncoderSignal(false);
         else if (value === 'signal') sim.setEncoderSignal(true);
+        else if (value === 'usb') sim.setUsb(true);
+        else if (value === 'nousb') sim.setUsb(false);
         else sim.command(map[value]);
       }
     },

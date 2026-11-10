@@ -646,3 +646,14 @@ Change:
 - Commit asks first (resetting counters is not undoable); the dialog says when there is no comment.
 Where: `src/ui/screens/service/Reporting.js`
 Status: both (Figma: special-screens frame, portrait)
+
+## DT-67 · Load/Store Backup screen (2026-11-10, P3-11)
+
+Source: docx §8.9 and its sketch
+Change:
+- One screen, four states: browse → name → run → result. The footer (browse) keeps the selection in words ("Format · bottle-330ml_template.fmt") above two buttons: "Create backup here" (wide, secondary, folder icon) and "Load" (160 px, primary). Landscape hides the selection line to give the list room.
+- Naming: the file name field wraps instead of cutting the date (new `renderTextField({ wrap })`); Backup / Format are radio cards with the extension and one line on what each holds and is for — the explanation the docx asks for sits on the choice itself.
+- Running: the shared ProgressResult with the warning line; leaving is refused with "Wait until the USB drive is finished".
+- Status bar: a USB icon while a drive is plugged in.
+Where: `src/ui/screens/service/Backup.js`, `src/core/backup.js`, `components/AlphaKeyboard.js`, `shell/StatusBar.js`
+Status: both (Figma: four special-screen frames)

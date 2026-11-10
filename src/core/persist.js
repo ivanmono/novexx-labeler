@@ -5,7 +5,7 @@
  */
 const KEY = 'novexx-hmi';
 const VERSION = 1;
-const PERSISTED = ['params', 'users', 'formats', 'logs', 'diag', 'errorlog', 'favourites', 'counters', 'settings'];
+const PERSISTED = ['params', 'users', 'formats', 'logs', 'diag', 'errorlog', 'favourites', 'counters', 'settings', 'usb'];
 
 let storage = null;
 try {

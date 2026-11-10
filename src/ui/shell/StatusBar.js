@@ -39,6 +39,7 @@ export function statusIcons({ getParam, machine }) {
   if (machine?.options?.busCard)
     out.push({ name: 'card', title: machine.options.busCardName ?? 'Bus card' });
   if (getParam(146)) out.push({ name: 'printer', title: 'Printer' });
+  if (machine?.usb) out.push({ name: 'usb', title: t('status.usb') });
   if (getParam(900)) out.push({ name: 'logs', title: t('status.recording'), accent: true });
   return out;
 }

@@ -15,6 +15,7 @@ import * as IoTest from './service/IoTest.js';
 import * as DiagnosisLogs from './service/DiagnosisLogs.js';
 import * as ErrorHistory from './service/ErrorHistory.js';
 import * as Reporting from './service/Reporting.js';
+import * as Backup from './service/Backup.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
 const MASKS = {
@@ -26,6 +27,7 @@ const MASKS = {
   diaglogs: DiagnosisLogs,
   errorhistory: ErrorHistory,
   reporting: Reporting,
+  backup: Backup,
 };
 
 export function render(ctx, info) {
