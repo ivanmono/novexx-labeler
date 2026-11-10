@@ -39,6 +39,9 @@ const COUNTER_IDS = {
   missing: 708,
 };
 
+/** A forced output goes back to normal after this long (docx §8.5 "reset after a timeout"). */
+export const FORCE_TIMEOUT_MS = 60_000;
+
 export function createSimulator(store, { machine, now = () => Date.now(), interval = 1000 } = {}) {
   let timer = null;
   let tick = 0;
@@ -297,7 +300,7 @@ export function createSimulator(store, { machine, now = () => Date.now(), interv
           state = fnl.includes('ready') ? cur.state === 'online' || running : fnl.includes('alarm') ? cur.state === 'alarm' : fnl.includes('warning') ? cur.state === 'warning' : running && Math.random() < 0.5;
         }
         // forced outputs reset after 60 s
-        const forced = p.forced != null && now() - (p.forcedAt ?? 0) > 60_000 ? null : p.forced;
+        const forced = p.forced != null && now() - (p.forcedAt ?? 0) > FORCE_TIMEOUT_MS ? null : p.forced;
         io[pin] = { ...p, state, forced };
       }
 

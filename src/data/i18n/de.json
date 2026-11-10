@@ -206,5 +206,17 @@
   "speed.confirmBody": "Der Etikettierer läuft {s} Sekunden mit der eingestellten Geschwindigkeit. Hände von der Spendekante fernhalten.",
   "speed.moves": "Der Test bewegt die Maschine.",
   "speed.at": "Gemessen um {time}",
-  "speed.noResult": "Kein Signal während des Tests — kein Ergebnis"
+  "speed.noResult": "Kein Signal während des Tests — kein Ergebnis",
+  "io.in": "EIN",
+  "io.out": "AUS",
+  "io.all": "Alle",
+  "io.forcedFor": "Geforct · {s} s",
+  "io.forceTitle": "Ausgänge forcen?",
+  "io.forceBody": "Ein geforcter Ausgang schaltet echte Hardware und kann die Maschine bewegen. Geforcte Ausgänge gehen nach {s} s, beim Verlassen dieser Seite oder mit „Alle Ausgänge zurücksetzen“ in den Normalzustand.",
+  "io.resetAll": "Alle Ausgänge zurücksetzen",
+  "io.forcedCount": "{n} Ausgänge geforct",
+  "io.forcedOne": "1 Ausgang geforct",
+  "io.readOnly": "Ausgänge forcen erfordert Zugriffsebene 3",
+  "io.live": "Live · jede Sekunde aktualisiert",
+  "io.ok": "Forcen"
 }

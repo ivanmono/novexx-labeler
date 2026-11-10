@@ -538,3 +538,15 @@ Change (Mono's design, first version):
 Where: `src/ui/screens/service/SpeedTest.js`, `src/core/simulator.js`
 Before → after: `speedtest-*` (speedtest.spec)
 Status: code only — Figma frames with P3-22b
+
+## DT-57 · IO-Test screen (2026-11-10, P3-06)
+
+Source: plan P3-06; docx §8.5 (modular row / group header / state indicator, in vs out at a glance, forcing at L3 with marking, reset on leave or timeout, "all outputs back to normal", explicit warning, L1 and L3 faces)
+Change (Mono's design, first version):
+- Group filter as pill chips at the top (All + one per IO group from the machine configuration); in "All" each group has its header and its own card.
+- Rows (TableRow): pin in Ioskeley Mono with an IN (grey) / OUT (teal) tag under it; function; a lamp pill for the state (filled dot + HIGH on green, ring + LOW on grey); on L3 a force switch on outputs only.
+- Forcing: the switch drives the output HIGH; off releases it. The first force on a visit asks once with the warning; a forced row gets the amber edge, tint and "Forced · n s" (time to the automatic reset); the bottom strip says how many outputs are forced and offers "All outputs back to normal". Leaving the screen resets everything.
+- Below L3 the force column is left out entirely and the strip says forcing needs level 3 (the read-only face).
+Where: `src/ui/screens/service/IoTest.js`, `src/ui/components/TableRow.js`, `src/core/simulator.js` (`FORCE_TIMEOUT_MS`)
+Before → after: `iotest-*` (iotest.spec)
+Status: both for the TableRow set (Figma rebuilt 2026-11-10); the screen frames with P3-22b

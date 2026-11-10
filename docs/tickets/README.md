@@ -91,7 +91,7 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 | [G3-4](G3-4.md)     | **Gate: users**                                                | -    | todo   |
 | [P3-05](P3-05.md)   | Speed Test                                                     | M    | done   |
 | [G3-5](G3-5.md)     | **Gate: help and wizard**                                      | -    | todo   |
-| [P3-06](P3-06.md)   | IO-Test                                                        | L    | todo   |
+| [P3-06](P3-06.md)   | IO-Test                                                        | L    | done   |
 | [P3-07](P3-07.md)   | Applicator Test and Test-Mode                                  | M    | todo   |
 | [P3-08](P3-08.md)   | Diagnosis Logs                                                 | M    | todo   |
 | [P3-09](P3-09.md)   | Error History                                                  | M    | todo   |

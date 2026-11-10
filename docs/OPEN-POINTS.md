@@ -63,7 +63,7 @@ Summarised from the clickdummy report (26 questions, duplicates merged). Questio
 | 41 | Which machine type dependent screens exist beyond Rewinder? | Only Rewinder and the bus card | P2-01 | open |
 | 42 | Printers: "Printfunction via CAN-Input" is the same parameter as on CAN | One value (246), cross-link hint | P2-02 | open |
 | 43 | Diagnosis activation screen vs toggle | Toggle on the logs screen (docx §8.6) | P3-08 | open |
-| 44 | Mode of the IO test force switches at L1 vs L3 | Two faces (docx §8.5) | P3-06 | open |
+| 44 | Mode of the IO test force switches at L1 vs L3 | Two faces (docx §8.5): below L3 no force column and a "needs level 3" line; at L3 switches on outputs only. Forcing drives the output HIGH; switching it off releases it (built 2026-11-10, DT-57) | P3-06 | open |
 | 45 | User management: picker for black/white lists | Manual ID entry; picker later with the web server | P3-16b | open |
 | 46 | Speed test refresh rate | 1 s (docx §8.4) | P3-05 | open |
 | 47 | Error history: severity levels and colours | high / mid / low with icon + text | P3-09 | open |

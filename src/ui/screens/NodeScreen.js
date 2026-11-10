@@ -11,6 +11,7 @@ import * as SelectFormat from './formats/SelectFormat.js';
 import * as ModifyFormat from './formats/ModifyFormat.js';
 import * as CreateFormat from './formats/CreateFormat.js';
 import * as SpeedTest from './service/SpeedTest.js';
+import * as IoTest from './service/IoTest.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
 const MASKS = {
@@ -18,6 +19,7 @@ const MASKS = {
   modifyformat: ModifyFormat,
   createformat: CreateFormat,
   speedtest: SpeedTest,
+  iotest: IoTest,
 };
 
 export function render(ctx, info) {

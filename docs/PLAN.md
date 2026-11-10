@@ -4,6 +4,7 @@
 
 Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
+- **IO-Test done (2026-11-10, P3-06, DT-57).**
 - **Speed Test done (2026-11-10, P3-05, DT-56).** G3-1 held: the user went on without a separate review; it is
   reviewed with the next gate.
 - **Formats done (2026-11-10).** P3-02 … P3-04: Select, Modify and Create Format on the P3-01 pieces, with seeded dummy
@@ -31,7 +32,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
   set). The 16 other portrait frames still show pre-board sizes. Builder len 32917, checksum 1976596149; read the
   "Components" section of `docs/FIGMA.md` before touching it.
 - **App state:** menus, parameter lists, all editors, help, favourites and the HMI screen work with dummy data in
-  portrait, LH and RH, dark and light. Tests: 105 unit (`npx vitest run`), 138 e2e (`npx playwright test`).
+  portrait, LH and RH, dark and light. Tests: 107 unit (`npx vitest run`), 148 e2e (`npx playwright test`).
 - **Repo:** GitHub https://github.com/ivanmono/novexx-labeler, branch main, push over HTTPS. README and CI still open (P5-05).
 - **Waiting on PID / designer** (`docs/OPEN-POINTS.md`): #51 touch-target re-base sign-off and glove test, #52
   editors as full pages vs §7.2, plus the earlier ones (slider list, L4 semantics, date/time widget, browser
@@ -42,7 +43,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 1. ~~Close Phase 2 in code~~ — done 2026-11-09 (P2-10, P2-14, P2-15).
 2. ~~P2-17 Figma catch-up~~ — done 2026-11-09 (presentation set); remaining portrait frames with P4-09.
 3. **G2-3 gate** with the designer: favourites, HMI screen, edit behaviour, plus sign-off on #51 / #52.
-4. **Phase 3**: ~~P3-01 shared pieces~~, ~~P3-02 … P3-04 formats~~ (done 2026-11-10); ~~P3-05 Speed Test~~; next P3-06 IO-Test (G3-1 held, reviewed with G3-2). Build it
+4. **Phase 3**: ~~P3-01 shared pieces~~, ~~P3-02 … P3-04 formats~~ (done 2026-11-10); ~~P3-05 Speed Test~~, ~~P3-06 IO-Test~~; next P3-07 Applicator Test (G3-1 held, reviewed with G3-2). Build it
    straight at the board sizes, portrait and landscape together, since landscape is no longer a late pass.
 
 ## Context

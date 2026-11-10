@@ -206,5 +206,17 @@
   "speed.confirmBody": "The labeller runs at the set speed for {s} seconds. Keep hands away from the dispensing edge.",
   "speed.moves": "The test moves the machine.",
   "speed.at": "Measured at {time}",
-  "speed.noResult": "No signal during the test — no result"
+  "speed.noResult": "No signal during the test — no result",
+  "io.in": "IN",
+  "io.out": "OUT",
+  "io.all": "All",
+  "io.forcedFor": "Forced · {s} s",
+  "io.forceTitle": "Force outputs?",
+  "io.forceBody": "A forced output switches real hardware and can move the machine. Forced outputs go back to normal after {s} s, when you leave this screen, or with “All outputs back to normal”.",
+  "io.resetAll": "All outputs back to normal",
+  "io.forcedCount": "{n} outputs forced",
+  "io.forcedOne": "1 output forced",
+  "io.readOnly": "Forcing outputs needs access level 3",
+  "io.live": "Live · updated every second",
+  "io.ok": "Force"
 }

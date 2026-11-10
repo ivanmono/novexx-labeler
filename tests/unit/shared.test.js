@@ -159,3 +159,28 @@ describe('FileBrowser', () => {
     ).not.toBeNull();
   });
 });
+
+describe('TableRow faces (P3-06)', () => {
+  it('read-only face has no force column; rows carry their direction', () => {
+    const out = dom(
+      renderTableRow({ pin: 'X2.1', label: 'P', kind: 'output', high: true, force: false }),
+    );
+    expect(out.querySelector('[role="switch"]')).toBeNull();
+    expect(out.querySelector('[data-dir]').textContent).toBe('OUT');
+    expect(out.querySelector('[data-state]').dataset.state).toBe('high');
+  });
+  it('a forced row shows its note', () => {
+    const out = dom(
+      renderTableRow({
+        pin: 'X2.1',
+        label: 'P',
+        kind: 'output',
+        high: true,
+        forced: true,
+        canForce: true,
+        forcedNote: 'Forced · 12 s',
+      }),
+    );
+    expect(out.querySelector('[data-forced-note]').textContent).toBe('Forced · 12 s');
+  });
+});
