@@ -495,6 +495,7 @@ const STATES = [
         await page.waitForSelector('[data-no-usb]');
       },
     },
+    { screen: 'usermodified', state: 'list-L3', route: 'screen/usermodified', level: 3 },
     {
       screen: 'fwupdate',
       state: 'select-L3',

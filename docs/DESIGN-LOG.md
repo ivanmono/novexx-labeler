@@ -668,3 +668,10 @@ Change:
 - The success state is also the "restart machine" state: one primary "Restart machine", no back.
 Where: `src/ui/screens/service/FwUpdate.js`, `src/core/firmware.js`, `src/app.js` (`ctx.restart`, installed version kept)
 Status: both (Figma: four special-screen frames, TitleBar Back=no · service)
+
+## DT-69 · User modified Parameters (2026-11-11, P3-13)
+
+Source: menu tree `usermodified` (diagram note: "list of user modified parameters")
+Change: the Favourites card per parameter (screen it lives on, name, ParamID, value with the changed dot) with "default <value>" in faint caption under the value, so the difference reads without opening anything; a one-line count above the list. Tapping edits in place; a row that is back at its default leaves.
+Where: `src/ui/screens/service/UserModified.js`, `components/ParamRow.js` (`defaultText`), `screens/ParamListScreen.js`
+Status: both (Figma: special-screens frame; ParamRow has no card variant yet)

@@ -17,6 +17,7 @@ import * as ErrorHistory from './service/ErrorHistory.js';
 import * as Reporting from './service/Reporting.js';
 import * as Backup from './service/Backup.js';
 import * as FwUpdate from './service/FwUpdate.js';
+import * as UserModified from './service/UserModified.js';
 
 /** Special masks with their own screen (Phase 3), by node id. */
 const MASKS = {
@@ -30,6 +31,7 @@ const MASKS = {
   reporting: Reporting,
   backup: Backup,
   fwupdate: FwUpdate,
+  usermodified: UserModified,
 };
 
 export function render(ctx, info) {

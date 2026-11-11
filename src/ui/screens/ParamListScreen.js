@@ -126,7 +126,12 @@ export function render(ctx, { arg }, nodeOverride = null) {
           branch: homes[0].branch ?? 'settings',
         }
       : null;
-    return `<div class="card-border"><div class="py-1">${renderParamRow({ ...r, favourite: false, last: true, context })}</div></div>`;
+    // User modified (P3-13): the default under the value, so the difference reads at a glance
+    const defaultText =
+      node.kind === 'usermodified' && r.param.default != null
+        ? ctx.t('modified.default', { value: formatParamValue(ctx, r.param, r.param.default) })
+        : null;
+    return `<div class="card-border"><div class="py-1">${renderParamRow({ ...r, favourite: false, last: true, context, defaultText })}</div></div>`;
   };
 
   const draw = () => {
@@ -145,8 +150,9 @@ export function render(ctx, { arg }, nodeOverride = null) {
       .join('');
     return `
       <div class="param-list flex-1 min-h-0 scroll-y p-4 flex flex-col gap-4" data-list="${esc(node.id)}" data-rows="${rows.filter((r) => r.kind === 'row').length}">
+        ${node.intro && rows.length ? `<p class="text-label text-muted px-1 -mb-1" data-list-intro>${esc(node.intro(rows.filter((r) => r.kind === 'row').length))}</p>` : ''}
         ${
-          rows.length && node.kind === 'favourites'
+          rows.length && (node.kind === 'favourites' || node.kind === 'usermodified')
             ? `<div class="flex flex-col gap-3" data-rows-host>${rows
                 .filter((r) => r.kind === 'row')
                 .map(favRow)

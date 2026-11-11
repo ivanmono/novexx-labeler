@@ -22,7 +22,7 @@ const INDENT = ['pl-4', 'pl-4', 'pl-9'];
  * @param {{ pid:number, label:string, value:string, indent?:number, locked?:boolean,
  *           readOnly?:boolean, action?:boolean, live?:boolean, changed?:boolean,
  *           favourite?:boolean, help?:boolean, needLevel?:number|null, last?:boolean,
- *           context?:{label:string, branch:string}|null }} row
+ *           context?:{label:string, branch:string}|null, defaultText?:string|null }} row
  * `context` (Favourites, DT-25/27/29): the screen the parameter lives on, in its branch colour, above the
  * label; value and chevron sit on the name's line, help stays in its right-hand column.
  */
@@ -42,6 +42,7 @@ export function renderParamRow(row) {
     needLevel = null,
     last = false,
     context = null,
+    defaultText = null,
   } = row;
   const marked = indent > 0;
   const state = locked ? 'locked' : action ? 'action' : readOnly ? 'readonly' : 'default';
@@ -68,6 +69,7 @@ export function renderParamRow(row) {
       <span class="${cx('col-start-1 row-start-2 text-label font-semibold line-clamp-2 break-words min-w-0', locked ? 'text-muted' : 'text-text')}">${esc(label)}</span>
       <span class="col-start-1 row-start-3 t-param text-caption text-faint" aria-label="ParamID">${pid}</span>
       ${valueBox('col-start-2 row-start-2 flex items-center gap-2 max-w-[260px]', 'text-label truncate')}
+      ${defaultText ? `<span class="col-start-2 row-start-3 pr-[30px] text-right text-caption text-faint truncate max-w-[260px]" data-default>${esc(defaultText)}</span>` : ''}
     </${tag}>`
     : '';
   const main =
