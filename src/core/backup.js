@@ -11,6 +11,7 @@
  *     configuration onto another machine.
  * Anything else on the drive is shown greyed out (not a machine backup).
  */
+import { seedFirmwareFolder } from './firmware.js';
 
 export const USB_ROOT = 'USB';
 export const KINDS = { backup: '.bak', format: '.fmt' };
@@ -132,10 +133,7 @@ export function seedUsb({ params, formats, paramsMeta, device, serial }) {
         { type: 'file', name: 'label-layout.pdf', size: '240 KB', date: dd(day(40)) },
       ],
       'USB/backups/line-2': [file('backup', defaultBackupName({ device: 'Jakobs XLS 222', serial: 'SN 0988', date: day(200) }), 200)],
-      'USB/firmware': [
-        { type: 'file', name: 'XLS22x_v0.98.fw', size: '18.1 MB', date: dd(day(130)) },
-        { type: 'file', name: 'XLS22x_v1.01.fw', size: '18.4 MB', date: dd(day(50)) },
-      ],
+      ...seedFirmwareFolder(dd, day),
     },
   };
 }

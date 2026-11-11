@@ -36,7 +36,7 @@ Binding document: `docs/sources/Frontend_Design_Requirements_Labeller_HMI_v1.6.d
 | §8.7 Error History | Newest first; search from 2 chars with keyboard; empty and end states; L1 read L3 clear | P3-09 | e2e error history | done 2026-11-10 |
 | §8.8 Reporting | Counters, comment, date/user without scrolling; commit resets; L3 | P3-10 | e2e reporting | done 2026-11-10 |
 | §8.9 Backup | USB browser; no-USB empty state; naming dialog; Backup vs Format; progress; L2 create L3 load | P3-11 | e2e backup | done 2026-11-10 |
-| §8.10 FW-Update | Versions side by side; own progress view; success/restart/failure/invalid signature; downgrade allowed; L3 | P3-12 | e2e update | todo |
+| §8.10 FW-Update | Versions side by side; own progress view; success/restart/failure/invalid signature; downgrade allowed; L3 | P3-12 | e2e update | done 2026-11-10 |
 | §8.11 Reporting QR | Scannable from 30 cm; text; regenerated; configurable URL template; L1 | P3-19 | e2e | todo |
 | §8.12 Search | From 2 chars; name, path, value; empty / no-match / too-many; back to results; filtered by level | P3-20 | e2e search | todo |
 | §8.13 Create New User | Five fields; masked password with policy feedback (618-627); Save gated; duplicate inline; L3 | P3-14 | validate.test, e2e | todo |
@@ -105,7 +105,7 @@ Binding document: `docs/sources/Frontend_Design_Requirements_Labeller_HMI_v1.6.d
 | reporting | Reporting | mask servicereport | P3-10 | done 2026-11-10 |
 | files | Files | menu | P2-02 | todo |
 | backup | Load/Store Backup | mask browser | P3-11 | done 2026-11-10 |
-| fwupdate | FW-Update | mask browser | P3-12 | todo |
+| fwupdate | FW-Update | mask browser | P3-12 | done 2026-11-10 |
 | usermodified | User modified Parameters | mask usermodified (override) | P3-13 | todo |
 | help | Help/Contact/Links | menu | P2-02 | todo |
 | reportingqr | Reporting QR | mask qr | P3-19 | todo |

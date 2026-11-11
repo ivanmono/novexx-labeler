@@ -134,6 +134,16 @@ export async function boot(root, { skipBoot = false } = {}) {
     back: () => (ctx.busy ? ctx.shell.toast.reject(ctx.busy) : ctx.shell.sheet.isOpen ? ctx.shell.sheet.close() : router.back('home')),
     /** Set while a long operation must not be left (backup, firmware): back / menu / home refuse with this text. */
     busy: null,
+    /** Restart the machine (FW-Update): back to the start-up screen and through the boot; the session ends. */
+    restart() {
+      ctx.busy = null;
+      ctx.logout({ silent: true, stay: true });
+      store.set('machine', { state: 'online', errors: [], warnings: [] });
+      router.replace('startup');
+      sim.boot().then((ok) => {
+        if (ok) router.replace('home');
+      });
+    },
     openMenu() {
       if (ctx.busy) return ctx.shell.toast.reject(ctx.busy);
       if (ctx.level < 1) {
@@ -289,6 +299,9 @@ export async function boot(root, { skipBoot = false } = {}) {
   mountDevPanel(api);
 
   // ---- go ------------------------------------------------------------------
+  // an installed firmware update survives a reload (P3-12)
+  const fw = store.get('settings').firmware;
+  if (fw) store.set('machine', (m) => ({ ...m, identity: { ...m.identity, firmware: fw.version, firmwareDate: fw.date } }));
   sim.start();
   const params = new URLSearchParams(location.search);
   if (skipBoot || params.has('nosplash')) sim.skipBoot();

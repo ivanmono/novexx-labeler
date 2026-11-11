@@ -496,6 +496,52 @@ const STATES = [
       },
     },
     {
+      screen: 'fwupdate',
+      state: 'select-L3',
+      route: 'screen/fwupdate',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-id="XLS22x_v0.02.fw"]');
+        await page.evaluate(() => (document.querySelector('[data-scroll]').scrollTop = 0));
+      },
+    },
+    {
+      screen: 'fwupdate',
+      state: 'running-L3',
+      route: 'screen/fwupdate',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-id="XLS22x_v0.02.fw"]');
+        await page.click('[data-action="install"]');
+        await page.locator('.modal').last().locator('[data-action="ok"]').click();
+        await page.waitForTimeout(2800);
+      },
+    },
+    {
+      screen: 'fwupdate',
+      state: 'success-L3',
+      route: 'screen/fwupdate',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-id="XLS22x_v0.02.fw"]');
+        await page.click('[data-action="install"]');
+        await page.locator('.modal').last().locator('[data-action="ok"]').click();
+        await page.waitForSelector('[data-fw-result="success"]', { timeout: 15000 });
+      },
+    },
+    {
+      screen: 'fwupdate',
+      state: 'rejected-L3',
+      route: 'screen/fwupdate',
+      level: 3,
+      steps: async (page) => {
+        await page.click('[data-id="XLS22x_v0.03-rc.fw"]');
+        await page.click('[data-action="install"]');
+        await page.locator('.modal').last().locator('[data-action="ok"]').click();
+        await page.waitForSelector('[data-fw-result="rejected"]', { timeout: 15000 });
+      },
+    },
+    {
       screen: 'formats',
       state: 'create-duplicate-L2',
       route: 'screen/createformat',

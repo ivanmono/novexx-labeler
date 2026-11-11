@@ -4,6 +4,7 @@
 
 Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 
+- **FW-Update done (2026-11-10, P3-12, DT-68).**
 - **Load/Store Backup done (2026-11-10, P3-11, DT-67).**
 - **Reporting done (2026-11-10, P3-10, DT-66).**
 - **Error History done (2026-11-10, P3-09, DT-60).**
@@ -48,7 +49,7 @@ Read this first, then `CLAUDE.md`, `docs/FIGMA.md` and the next ticket.
 1. ~~Close Phase 2 in code~~ — done 2026-11-09 (P2-10, P2-14, P2-15).
 2. ~~P2-17 Figma catch-up~~ — done 2026-11-09 (presentation set); remaining portrait frames with P4-09.
 3. **G2-3 gate** with the designer: favourites, HMI screen, edit behaviour, plus sign-off on #51 / #52.
-4. **Phase 3**: ~~P3-01 shared pieces~~, ~~P3-02 … P3-04 formats~~ (done 2026-11-10); ~~P3-05 Speed Test~~, ~~P3-06 IO-Test~~, ~~P3-07~~, ~~P3-08~~, ~~P3-09~~, ~~P3-10~~, ~~P3-11~~; next P3-12 FW-Update (G3-1 held, reviewed with G3-2). Build it
+4. **Phase 3**: ~~P3-01 shared pieces~~, ~~P3-02 … P3-04 formats~~ (done 2026-11-10); ~~P3-05 Speed Test~~, ~~P3-06 IO-Test~~, ~~P3-07~~, ~~P3-08~~, ~~P3-09~~, ~~P3-10~~, ~~P3-11~~, ~~P3-12~~; next P3-13 User modified Parameters (G3-1 held, reviewed with G3-2). Build it
    straight at the board sizes, portrait and landscape together, since landscape is no longer a late pass.
 
 ## Context

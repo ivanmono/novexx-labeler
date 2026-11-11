@@ -149,7 +149,7 @@ export function render(ctx, { arg }) {
       </div>`;
 
   const resultView = () => `
-      <div class="flex-1 min-h-0 flex flex-col justify-center px-3" data-backup-result="${result.ok ? 'ok' : 'failed'}">
+      <div class="flex-1 min-h-0 overflow-y-auto flex flex-col px-3 py-3 [&>*]:my-auto" data-backup-result="${result.ok ? 'ok' : 'failed'}">
         ${renderProgressResult({
           state: result.ok ? 'success' : 'failure',
           title: result.title,

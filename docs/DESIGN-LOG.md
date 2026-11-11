@@ -657,3 +657,14 @@ Change:
 - Status bar: a USB icon while a drive is plugged in.
 Where: `src/ui/screens/service/Backup.js`, `src/core/backup.js`, `components/AlphaKeyboard.js`, `shell/StatusBar.js`
 Status: both (Figma: four special-screen frames)
+
+## DT-68 · FW-Update screen (2026-11-10, P3-12)
+
+Source: docx §8.10 and its sketch
+Change:
+- Versions card: Installed and Selected side by side in Ioskeley Mono 32 px with a bold chevron between them; the step below in words and colour (green newer, amber older with the alarm icon — a downgrade is allowed, so it is a note, not an error).
+- "What happens" line with the help icon above the single primary Install button.
+- Update view: own title ("Firmware update") without back; result cards scroll when the failure text is long (also on Backup).
+- The success state is also the "restart machine" state: one primary "Restart machine", no back.
+Where: `src/ui/screens/service/FwUpdate.js`, `src/core/firmware.js`, `src/app.js` (`ctx.restart`, installed version kept)
+Status: both (Figma: four special-screen frames, TitleBar Back=no · service)

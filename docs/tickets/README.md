@@ -97,7 +97,7 @@ git-ignored `.redmine-key`) refreshes the six issues from the ticket files; `--d
 | [P3-09](P3-09.md)   | Error History                                                  | M    | done   |
 | [P3-10](P3-10.md)   | Reporting (service done)                                       | M    | done   |
 | [P3-11](P3-11.md)   | Load/Store Backup (USB)                                        | L    | done   |
-| [P3-12](P3-12.md)   | FW-Update                                                      | L    | todo   |
+| [P3-12](P3-12.md)   | FW-Update                                                      | L    | done   |
 | [P3-13](P3-13.md)   | User modified Parameters                                       | S    | todo   |
 | [P3-14](P3-14.md)   | Create New User                                                | L    | todo   |
 | [P3-15](P3-15.md)   | User Settings list                                             | S    | todo   |
